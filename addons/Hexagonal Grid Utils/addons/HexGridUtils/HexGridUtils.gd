@@ -22,8 +22,7 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
 
-
-extends Node
+class_name HexGridUtils extends Node
 
 static func snap_pos_to_hex_grid_flat_top(i_globalPosition: Vector2, i_gridOffset: Vector2, i_hexCellRadius: float):
 	i_globalPosition += i_gridOffset

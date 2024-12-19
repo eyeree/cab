@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://b1umt3mgf2ylg"]
 
-[ext_resource type="Script" uid="uid://bls54okmys6ga" path="res://grid_scene.gd" id="1_65i6o"]
-[ext_resource type="Shader" uid="uid://ihr7d1ce3w8l" path="res://grid/hex_grid_shader.gdshader" id="1_ebq2e"]
+[ext_resource type="Script" uid="uid://bls54okmys6ga" path="res://grid/grid_scene.gd" id="1_avoiu"]
+[ext_resource type="Shader" uid="uid://ihr7d1ce3w8l" path="res://grid/hex_grid_shader.gdshader" id="2_c8nch"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65i6o"]
 render_priority = 0
-shader = ExtResource("1_ebq2e")
+shader = ExtResource("2_c8nch")
 shader_parameter/scale = 5.0
 shader_parameter/radius = 0.45
 shader_parameter/offset = 0.05
@@ -43,7 +43,7 @@ ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.65
 
 [node name="GridScene" type="Node3D"]
-script = ExtResource("1_65i6o")
+script = ExtResource("1_avoiu")
 
 [node name="GridPlane" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
@@ -85,4 +85,4 @@ spot_range = 45.878
 
 [node name="Camera" type="Camera3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007, 0.61)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007, 0.55)
