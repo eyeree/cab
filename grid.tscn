@@ -1,20 +1,21 @@
-[gd_scene load_steps=9 format=3 uid="uid://b1umt3mgf2ylg"]
+[gd_scene load_steps=10 format=3 uid="uid://b1umt3mgf2ylg"]
 
+[ext_resource type="Script" uid="uid://bls54okmys6ga" path="res://grid_scene.gd" id="1_65i6o"]
 [ext_resource type="Shader" uid="uid://ihr7d1ce3w8l" path="res://grid/hex_grid_shader.gdshader" id="1_ebq2e"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65i6o"]
 render_priority = 0
 shader = ExtResource("1_ebq2e")
-shader_parameter/scale = 8.0
-shader_parameter/radius = 0.25
-shader_parameter/offset = 0.0
-shader_parameter/power = 5.305
+shader_parameter/scale = 5.0
+shader_parameter/radius = 0.45
+shader_parameter/offset = 0.05
+shader_parameter/power = 10.0
 shader_parameter/hide_incomplete = true
-shader_parameter/color = Color(0.54308, 0.0261673, 0.682395, 1)
+shader_parameter/color = Color(0.37833, 0.0099455, 0.479479, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sle3t"]
 material = SubResource("ShaderMaterial_65i6o")
-size = Vector2(10, 10)
+size = Vector2(1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ebq2e"]
 albedo_color = Color(0.158421, 3.85046e-06, 0.909991, 1)
@@ -41,14 +42,17 @@ ambient_light_source = 1
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.65
 
-[node name="Node3D" type="Node3D"]
+[node name="GridScene" type="Node3D"]
+script = ExtResource("1_65i6o")
 
 [node name="GridPlane" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.00274196, 0.00760048, -0.000401348)
 mesh = SubResource("PlaneMesh_sle3t")
 
 [node name="CellBase1" type="MeshInstance3D" parent="GridPlane"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -2.18557e-09)
+visible = false
 mesh = SubResource("CylinderMesh_65i6o")
 skeleton = NodePath("../..")
 
@@ -59,6 +63,7 @@ skeleton = NodePath("../../..")
 
 [node name="CellBase2" type="MeshInstance3D" parent="GridPlane"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.946644, 0.0499999, -1.6171)
+visible = false
 mesh = SubResource("CylinderMesh_65i6o")
 skeleton = NodePath("../..")
 
@@ -67,16 +72,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.198177, -0.0126941)
 mesh = SubResource("CylinderMesh_bghhw")
 skeleton = NodePath("../../..")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.2)
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_bghhw")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(0.962956, -0.0971468, -0.251553, 0.269659, 0.346912, 0.898296, 0, -0.932853, 0.360257, -3.32323, 0, 10.9019)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
+[node name="SpotLight3D" type="SpotLight3D" parent="WorldEnvironment"]
 transform = Transform3D(0.823027, 0.1866, 0.536476, 0, 0.944497, -0.328521, -0.568002, 0.270381, 0.777347, 5.34054, -4.07409, 5.11542)
 light_energy = 1.571
 spot_range = 45.878
+
+[node name="Camera" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007, 0.61)
