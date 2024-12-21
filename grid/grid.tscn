@@ -1,15 +1,15 @@
 [gd_scene load_steps=10 format=3 uid="uid://b1umt3mgf2ylg"]
 
-[ext_resource type="Script" uid="uid://bls54okmys6ga" path="res://grid/grid_scene.gd" id="1_avoiu"]
-[ext_resource type="Shader" uid="uid://clwnldpyc8any" path="res://grid/hex_grid_shader_2.gdshader" id="3_c8nch"]
+[ext_resource type="Script" uid="uid://bls54okmys6ga" path="res://grid/grid.gd" id="1_ppiwg"]
+[ext_resource type="Shader" uid="uid://clwnldpyc8any" path="res://grid/hex_grid.gdshader" id="2_y3jnv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65i6o"]
 render_priority = 0
-shader = ExtResource("3_c8nch")
+shader = ExtResource("2_y3jnv")
 shader_parameter/line_color = Color(0.314284, 0.17842, 0.351607, 1)
 shader_parameter/selected_color = Color(1, 0, 0, 1)
-shader_parameter/line_size = 0.125
-shader_parameter/max_hex_distance = 5
+shader_parameter/line_size = 0.175
+shader_parameter/max_hex_distance = 10
 shader_parameter/selected_index = Vector2i(1000, 1000)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sle3t"]
@@ -42,7 +42,7 @@ ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.65
 
 [node name="GridScene" type="Node3D"]
-script = ExtResource("1_avoiu")
+script = ExtResource("1_ppiwg")
 grid_size = 3
 
 [node name="GridPlane" type="MeshInstance3D" parent="."]

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ss11q3o2yicq"]
+
+[ext_resource type="Script" uid="uid://jd1vphqda12y" path="res://model/cell.gd" id="1_wnlri"]
+
+[node name="CellScene" type="Node3D"]
+script = ExtResource("1_wnlri")

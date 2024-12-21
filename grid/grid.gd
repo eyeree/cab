@@ -1,5 +1,5 @@
 @tool
-class_name GridScene extends Node3D
+class_name Grid extends Node3D
 
 # https://www.redblobgames.com/grids/hexagons/
 

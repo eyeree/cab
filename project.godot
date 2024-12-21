@@ -10,10 +10,13 @@ config_version=5
 
 [application]
 
-config/name="New Game Project"
-run/main_scene="res://grid/grid_scene.tscn"
+config/name="Cellular Auto Battle"
+run/main_scene="uid://bs4xqfk5ujxms"
 config/features=PackedStringArray("4.4", "Mobile")
-config/icon="res://icon.svg"
+boot_splash/bg_color=Color(0.177001, 0.162603, 0.191404, 1)
+boot_splash/image="uid://bpivn70s33guk"
+config/icon="uid://rk0fm7f2ob4"
+boot_splash/minimum_display_time=2000
 
 [rendering]
 
