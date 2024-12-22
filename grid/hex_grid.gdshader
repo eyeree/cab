@@ -66,59 +66,60 @@ void fragment( )
 	int hex_distance = axial_distance_from_origin(current_axial);
 
     if (hex_distance > max_hex_distance) {
-        discard;
-    }
+        //discard;
+		ALBEDO = vec3(1.0, 0.0, 0.0);
+    } else {
 
-	vec2 current_center = axial_to_uv(current_axial, hex_radius);
-	vec2 offset_uv = (uv - current_center) / hex_radius;
-	float d = abs(hexDist(offset_uv));
-	//d = is_in_hex(offset_uv * hex_radius);
+		vec2 current_center = axial_to_uv(current_axial, hex_radius);
+		vec2 offset_uv = (uv - current_center) / hex_radius;
+		float d = abs(hexDist(offset_uv));
+		//d = is_in_hex(offset_uv * hex_radius);
 
-    vec3 c = line_color.rgb;
+	    vec3 c = line_color.rgb;
 
-	if (current_axial == selected_index) {
-		c = selected_color.rgb;
+		if (current_axial == selected_index) {
+			c = selected_color.rgb;
+		}
+
+		//if(hex_distance == 4) {
+			//c = vec3(0.0, 1.0, 0.0);
+		//}
+
+		//d += 0.135;
+		//d *= 1.4;
+		//d *= 1.0 + (hex_radius * 2.0);
+		//float scale = 1.0 * hex_radius;
+		//float scaled_line_size = line_size / scale;
+	    c *= smoothstep(hex_radius, 0.0, (d - line_size));
+
+		//c = vec3(scale);
+
+		//if(d <= 0.135) {
+			//c = vec3(1, 0, 0);
+		//}
+
+		//c = vec3(offset_uv.xy, 0);
+
+		//if (current_center != vec2(0.0, 0.0)) {
+			//c = vec3((current_center.x / 0.5) + 1.0);
+		//}
+
+		//if (d > 0.1) {
+			//c = vec3(1.0);
+		//}
+
+
+
+	//
+		//if (current_axial == ivec2(3, 0)) {
+			//c = vec3(0.0, 0.0, 1.0);
+		//}
+
+		//if (abs(length(uv - current_center)) < 0.005) {
+			//c = vec3(0.0, 0.0, 0.0);
+		//}
+
+		ALBEDO = c;
 	}
 
-	//if(hex_distance == 4) {
-		//c = vec3(0.0, 1.0, 0.0);
-	//}
-
-	//d += 0.135;
-	//d *= 1.4;
-	//d *= 1.0 + (hex_radius * 2.0);
-	//float scale = 1.0 * hex_radius;
-	//float scaled_line_size = line_size / scale;
-    c *= smoothstep(hex_radius, 0.0, (d - line_size));
-
-	//c = vec3(scale);
-
-	//if(d <= 0.135) {
-		//c = vec3(1, 0, 0);
-	//}
-
-	//c = vec3(offset_uv.xy, 0);
-
-	//if (current_center != vec2(0.0, 0.0)) {
-		//c = vec3((current_center.x / 0.5) + 1.0);
-	//}
-
-	//if (d > 0.1) {
-		//c = vec3(1.0);
-	//}
-
-
-
-//
-	//if (current_axial == ivec2(3, 0)) {
-		//c = vec3(0.0, 0.0, 1.0);
-	//}
-
-	//if (abs(length(uv - current_center)) < 0.005) {
-		//c = vec3(0.0, 0.0, 0.0);
-	//}
-
-	ALBEDO = c;
-
 }
-

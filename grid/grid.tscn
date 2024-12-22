@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b1umt3mgf2ylg"]
+[gd_scene load_steps=7 format=3 uid="uid://b1umt3mgf2ylg"]
 
 [ext_resource type="Script" uid="uid://bls54okmys6ga" path="res://grid/grid.gd" id="1_ppiwg"]
 [ext_resource type="Shader" uid="uid://clwnldpyc8any" path="res://grid/hex_grid.gdshader" id="2_y3jnv"]
@@ -16,23 +16,8 @@ shader_parameter/selected_index = Vector2i(1000, 1000)
 material = SubResource("ShaderMaterial_65i6o")
 size = Vector2(1, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ebq2e"]
-albedo_color = Color(0.158421, 3.85046e-06, 0.909991, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_65i6o"]
-material = SubResource("StandardMaterial3D_ebq2e")
-top_radius = 0.25
-bottom_radius = 0.25
-height = 0.1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sle3t"]
-albedo_color = Color(0.846284, 0, 0.132476, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_bghhw"]
-material = SubResource("StandardMaterial3D_sle3t")
-top_radius = 0.15
-bottom_radius = 0.2
-height = 0.3
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ppiwg"]
+data = PackedVector3Array(0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, -0.5, 0, 0.5, -0.5, 0, -0.5, 0.5, 0, -0.5)
 
 [sub_resource type="Environment" id="Environment_bghhw"]
 background_mode = 1
@@ -47,30 +32,13 @@ grid_size = 3
 
 [node name="GridPlane" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.00274196, 0.00760048, -0.000401348)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 mesh = SubResource("PlaneMesh_sle3t")
 
-[node name="CellBase1" type="MeshInstance3D" parent="GridPlane"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -2.18557e-09)
-visible = false
-mesh = SubResource("CylinderMesh_65i6o")
-skeleton = NodePath("../..")
+[node name="StaticBody3D" type="StaticBody3D" parent="GridPlane"]
 
-[node name="CellTop1" type="MeshInstance3D" parent="GridPlane/CellBase1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.198177, 0)
-mesh = SubResource("CylinderMesh_bghhw")
-skeleton = NodePath("../../..")
-
-[node name="CellBase2" type="MeshInstance3D" parent="GridPlane"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.946644, 0.0499999, -1.6171)
-visible = false
-mesh = SubResource("CylinderMesh_65i6o")
-skeleton = NodePath("../..")
-
-[node name="CellTop2" type="MeshInstance3D" parent="GridPlane/CellBase2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.198177, -0.0126941)
-mesh = SubResource("CylinderMesh_bghhw")
-skeleton = NodePath("../../..")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GridPlane/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ppiwg")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_bghhw")
@@ -85,4 +53,4 @@ spot_range = 45.878
 
 [node name="Camera" type="Camera3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007, 0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.6)

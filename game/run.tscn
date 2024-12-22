@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://dmaqlc81kw7f8"]
+
+[ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://grid/grid.tscn" id="1_4nsis"]
+[ext_resource type="PackedScene" uid="uid://dhhxkt7ngc28u" path="res://ui/run/run_ui.tscn" id="2_rtlyr"]
+[ext_resource type="Script" uid="uid://y7300glu8yka" path="res://game/camera_3d.gd" id="3_rtlyr"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RunUI" parent="HBoxContainer" instance=ExtResource("2_rtlyr")]
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(826, 648)
+size_2d_override = Vector2i(11, 0)
+render_target_update_mode = 4
+
+[node name="GridScene" parent="HBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("1_4nsis")]
+grid_size = 0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.64268)
+script = ExtResource("3_rtlyr")
