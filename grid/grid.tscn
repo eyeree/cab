@@ -8,8 +8,8 @@ render_priority = 0
 shader = ExtResource("2_y3jnv")
 shader_parameter/line_color = Color(0.314284, 0.17842, 0.351607, 1)
 shader_parameter/selected_color = Color(1, 0, 0, 1)
-shader_parameter/line_size = 0.175
-shader_parameter/max_hex_distance = 10
+shader_parameter/line_size = 0.075
+shader_parameter/max_hex_distance = 2
 shader_parameter/selected_index = Vector2i(1000, 1000)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sle3t"]
@@ -53,4 +53,4 @@ spot_range = 45.878
 
 [node name="Camera" type="Camera3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.64268)

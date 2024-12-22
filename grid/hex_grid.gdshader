@@ -66,8 +66,7 @@ void fragment( )
 	int hex_distance = axial_distance_from_origin(current_axial);
 
     if (hex_distance > max_hex_distance) {
-        //discard;
-		ALBEDO = vec3(1.0, 0.0, 0.0);
+        discard;
     } else {
 
 		vec2 current_center = axial_to_uv(current_axial, hex_radius);

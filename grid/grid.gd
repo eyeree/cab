@@ -58,10 +58,10 @@ class GridSizeInfo:
 			return Vector2i(x_grid, y_grid + roundi(y + 0.5 * x))
 					
 static var grid_size_info_map: Dictionary[GridSize, GridSizeInfo] = {
-	GridSize.SMALL: GridSizeInfo.new(2, 0.075),
-	GridSize.MEDIUM: GridSizeInfo.new(4, 0.125),
-	GridSize.LARGE: GridSizeInfo.new(7, 0.15),
-	GridSize.HUGE: GridSizeInfo.new(10, 0.175),
+	GridSize.SMALL: GridSizeInfo.new(3, 0.11),
+	GridSize.MEDIUM: GridSizeInfo.new(5, 0.13),
+	GridSize.LARGE: GridSizeInfo.new(10, 0.17),
+	GridSize.HUGE: GridSizeInfo.new(20, 0.21),
 }
 
 @export var grid_size:GridSize = GridSize.SMALL:
@@ -74,12 +74,9 @@ var _grid_size_info:GridSizeInfo = grid_size_info_map[grid_size]
 
 @onready var grid_material:ShaderMaterial = %GridPlane.mesh.material
 @onready var grid_plane:MeshInstance3D = %GridPlane
-@onready var camera: Camera3D = $"../../../../Camera3D"
-
-var camera_distance:float = 0.0
 
 func _ready() -> void:
-	_sync_camera_positions()
+	_set_camera_positions()
 	_on_grid_size_set()
 
 func _on_grid_size_set():
@@ -93,66 +90,35 @@ func set_selected_index(index:Vector2i) -> void:
 func clear_selected_index() -> void:
 	grid_material.set_shader_parameter('selected_index', Vector2i.MAX)
 
-func _sync_camera_positions():
-	var vp1 = get_viewport()
-	var c1 = vp1.get_camera_3d()
-	var fov:float = c1.fov
-	var max_extent:float =  grid_plane.get_aabb().get_longest_axis_size()
-	camera_distance = max_extent / sin(deg_to_rad(fov / 2.0)) - 1.0
-	var new_position = grid_plane.position + Vector3(0, 0, camera_distance)
-	c1.position = new_position
-	
-func _focus_camera_on_node(camera: Camera3D, node: MeshInstance3D) -> void:
+func _set_camera_positions():
+	var viewport:Viewport = get_viewport()
+	var camera:Camera3D = viewport.get_camera_3d()
 	var fov:float = camera.fov
-	var max_extent:float =  node.get_aabb().get_longest_axis_size()
-	var min_distance:float = max_extent / sin(deg_to_rad(fov / 2.0)) - 1.0
-	#camera.look_at(node.translation, Vector3.UP)
-	#var offset = (camera.position - node.position).normalized()
-	#camera.position = node.position + (offset * min_distance)
-	var new_position = node.position + Vector3(0, 0, min_distance)
-	prints('_focus_camera_on_node', fov, max_extent, min_distance, camera.position, new_position)
+	var max_extent:float =  grid_plane.get_aabb().get_longest_axis_size()
+	var camera_distance:float = max_extent / sin(deg_to_rad(fov / 2.0)) - 1.0
+	var new_position:Vector3 = grid_plane.position + Vector3(0, 0, camera_distance)
 	camera.position = new_position
-	
+
 # range of -0.5 to 0.5 over the viewport, adjusted for camera positioning relative # 
 func _mouse_position_to_grid_position() -> Vector2:
-	# (-0.818482, -0.467396)
-	# (0.818482, 0.453396)
-
-	#mouse_position = get_viewport().size
-	#var grid_position:Vector2 = (mouse_position / Vector2(get_viewport().size)) - Vector2(0.5, 0.5)
-	#grid_position -= Vector2(0, 0.007)
-	#grid_position *= Vector2(float(get_viewport().size.x) / float(get_viewport().size.y), 1.0)
-	#grid_position *= Vector2(1.2, 1.0)
-	
-	var vp2 = get_viewport()
-	var c1:Camera3D = vp2.get_camera_3d()
-	if vp2 is SubViewport:
-		var vpc:SubViewportContainer = get_parent().get_parent()
-		var vpcp:Vector2 = vpc.get_global_position()	
-		vp2 = get_parent().get_parent().get_viewport()
-		prints('global_position', vpcp, c1.position, c1.global_position)
-	var mp2 = vp2.get_mouse_position()
-	var c2:Camera3D = vp2.get_camera_3d()
-	#prints('global_position', c2.global_position, c1.global_position)
-	var origin:Vector3 = c2.project_ray_origin(mp2) 
-	var normal:Vector3 = c2.project_ray_normal(mp2)
+	var viewport = get_viewport()
+	#if viewport is SubViewport:
+		#var vpc:SubViewportContainer = get_parent().get_parent()
+		#var vpcp:Vector2 = vpc.get_global_position()	
+		#viewport = get_parent().get_parent().get_viewport()
+	var mouse_position = viewport.get_mouse_position()
+	var camera:Camera3D = viewport.get_camera_3d()
+	var origin:Vector3 = camera.project_ray_origin(mouse_position) 
+	var normal:Vector3 = camera.project_ray_normal(mouse_position)
 	var end = origin + normal * 100
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
 	var space_state:PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var result = space_state.intersect_ray(query)
 	if not result.has('position'):
 		return Vector2.INF	
-		
-	var hit_position:Vector3 = result['position']
-		
-	#prints('result', position)	
-
-	#var drop_plane:Plane = Plane(Vector3(0, 0, 1), 0)
-	#var intersection_position:Vector3 = drop_plane.intersects_ray(origin, normal)
-	#var grid_position_2:Vector2 = Vector2(intersection_position.x, -intersection_position.y)
-			
-	#prints('_mouse_position_to_grid_position', mouse_position, mp2, grid_position, grid_position_2)
-	return Vector2(hit_position.x, -hit_position.y)
+	else:	
+		var hit_position:Vector3 = result['position']
+		return Vector2(hit_position.x, -hit_position.y)
 	
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
