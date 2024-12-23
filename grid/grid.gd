@@ -80,7 +80,6 @@ func _ready() -> void:
 	_on_grid_size_set()
 
 func _on_grid_size_set():
-	prints('_on_grid_size_set')
 	if not is_inside_tree(): return
 	_grid_size_info.apply_grid_material_settings(grid_material)
 	

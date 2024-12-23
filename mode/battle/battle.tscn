@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=4 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://grid/grid.tscn" id="1_8ipuh"]
+[ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://mode/battle/battle_controller.gd" id="1_fnkdq"]
 [ext_resource type="PackedScene" uid="uid://pkpl54rmgns7" path="res://ui/controls/title.tscn" id="2_fnkdq"]
 
-[node name="HBoxContainer" type="HBoxContainer"]
+[node name="BattleController" type="Node"]
+script = ExtResource("1_fnkdq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,56 +15,77 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer"]
 handle_input_locally = false
 size = Vector2i(822, 648)
 render_target_update_mode = 4
 
-[node name="GridScene" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_8ipuh")]
+[node name="GridScene" parent="HBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("1_8ipuh")]
 grid_size = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="GameTitle" parent="PanelContainer/VBoxContainer" instance=ExtResource("2_fnkdq")]
+[node name="GameTitle" parent="HBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("2_fnkdq")]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="StepButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="StepButton" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Step"
 
-[node name="ResetButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="ResetButton" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "Reset"
 
-[node name="HBoxContainer1" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="HBoxContainer1" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="RunButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer1"]
+[node name="RunButton" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer1"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Run"
 
-[node name="PauseButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer1"]
+[node name="PauseButton" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer1"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "Pause"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Speed:"
+
+[node name="RunSpeedSlider" type="HSlider" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 20.0
+rounded = true
+tick_count = 20
+ticks_on_borders = true
