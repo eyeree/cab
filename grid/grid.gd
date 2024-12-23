@@ -102,10 +102,6 @@ func _set_camera_positions():
 # range of -0.5 to 0.5 over the viewport, adjusted for camera positioning relative # 
 func _mouse_position_to_grid_position() -> Vector2:
 	var viewport = get_viewport()
-	#if viewport is SubViewport:
-		#var vpc:SubViewportContainer = get_parent().get_parent()
-		#var vpcp:Vector2 = vpc.get_global_position()	
-		#viewport = get_parent().get_parent().get_viewport()
 	var mouse_position = viewport.get_mouse_position()
 	var camera:Camera3D = viewport.get_camera_3d()
 	var origin:Vector3 = camera.project_ray_origin(mouse_position) 

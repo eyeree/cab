@@ -18,6 +18,10 @@ boot_splash/image="uid://bpivn70s33guk"
 config/icon="uid://rk0fm7f2ob4"
 boot_splash/minimum_display_time=2000
 
+[gui]
+
+theme/custom="uid://vswv5lu4ne81"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
