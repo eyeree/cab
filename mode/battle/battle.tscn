@@ -6,6 +6,7 @@
 
 [node name="BattleController" type="Node"]
 script = ExtResource("1_fnkdq")
+content_path = "uid://ws18jx2xdyy3"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchors_preset = 15
@@ -25,7 +26,8 @@ handle_input_locally = false
 size = Vector2i(822, 648)
 render_target_update_mode = 4
 
-[node name="GridScene" parent="HBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("1_8ipuh")]
+[node name="Grid" parent="HBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("1_8ipuh")]
+unique_name_in_owner = true
 grid_size = 0
 
 [node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]

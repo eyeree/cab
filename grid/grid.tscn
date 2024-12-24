@@ -1,15 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://b1umt3mgf2ylg"]
+[gd_scene load_steps=8 format=3 uid="uid://b1umt3mgf2ylg"]
 
 [ext_resource type="Script" uid="uid://bls54okmys6ga" path="res://grid/grid.gd" id="1_ppiwg"]
 [ext_resource type="Shader" uid="uid://clwnldpyc8any" path="res://grid/hex_grid.gdshader" id="2_y3jnv"]
+[ext_resource type="Script" uid="uid://chik2wyu0arh2" path="res://grid/grid_camera_rig.gd" id="3_y3jnv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65i6o"]
 render_priority = 0
 shader = ExtResource("2_y3jnv")
 shader_parameter/line_color = Color(0.314284, 0.17842, 0.351607, 1)
 shader_parameter/selected_color = Color(1, 0, 0, 1)
-shader_parameter/line_size = 0.11
-shader_parameter/max_hex_distance = 3
+shader_parameter/line_size = 0.01
+shader_parameter/max_hex_distance = 5
 shader_parameter/selected_index = Vector2i(1000, 1000)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sle3t"]
@@ -26,7 +27,7 @@ ambient_light_source = 1
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.65
 
-[node name="GridScene" type="Node3D"]
+[node name="Grid" type="Node3D"]
 script = ExtResource("1_ppiwg")
 grid_size = 3
 
@@ -51,6 +52,9 @@ transform = Transform3D(0.823027, 0.1866, 0.536476, 0, 0.944497, -0.328521, -0.5
 light_energy = 1.571
 spot_range = 45.878
 
-[node name="Camera" type="Camera3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.64268)
+[node name="CameraRig" type="Node3D" parent="."]
+transform = Transform3D(0.99997, 0, 0, 0, 0.99997, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("3_y3jnv")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+transform = Transform3D(1.00003, 0, 0, 0, 1.00003, 0, 0, 0, 1, 0, 0, 0.6)
