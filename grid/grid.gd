@@ -1,6 +1,6 @@
 @tool
 class_name Grid extends Node3D
-      
+	  
 #region: External References
 
 @onready var _grid_material:ShaderMaterial = %GridPlane.mesh.material
@@ -11,17 +11,17 @@ class_name Grid extends Node3D
 #region: Initialization
 
 func _ready() -> void:
-    #_set_camera_position()
-    _on_grid_size_set()
+	#_set_camera_position()
+	_on_grid_size_set()
 
 func _set_camera_position():
-    var viewport:Viewport = get_viewport()
-    var camera:Camera3D = viewport.get_camera_3d()
-    var fov:float = camera.fov
-    var max_extent:float =  _grid_plane.get_aabb().get_longest_axis_size()
-    var camera_distance:float = max_extent / sin(deg_to_rad(fov / 2.0)) - 1.0
-    var new_position:Vector3 = _grid_plane.position + Vector3(0, 0, camera_distance)
-    camera.position = new_position
+	var viewport:Viewport = get_viewport()
+	var camera:Camera3D = viewport.get_camera_3d()
+	var fov:float = camera.fov
+	var max_extent:float =  _grid_plane.get_aabb().get_longest_axis_size()
+	var camera_distance:float = max_extent / sin(deg_to_rad(fov / 2.0)) - 1.0
+	var new_position:Vector3 = _grid_plane.position + Vector3(0, 0, camera_distance)
+	camera.position = new_position
 
 #endregion
 
@@ -30,58 +30,58 @@ func _set_camera_position():
 enum GridSize { SMALL, MEDIUM, LARGE, HUGE }
 
 class GridSizeInfo:
-    var hex_max_distance:int
-    var hex_outer_radius:float
-    var hex_inner_radius:float
-    var content_scale:Vector3
-    var line_size:float
+	var hex_max_distance:int
+	var hex_outer_radius:float
+	var hex_inner_radius:float
+	var content_scale:Vector3
+	var line_size:float
 
-    func _init(
-        hex_max_distance_:int,
-        line_size_:float
-    ):
-        line_size = line_size_
-        hex_max_distance = hex_max_distance_
-        hex_outer_radius = (1.0 / ((hex_max_distance*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
-        hex_inner_radius = hex_outer_radius / sqrt(3.0/2.0)
-        content_scale = Vector3(hex_inner_radius, hex_inner_radius, hex_inner_radius) * 2
+	func _init(
+		hex_max_distance_:int,
+		line_size_:float
+	):
+		line_size = line_size_
+		hex_max_distance = hex_max_distance_
+		hex_outer_radius = (1.0 / ((hex_max_distance*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
+		hex_inner_radius = hex_outer_radius / sqrt(3.0/2.0)
+		content_scale = Vector3(hex_inner_radius, hex_inner_radius, hex_inner_radius) * 2
 
-    func apply_grid_material_settings(grid_material:ShaderMaterial) -> void:
-        grid_material.set_shader_parameter('max_hex_distance', hex_max_distance)
-        grid_material.set_shader_parameter('line_size', line_size)
-            
+	func apply_grid_material_settings(grid_material:ShaderMaterial) -> void:
+		grid_material.set_shader_parameter('max_hex_distance', hex_max_distance)
+		grid_material.set_shader_parameter('line_size', line_size)
+			
 static var _grid_size_info_map: Dictionary[GridSize, GridSizeInfo] = {
-    GridSize.SMALL: GridSizeInfo.new(3, 0.11),
-    GridSize.MEDIUM: GridSizeInfo.new(5, 0.13),
-    GridSize.LARGE: GridSizeInfo.new(10, 0.17),
-    GridSize.HUGE: GridSizeInfo.new(20, 0.21),
+	GridSize.SMALL: GridSizeInfo.new(3, 0.11),
+	GridSize.MEDIUM: GridSizeInfo.new(5, 0.13),
+	GridSize.LARGE: GridSizeInfo.new(10, 0.17),
+	GridSize.HUGE: GridSizeInfo.new(20, 0.21),
 }
 
 @export var grid_size:GridSize = GridSize.SMALL:
-    set(value):
-        grid_size = value
-        _grid_size_info = _grid_size_info_map[value]
-        _on_grid_size_set()
+	set(value):
+		grid_size = value
+		_grid_size_info = _grid_size_info_map[value]
+		_on_grid_size_set()
 
 var _grid_size_info:GridSizeInfo = _grid_size_info_map[grid_size]
 
 func _on_grid_size_set():
-    if not is_inside_tree(): return
-    clear_all_hex_content()
-    _grid_size_info.apply_grid_material_settings(_grid_material)
-    prints('hex_outer_radius', _grid_size_info.hex_outer_radius)
-    prints('hex_inner_radius', _grid_size_info.hex_inner_radius)
+	if not is_inside_tree(): return
+	clear_all_hex_content()
+	_grid_size_info.apply_grid_material_settings(_grid_material)
+	#prints('hex_outer_radius', _grid_size_info.hex_outer_radius)
+	#prints('hex_inner_radius', _grid_size_info.hex_inner_radius)
 
 
 #endregion
-    
+	
 #region: Hex State
 
 func set_selected_index(index:HexIndex) -> void:
-    _grid_material.set_shader_parameter('selected_index', index.to_axial())
-    
+	_grid_material.set_shader_parameter('selected_index', index.to_axial())
+	
 func clear_selected_index() -> void:
-    _grid_material.set_shader_parameter('selected_index', HexIndex.INVALID.to_axial())
+	_grid_material.set_shader_parameter('selected_index', HexIndex.INVALID.to_axial())
 
 #endregion
   
@@ -90,73 +90,73 @@ func clear_selected_index() -> void:
 var _hex_content:Dictionary[Vector3i, Node3D] = {}
 
 func _add_content_to_tree(index:HexIndex, content:Node3D):
-    var position2D:Vector2 = index.center_point(_grid_size_info.hex_outer_radius)
-    content.position = Vector3(position2D.x, position2D.y, 0)
-    content.scale = _grid_size_info.content_scale
-    _grid_plane.add_child(content)
+	var position2D:Vector2 = index.center_point(_grid_size_info.hex_outer_radius)
+	content.position = Vector3(position2D.x, position2D.y, 0)
+	content.scale = _grid_size_info.content_scale
+	_grid_plane.add_child(content)
 
 func _remove_content_from_tree(content:Node3D):
-    _grid_plane.remove_child(content)
-    content.queue_free()
-    
+	_grid_plane.remove_child(content)
+	content.queue_free()
+	
 func set_hex_content(index:HexIndex, content:Node3D):
-    var current = _hex_content.get(index.key)
-    if current: _remove_content_from_tree(current)
-    _hex_content.set(index.key, content)
-    if content: _add_content_to_tree(index, content)
-    
+	var current = _hex_content.get(index.key)
+	if current: _remove_content_from_tree(current)
+	_hex_content.set(index.key, content)
+	if content: _add_content_to_tree(index, content)
+	
 func clear_hex_content(index:HexIndex):
-    set_hex_content(index, null)
+	set_hex_content(index, null)
 
 func get_hex_content(index:HexIndex) -> Node3D:	
-    return _hex_content.get(index.key)
-    
+	return _hex_content.get(index.key)
+	
 func clear_all_hex_content() -> void:
-    for content:Node3D in _hex_content.values():
-        _remove_content_from_tree(content)
-    _hex_content = {}
-    
+	for content:Node3D in _hex_content.values():
+		_remove_content_from_tree(content)
+	_hex_content = {}
+	
 func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
-    var indexes:Array[HexIndex] = center.ring(radius)
-    for index in indexes:
-        var content = get_hex_content(index)
-        callable.call(content, index)
+	var indexes:Array[HexIndex] = center.ring(radius)
+	for index in indexes:
+		var content = get_hex_content(index)
+		callable.call(content, index)
 
 #endregion
 
 #region: Mouse Position
-    
+	
 var _mouse_hex_index:HexIndex = HexIndex.INVALID
 
 # range of -0.5 to 0.5 over the viewport, adjusted for camera positioning relative # 
 func _mouse_position_to_grid_position() -> Vector2:
-    var viewport = get_viewport()
-    var mouse_position = viewport.get_mouse_position()
-    var camera:Camera3D = viewport.get_camera_3d()
-    var origin:Vector3 = camera.project_ray_origin(mouse_position) 
-    var normal:Vector3 = camera.project_ray_normal(mouse_position)
-    var end = origin + normal * 100
-    var query = PhysicsRayQueryParameters3D.create(origin, end)
-    var space_state:PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-    var result = space_state.intersect_ray(query)
-    if not result.has('position'):
-        return Vector2.INF	
-    else:	
-        var hit_position:Vector3 = result['position']
-        return Vector2(hit_position.x, -hit_position.y)
+	var viewport = get_viewport()
+	var mouse_position = viewport.get_mouse_position()
+	var camera:Camera3D = viewport.get_camera_3d()
+	var origin:Vector3 = camera.project_ray_origin(mouse_position) 
+	var normal:Vector3 = camera.project_ray_normal(mouse_position)
+	var end = origin + normal * 100
+	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	var space_state:PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var result = space_state.intersect_ray(query)
+	if not result.has('position'):
+		return Vector2.INF	
+	else:	
+		var hit_position:Vector3 = result['position']
+		return Vector2(hit_position.x, -hit_position.y)
 
-func _input(event: InputEvent) -> void:
-    if event is InputEventMouseMotion:
-        var grid_position:Vector2 = _mouse_position_to_grid_position()
-        if grid_position != Vector2.INF:
-            var hex_index:HexIndex = HexIndex.from_point(grid_position, _grid_size_info.hex_outer_radius)
-            if hex_index != _mouse_hex_index:
-                if hex_index != null:
-                    mouse_exited_hex.emit(hex_index)
-                if hex_index.distance_to_center() <= _grid_size_info.hex_max_distance:                   
-                    _mouse_hex_index = hex_index
-                    mouse_entered_hex.emit(hex_index)
-    
+#func _input(event: InputEvent) -> void:
+	#if event is InputEventMouseMotion:
+		#var grid_position:Vector2 = _mouse_position_to_grid_position()
+		#if grid_position != Vector2.INF:
+			#var hex_index:HexIndex = HexIndex.from_point(grid_position, _grid_size_info.hex_outer_radius)
+			#if hex_index != _mouse_hex_index:
+				#if hex_index != null:
+					#mouse_exited_hex.emit(hex_index)
+				#if hex_index.distance_to_center() <= _grid_size_info.hex_max_distance:                   
+					#_mouse_hex_index = hex_index
+					#mouse_entered_hex.emit(hex_index)
+	#
 signal mouse_entered_hex(index:HexIndex)
 signal mouse_exited_hex(index:HexIndex)
 
