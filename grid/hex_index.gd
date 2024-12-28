@@ -19,30 +19,39 @@ static var _direction_vectors = [
 static func from_axial(q_:int, r_:int) -> HexIndex:
     return HexIndex.new(q_, r_, -q_ - r_)
     
+static var last:HexIndex = HexIndex.INVALID
+
 static func from_point(point:Vector2, hex_outer_radius:float) -> HexIndex:
     # pixel_to_pointy_hex https://www.redblobgames.com/grids/hexagons/#pixel-to-hex	
-    var q_:float = (sqrt(3)/3 * point.x  -  1.0/3.0 * point.y) / hex_outer_radius
-    var r_:float = (2.0/3.0 * point.y) / hex_outer_radius
+    var q_:float = ((sqrt(3.0)/3.0) * point.x  -  (1.0/3.0) * point.y) / hex_outer_radius
+    var r_:float = ((2.0/3.0) * point.y) / hex_outer_radius
     return HexIndex.round_axial(q_, r_)
     
 static func round_axial(q_:float, r_:float) -> HexIndex:
-    return round_cube(q_, r_, -q_ - r_)
+    var q_round:int = roundi(q_)
+    var r_round:int = roundi(r_)
+    q_ -= q_round 
+    r_ -= r_round
+    if abs(q_) >= abs(r_):
+        return HexIndex.from_axial(q_round + roundi(q_ + 0.5*r_), r_round)
+    else:
+        return HexIndex.from_axial(q_round, r_round + roundi(r_ + 0.5*q_))
 
 static func round_cube(q_:float, r_:float, s_:float) -> HexIndex:
-    var q_round = round(q_)
-    var r_round = round(r_)
-    var s_round = round(s_)
+    var q_round:int = roundi(q_)
+    var r_round:int = roundi(r_)
+    var s_round:int = roundi(s_)
 
-    var q_diff = abs(q_round - q_)
-    var r_diff = abs(r_round - r_)
-    var s_diff = abs(s_round - s_)
+    var q_diff:float = abs(q_round - q_)
+    var r_diff:float = abs(r_round - r_)
+    var s_diff:float = abs(s_round - s_)
 
     if q_diff > r_diff and q_diff > s_diff:
-        q_round = -r_ - s_
+        q_round = -r_round - s_round
     elif r_diff > s_diff:
-        r_round = -q_ - s_
+        r_round = -q_round - s_round
     else:
-        s_round = -q_ - r_
+        s_round = -q_round - r_round
 
     return HexIndex.new(q_round, r_round, s_round)
         
