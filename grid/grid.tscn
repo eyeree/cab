@@ -11,10 +11,10 @@ shader_parameter/normal_line_color = Color(0.450157, 0.0704913, 0.400597, 1)
 shader_parameter/selected_line_color = Color(0.840683, 0.00120019, 0.929285, 1)
 shader_parameter/normal_background_color = Color(0.0722556, 0.000914003, 0.0790231, 1)
 shader_parameter/selected_background_color = Color(0.311767, 0.0128437, 0.335206, 1)
-shader_parameter/outside_color = Color(0.192157, 0, 0, 1)
-shader_parameter/line_size = 0.13
-shader_parameter/max_hex_distance = 5
-shader_parameter/hex_outer_radius = 0.0524864
+shader_parameter/outside_color = Color(0, 0, 0, 1)
+shader_parameter/line_size = 0.11
+shader_parameter/max_hex_distance = 3
+shader_parameter/hex_outer_radius = 0.0824786
 shader_parameter/selected_index = Vector2i(0, 0)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sle3t"]

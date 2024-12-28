@@ -34,7 +34,7 @@ class_name CameraControl extends Node3D
 enum E_MOUSE_ACTION_STATES {
 	IDLE,
 	MOVE_AND_DRAG,
-	PAN_AND_TILT,
+	ROTATE_AND_TILT,
 }
 
 # Generic
@@ -104,6 +104,8 @@ var ActualRotateSpeed : float
 var ActualTiltSpeed : float
 var ActualTiltAngle : float
 
+var RotationDirection : float = 1.0
+
 func _ready():
 	_reset()
 
@@ -132,10 +134,14 @@ func _process(delta):
 		_reset()
 	
 # Mouse action state handling
-	if not Input.is_action_pressed(CfgInputMouseRotateAndTilt) and Input.is_action_pressed(CfgInputMouseMove):
+	if Input.is_action_just_pressed(CfgInputMouseMove):
 		ActualMouseState = E_MOUSE_ACTION_STATES.MOVE_AND_DRAG
-	elif Input.is_action_pressed(CfgInputMouseRotateAndTilt) and not Input.is_action_pressed(CfgInputMouseMove):
-		ActualMouseState = E_MOUSE_ACTION_STATES.PAN_AND_TILT
+	elif Input.is_action_just_pressed(CfgInputMouseRotateAndTilt):
+		ActualMouseState = E_MOUSE_ACTION_STATES.ROTATE_AND_TILT
+		if (mousePos.y < viewPortSize.y / 2.0):
+			RotationDirection = -1.0
+		else:
+			RotationDirection = 1.0
 	elif Input.is_action_just_released(CfgInputMouseRotateAndTilt) or Input.is_action_just_released(CfgInputMouseMove):
 		ActualMouseState = E_MOUSE_ACTION_STATES.IDLE
 	
@@ -196,14 +202,16 @@ func _process(delta):
 	
 # Rotate handling
 	ActualRotateSpeed = CfgRotateSpeed * 1.5 * delta
-	rotate_y(KeyAndMouseCtrl(ActualRotateSpeed,CfgInputKeyRotateLeft, CfgInputKeyRotateRight, CfgRotateInvertDirection, \
-										ActualMouseState == E_MOUSE_ACTION_STATES.PAN_AND_TILT, \
-										(0.0025 * CfgInputMouseSensitivity)).Xvalue)
+	var actualRotation = KeyAndMouseCtrl(ActualRotateSpeed,CfgInputKeyRotateLeft, CfgInputKeyRotateRight, CfgRotateInvertDirection, \
+										ActualMouseState == E_MOUSE_ACTION_STATES.ROTATE_AND_TILT, \
+										(0.0025 * CfgInputMouseSensitivity)).Xvalue
+	actualRotation *= RotationDirection
+	rotate_y(actualRotation)
 	
 # Tilt handling
 	ActualTiltSpeed = CfgTiltSpeed * 100 * delta
 	ActualTiltAngle += (KeyAndMouseCtrl(ActualTiltSpeed, CfgInputKeyTiltForward, CfgInputKeyTiltBackward, CfgTiltInvertDirection, \
-										ActualMouseState == E_MOUSE_ACTION_STATES.PAN_AND_TILT, \
+										ActualMouseState == E_MOUSE_ACTION_STATES.ROTATE_AND_TILT, \
 										(0.0025 * CfgInputMouseSensitivity)).Yvalue)
 	ActualTiltAngle = clamp(ActualTiltAngle, CfgTiltMinAngle, CfgTiltMaxAngle)
 	$Camera.rotation.x = -deg_to_rad(ActualTiltAngle)
