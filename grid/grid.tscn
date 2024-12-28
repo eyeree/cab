@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b1umt3mgf2ylg"]
+[gd_scene load_steps=8 format=3 uid="uid://b1umt3mgf2ylg"]
 
 [ext_resource type="Script" uid="uid://bls54okmys6ga" path="res://grid/grid.gd" id="1_ppiwg"]
 [ext_resource type="PackedScene" uid="uid://d00w00qk2iuka" path="res://addons/LH_CameraControl/CameraControl/camera_control.tscn" id="2_p060q"]
@@ -11,9 +11,10 @@ shader_parameter/normal_line_color = Color(0.450157, 0.0704913, 0.400597, 1)
 shader_parameter/selected_line_color = Color(0.840683, 0.00120019, 0.929285, 1)
 shader_parameter/normal_background_color = Color(0.0722556, 0.000914003, 0.0790231, 1)
 shader_parameter/selected_background_color = Color(0.311767, 0.0128437, 0.335206, 1)
-shader_parameter/outside_color = Color(0, 0, 0, 1)
+shader_parameter/outside_color = Color(0.192157, 0, 0, 1)
 shader_parameter/line_size = 0.13
 shader_parameter/max_hex_distance = 5
+shader_parameter/hex_outer_radius = 0.0524864
 shader_parameter/selected_index = Vector2i(0, 0)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sle3t"]
@@ -29,9 +30,6 @@ background_energy_multiplier = 1.53
 ambient_light_source = 1
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.65
-
-[sub_resource type="BoxMesh" id="BoxMesh_y3jnv"]
-size = Vector3(0.1, 0.1, 0.1)
 
 [node name="Grid" type="Node3D"]
 script = ExtResource("1_ppiwg")
@@ -62,6 +60,7 @@ CfgRotateInvertDirection = true
 CfgTiltSpeed = 2.0
 CfgTiltInitAngle = 90.0
 CfgTiltMaxAngle = 90.0
+CfgInputMouseSensitivity = 0.5
 CfgInputMouseMove = "GridCameraMove"
 CfgInputMouseRotateAndTilt = "GridCameraRotate"
 CfgInputMouseZoomIn = "GridCameraZoomIn"
@@ -88,8 +87,5 @@ transform = Transform3D(0.962956, -0.0971468, -0.251553, 0.269659, 0.346912, 0.8
 transform = Transform3D(0.823027, 0.1866, 0.536476, 0, 0.944497, -0.328521, -0.568002, 0.270381, 0.777347, 5.34054, -4.07409, 5.11542)
 light_energy = 1.571
 spot_range = 45.878
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_y3jnv")
 
 [editable path="GridPlane/CameraControl"]

@@ -217,11 +217,8 @@ func _process(delta):
 	var direction = $Camera.project_ray_normal(center);
 	var plane = Plane(Vector3.FORWARD, 0)
 	var intersection = plane.intersects_ray(origin, direction)
-	if not intersection:
-		prints('No intersection!')
-	else:
-		if intersection.length() > CfgMaxDistanceFromOrigin:
-			global_position = previous_position
+	if intersection and intersection.length() > CfgMaxDistanceFromOrigin:
+		global_position = previous_position
 
 	
 # Debug info

@@ -34,11 +34,12 @@ class GridSizeInfo:
 		line_size = line_size_
 		hex_max_distance = hex_max_distance_
 		hex_outer_radius = (1.0 / ((hex_max_distance*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
-		hex_inner_radius = hex_outer_radius / sqrt(3.0/2.0)
+		hex_inner_radius = (hex_outer_radius * sqrt(3.0) / 2.0)
 		content_scale = Vector3(hex_inner_radius, hex_inner_radius, hex_inner_radius) * 2
 
 	func apply_grid_material_settings(grid_material:ShaderMaterial) -> void:
 		grid_material.set_shader_parameter('max_hex_distance', hex_max_distance)
+		grid_material.set_shader_parameter('hex_outer_radius', hex_outer_radius)
 		grid_material.set_shader_parameter('line_size', line_size)
 			
 static var _grid_size_info_map: Dictionary[GridSize, GridSizeInfo] = {
@@ -60,8 +61,8 @@ func _on_grid_size_set():
 	if not is_inside_tree(): return
 	clear_all_hex_content()
 	_grid_size_info.apply_grid_material_settings(_grid_material)
-	#prints('hex_outer_radius', _grid_size_info.hex_outer_radius)
-	#prints('hex_inner_radius', _grid_size_info.hex_inner_radius)
+	prints('hex_outer_radius', _grid_size_info.hex_outer_radius)
+	prints('hex_inner_radius', _grid_size_info.hex_inner_radius)
 
 
 #endregion
@@ -82,7 +83,7 @@ var _hex_content:Dictionary[Vector3i, Node3D] = {}
 
 func _add_content_to_tree(index:HexIndex, content:Node3D):
 	var position2D:Vector2 = index.center_point(_grid_size_info.hex_outer_radius)
-	content.position = Vector3(position2D.x, position2D.y, 0)
+	content.position = Vector3(position2D.x, 0, position2D.y)
 	content.scale = _grid_size_info.content_scale
 	_grid_plane.add_child(content)
 

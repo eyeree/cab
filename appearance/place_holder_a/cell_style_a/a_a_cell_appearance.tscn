@@ -1,7 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ws18jx2xdyy3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oafgt"]
-transparency = 1
 albedo_color = Color(0.6, 0.721569, 0, 0.588235)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_0gdrh"]

@@ -43,9 +43,9 @@ func _on_mouse_exited_hex(_index:HexIndex):
 
 func _setup():
 	var content_scene:PackedScene = load(content_path)
-	var content:Node3D = content_scene.instantiate()
-	var center_index = HexIndex.CENTER
-	_grid.set_hex_content(center_index, content)
+	for index in HexIndex.CENTER.ring(2):
+		var content:Node3D = content_scene.instantiate()
+		_grid.set_hex_content(index, content)
 	
 func _step() -> void:
 	prints('step')

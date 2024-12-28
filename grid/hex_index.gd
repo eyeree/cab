@@ -2,14 +2,18 @@ class_name HexIndex extends RefCounted
 
 # https://www.redblobgames.com/grids/hexagons/
 
-enum HexDirection { NW = 0, NE = 1, E = 2, SE = 3, SW = 4, W = 5 }
+enum HexDirection { NE = 0, E = 1, SE = 2, SW = 3, W = 4, NW = 5 }
 
 static var INVALID:HexIndex = HexIndex.new(2147483647, 2147483647, 2147483647)
 static var CENTER:HexIndex = HexIndex.new(0, 0, 0)
     
 static var _direction_vectors = [
-    HexIndex.new(+1, 0, -1), HexIndex.new(+1, -1, 0), HexIndex.new(0, -1, +1), 
-    HexIndex.new(-1, 0, +1), HexIndex.new(-1, +1, 0), HexIndex.new(0, +1, -1), 
+    HexIndex.new(+1, -1, 0), # NE
+    HexIndex.new(+1, 0, -1), # E
+    HexIndex.new(0, +1, -1), # SE
+    HexIndex.new(-1, +1, 0), # SW
+    HexIndex.new(-1, 0, +1), # W
+    HexIndex.new(0, -1, +1), # NW
 ]
 
 static func from_axial(q_:int, r_:int) -> HexIndex:
@@ -87,7 +91,7 @@ func distance_to_center() -> int:
 func ring(radius:int) -> Array[HexIndex]:
     var results:Array[HexIndex] = []
     var index = add(_direction_vectors[4].scale(radius))
-    for direction in HexDirection:
+    for direction in HexDirection.values():
         for hex in range(0, radius):
             results.append(index)
             index = index.neighbor(direction)
@@ -98,9 +102,10 @@ func to_axial() -> Vector2i:
     
 func center_point(hex_outer_radius:float) -> Vector2:
     # pointy_hex_to_pixel https://www.redblobgames.com/grids/hexagons/#hex-to-pixel-axial
-    var x:float = hex_outer_radius * (sqrt(3) * q  +  sqrt(3)/2 * r)
-    var y:float = hex_outer_radius * (3.0/2.0 * q)
+    var x:float = hex_outer_radius * (sqrt(3.0) * q  +  sqrt(3.0)/2.0 * r)
+    var y:float = hex_outer_radius * ((3.0/2.0) * r)
     return Vector2(x, y)
 
-                    
         
+func _to_string() -> String:
+    return "{q: %d, r: %d, s: %d}" % [q, r, s]
