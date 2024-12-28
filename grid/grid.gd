@@ -139,7 +139,7 @@ func _mouse_position_to_grid_position() -> Vector2:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		
-		if _camera_control.ActualMouseState != GridCameraControl.E_MOUSE_ACTION_STATES.IDLE:
+		if _camera_control.ActualMouseState != CameraControl.E_MOUSE_ACTION_STATES.IDLE:
 			return
 
 		var grid_position:Vector2 = _mouse_position_to_grid_position()
