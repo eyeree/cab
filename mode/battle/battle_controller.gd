@@ -38,7 +38,7 @@ func _ready() -> void:
 func _on_mouse_entered_hex(index:HexIndex):
 	_grid.set_selected_index(index)
 
-func _on_mouse_exited_hex(index:HexIndex):
+func _on_mouse_exited_hex(_index:HexIndex):
 	_grid.clear_selected_index()
 
 func _setup():

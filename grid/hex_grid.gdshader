@@ -2,8 +2,11 @@ shader_type spatial;
 render_mode unshaded;
 
 //uniform float hex_radius: hint_range(0.001, 0.5, 0.01) = 0.05;
-uniform vec4 line_color: source_color = vec4( 0.0, 1.0, 0.3, 1.0 );
-uniform vec4 selected_color: source_color = vec4( 1.0, 0.0, 0.0, 1.0 );
+uniform vec4 normal_line_color: source_color = vec4( 0.0, 1.0, 0.3, 1.0 );
+uniform vec4 selected_line_color: source_color = vec4( 1.0, 0.0, 0.0, 1.0 );
+uniform vec4 normal_background_color: source_color = vec4( 0.0, 0.0, 0.0, 1.0 );
+uniform vec4 selected_background_color: source_color = vec4( 0.5, 0.0, 0.0, 1.0 );
+uniform vec4 outside_color: source_color = vec4( 0.5, 0.0, 0.0, 1.0 );
 uniform float line_size = 0.01; // : hint_range(0.1, 50, 0.1) = 0.1;
 uniform int max_hex_distance = 5;
 uniform ivec2 selected_index = ivec2(1000);
@@ -66,59 +69,26 @@ void fragment( )
 	int hex_distance = axial_distance_from_origin(current_axial);
 
     if (hex_distance > max_hex_distance) {
-        discard;
+        ALBEDO = outside_color.rgb;
+		ALPHA = outside_color.a;
     } else {
 
 		vec2 current_center = axial_to_uv(current_axial, hex_radius);
 		vec2 offset_uv = (uv - current_center) / hex_radius;
 		float d = abs(hexDist(offset_uv));
-		//d = is_in_hex(offset_uv * hex_radius);
 
-	    vec3 c = line_color.rgb;
-
+		vec4 line_color = normal_line_color;
+		vec4 background_color = normal_background_color;
 		if (current_axial == selected_index) {
-			c = selected_color.rgb;
+			line_color = selected_line_color;
+			background_color = selected_background_color;
 		}
 
-		//if(hex_distance == 4) {
-			//c = vec3(0.0, 1.0, 0.0);
-		//}
+	    vec4 c = background_color;
+	    c = mix(c, line_color, smoothstep(hex_radius, 0.0, (d - line_size)));
 
-		//d += 0.135;
-		//d *= 1.4;
-		//d *= 1.0 + (hex_radius * 2.0);
-		//float scale = 1.0 * hex_radius;
-		//float scaled_line_size = line_size / scale;
-	    c *= smoothstep(hex_radius, 0.0, (d - line_size));
-
-		//c = vec3(scale);
-
-		//if(d <= 0.135) {
-			//c = vec3(1, 0, 0);
-		//}
-
-		//c = vec3(offset_uv.xy, 0);
-
-		//if (current_center != vec2(0.0, 0.0)) {
-			//c = vec3((current_center.x / 0.5) + 1.0);
-		//}
-
-		//if (d > 0.1) {
-			//c = vec3(1.0);
-		//}
-
-
-
-	//
-		//if (current_axial == ivec2(3, 0)) {
-			//c = vec3(0.0, 0.0, 1.0);
-		//}
-
-		//if (abs(length(uv - current_center)) < 0.005) {
-			//c = vec3(0.0, 0.0, 0.0);
-		//}
-
-		ALBEDO = c;
+		ALBEDO = c.rgb;
+		ALPHA = c.a;
 	}
 
 }

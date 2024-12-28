@@ -77,6 +77,9 @@ CfgInputKeyTiltForward = "Unbound"
 CfgInputKeyTiltBackward = "Unbound"
 CfgInputKeyReset = "GridCameraReset"
 
+[node name="Camera" parent="GridPlane/CameraControl" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_bghhw")
 

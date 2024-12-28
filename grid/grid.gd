@@ -5,23 +5,14 @@ class_name Grid extends Node3D
 
 @onready var _grid_material:ShaderMaterial = %GridPlane.mesh.material
 @onready var _grid_plane:MeshInstance3D = %GridPlane
+@onready var _camera_control:CameraControl = %CameraControl
 
 #endregion
 
 #region: Initialization
 
 func _ready() -> void:
-	#_set_camera_position()
 	_on_grid_size_set()
-
-func _set_camera_position():
-	var viewport:Viewport = get_viewport()
-	var camera:Camera3D = viewport.get_camera_3d()
-	var fov:float = camera.fov
-	var max_extent:float =  _grid_plane.get_aabb().get_longest_axis_size()
-	var camera_distance:float = max_extent / sin(deg_to_rad(fov / 2.0)) - 1.0
-	var new_position:Vector3 = _grid_plane.position + Vector3(0, 0, camera_distance)
-	camera.position = new_position
 
 #endregion
 
@@ -145,18 +136,22 @@ func _mouse_position_to_grid_position() -> Vector2:
 		var hit_position:Vector3 = result['position']
 		return Vector2(hit_position.x, -hit_position.y)
 
-#func _input(event: InputEvent) -> void:
-	#if event is InputEventMouseMotion:
-		#var grid_position:Vector2 = _mouse_position_to_grid_position()
-		#if grid_position != Vector2.INF:
-			#var hex_index:HexIndex = HexIndex.from_point(grid_position, _grid_size_info.hex_outer_radius)
-			#if hex_index != _mouse_hex_index:
-				#if hex_index != null:
-					#mouse_exited_hex.emit(hex_index)
-				#if hex_index.distance_to_center() <= _grid_size_info.hex_max_distance:                   
-					#_mouse_hex_index = hex_index
-					#mouse_entered_hex.emit(hex_index)
-	#
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		
+		if _camera_control.ActualMouseState != GridCameraControl.E_MOUSE_ACTION_STATES.IDLE:
+			return
+
+		var grid_position:Vector2 = _mouse_position_to_grid_position()
+		if grid_position != Vector2.INF:
+			var hex_index:HexIndex = HexIndex.from_point(grid_position, _grid_size_info.hex_outer_radius)
+			if hex_index != _mouse_hex_index:
+				if hex_index != null:
+					mouse_exited_hex.emit(hex_index)
+				if hex_index.distance_to_center() <= _grid_size_info.hex_max_distance:                   
+					_mouse_hex_index = hex_index
+					mouse_entered_hex.emit(hex_index)
+
 signal mouse_entered_hex(index:HexIndex)
 signal mouse_exited_hex(index:HexIndex)
 
