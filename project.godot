@@ -20,7 +20,7 @@ boot_splash/minimum_display_time=2000
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/orbit_camera/plugin.cfg")
+enabled=PackedStringArray()
 
 [gui]
 

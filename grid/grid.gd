@@ -79,7 +79,7 @@ func clear_selected_index() -> void:
   
 #region: Hex Content
   
-var _hex_content:Dictionary[Vector3i, Node3D] = {}
+var _hex_content:HexStore = HexStore.new()
 
 func _add_content_to_tree(index:HexIndex, content:Node3D):
 	var position2D:Vector2 = index.center_point(_grid_size_info.hex_outer_radius)
@@ -92,28 +92,22 @@ func _remove_content_from_tree(content:Node3D):
 	content.queue_free()
 	
 func set_hex_content(index:HexIndex, content:Node3D):
-	var current = _hex_content.get(index.key)
+	var current:Node3D = _hex_content.get_value(index) as Node3D
 	if current: _remove_content_from_tree(current)
-	_hex_content.set(index.key, content)
+	_hex_content.set_value(index, content)
 	if content: _add_content_to_tree(index, content)
 	
 func clear_hex_content(index:HexIndex):
 	set_hex_content(index, null)
 
 func get_hex_content(index:HexIndex) -> Node3D:	
-	return _hex_content.get(index.key)
+	return _hex_content.get_value(index) as Node3D
 	
 func clear_all_hex_content() -> void:
-	for content:Node3D in _hex_content.values():
+	for content:Node3D in _hex_content.get_all_values():
 		_remove_content_from_tree(content)
-	_hex_content = {}
+	_hex_content.clear_all_values()
 	
-func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
-	var indexes:Array[HexIndex] = center.ring(radius)
-	for index in indexes:
-		var content = get_hex_content(index)
-		callable.call(content, index)
-
 #endregion
 
 #region: Mouse Position

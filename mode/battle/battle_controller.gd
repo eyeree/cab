@@ -17,6 +17,8 @@ var _is_running:bool = false
 
 var _step_timer:SceneTreeTimer = null
 
+var _battle:Battle = Battle.new()
+
 func _ready() -> void:
 	
 	_step_button.pressed.connect(_step)
