@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbool5fegnid0"]
+
+[ext_resource type="Script" uid="uid://brlyvmpsdx26" path="res://model/effect_appearance.gd" id="1_nfsjm"]
+
+[node name="EffectB" type="Node"]
+script = ExtResource("1_nfsjm")
+metadata/_custom_type_script = ExtResource("1_nfsjm")

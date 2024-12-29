@@ -113,3 +113,9 @@ func equals(other:HexIndex) -> bool:
 
 func _to_string() -> String:
 	return "{q: %d, r: %d, s: %d}" % [q, r, s]
+
+func serialize() -> Variant:
+	return [q, r, s]
+	
+static func deserialize(data:Variant) -> HexIndex:
+	return HexIndex.new(data[0], data[1], data[2])

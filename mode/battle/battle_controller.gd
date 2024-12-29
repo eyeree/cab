@@ -17,7 +17,7 @@ var _is_running:bool = false
 
 var _step_timer:SceneTreeTimer = null
 
-var _battle:Battle = Battle.new()
+var _world:World
 
 func _ready() -> void:
 	
@@ -27,7 +27,7 @@ func _ready() -> void:
 	_pause_button.pressed.connect(_pause)
 	
 	_run_speed_slider.value = remap(_run_step_delta, _max_run_step_delta, _min_run_step_delta, _run_speed_slider.min_value, _run_speed_slider.max_value)
-	_run_speed_slider.value_changed.connect(_on__run_speed_changed)
+	_run_speed_slider.value_changed.connect(_on_run_speed_changed)
 	
 	_grid.mouse_entered_hex.connect(_on_mouse_entered_hex)
 	_grid.mouse_exited_hex.connect(_on_mouse_exited_hex)
@@ -44,6 +44,9 @@ func _on_mouse_exited_hex(_index:HexIndex):
 	_grid.clear_selected_index()
 
 func _setup():
+	var cells:HexStore = HexStore.new()
+	
+	_world = World.new(cells, 5)
 	var content_scene:PackedScene = load(content_path)
 	_grid.set_hex_content(HexIndex.CENTER, content_scene.instantiate())
 
@@ -83,7 +86,7 @@ func _start_step_timer() -> void:
 	_step_timer = get_tree().create_timer(_run_step_delta)
 	_step_timer.timeout.connect(_step)
 	
-func _on__run_speed_changed(value:float) -> void:
+func _on_run_speed_changed(value:float) -> void:
 	_run_step_delta = remap(value, _run_speed_slider.min_value, _run_speed_slider.max_value, _max_run_step_delta, _min_run_step_delta)
 	if _is_running: _start_step_timer()
 

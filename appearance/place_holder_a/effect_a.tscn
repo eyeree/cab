@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://3h0ed54r6bqa"]
+
+[ext_resource type="Script" uid="uid://brlyvmpsdx26" path="res://model/effect_appearance.gd" id="1_fjdl1"]
+
+[node name="EffectA" type="Node"]
+script = ExtResource("1_fjdl1")
+metadata/_custom_type_script = ExtResource("1_fjdl1")
