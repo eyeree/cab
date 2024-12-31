@@ -1,7 +1,8 @@
 class_name AppearanceSet extends Resource
 
-static var _serialization = SerializationUtil.register(AppearanceSet) \
-	.as_resource_path(AppearanceSet)
+static func _static_init():
+	SerializationUtil.register(AppearanceSet) \
+		.use_resource_path_for(AppearanceSet)
 
 @export_file("*.tscn") var cell_appearances:Array[String] = []
 	

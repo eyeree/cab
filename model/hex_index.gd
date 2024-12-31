@@ -2,7 +2,8 @@ class_name HexIndex extends RefCounted
 
 # https://www.redblobgames.com/grids/hexagons/
 
-static var _serialization = SerializationUtil.register(HexIndex)
+static func _static_init():
+	SerializationUtil.register(HexIndex)
 
 enum HexDirection { NE = 0, E = 1, SE = 2, SW = 3, W = 4, NW = 5 }
 

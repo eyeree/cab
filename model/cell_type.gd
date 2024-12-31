@@ -1,10 +1,11 @@
 class_name CellType extends RefCounted
 
-static var _serializers = SerializationUtil.register(CellType, {
-	Activation = Activation
-}).ignore_properties(CellType, ['genome'])
+static func _static_init():
+	SerializationUtil.register(CellType, {
+		Activation = Activation
+	})
 
-class Activation extends RefCounted:	
+class Activation extends RefCounted:
 	var gene:Gene
 	var config:GeneConfig
 

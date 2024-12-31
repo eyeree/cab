@@ -1,19 +1,13 @@
 class_name Cell extends RefCounted
 
-static var _serialization = SerializationUtil.register(Cell) \
-	.ignore_properties(Cell, ['genome'])
-
-static var _next_cell_number:int = 1
-static func get_next_cell_number() -> int:
-	var cell_number = _next_cell_number
-	_next_cell_number += 1
-	return cell_number
+static func _static_init():
+	SerializationUtil.register(Cell)
 
 var genome:Genome
 var cell_type:CellType
 var cell_appearance:CellAppearance
 
-var cell_number:int = get_next_cell_number()
+var cell_number:int
 
 var energy:float = 0.0
 var gene_states:Array[GeneState] = []

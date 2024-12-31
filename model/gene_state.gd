@@ -1,7 +1,7 @@
 class_name GeneState extends RefCounted
 
-static var _serialization = SerializationUtil.register(GeneState) \
-	.ignore_properties(GeneState, ['cell'])
+static func _static_init():
+	SerializationUtil.register(GeneState)
 
 var gene:Gene
 var cell:Cell

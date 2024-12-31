@@ -1,7 +1,8 @@
 class_name Gene extends Resource
 
-static var _serialization = SerializationUtil.register(Gene) \
-	.as_resource_path(Gene)
+static func _static_init():
+	SerializationUtil.register(Gene) \
+		.use_resource_path_for(Gene)
 
 var name:String = "(new gene)"
 var required_effects:Array[StringName] = []

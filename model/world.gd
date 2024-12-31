@@ -1,6 +1,7 @@
 class_name World extends RefCounted
 
-static var _serialization = SerializationUtil.register(World)
+static func _static_init():
+	SerializationUtil.register(World)
 
 static var empty_cell:Cell # = EnvionmentGenome.empty_cell
 static var bounds_cell:Cell # = EnvionmentGenome.bounds_cell
@@ -9,6 +10,12 @@ var cells:HexStore
 var step_count:int
 var max_hex_distance:int
 
+static var _next_cell_number:int = 1
+static func get_next_cell_number() -> int:
+	var cell_number = _next_cell_number
+	_next_cell_number += 1
+	return cell_number
+	
 static func debug(msg:String, args:Array) -> void:
 	if true: prints("World", msg % args)
 
@@ -61,32 +68,6 @@ func set_cell(index:HexIndex, cell:Cell) -> void:
 	if existing:
 		var resolved = existing.resolve_conflicting_create(cell)
 		cells.set_value(index, resolved)
-
-func _on_serialize(data:Dictionary):
-	var genome_map:Dictionary[Genome, Variant] = {}
-	for cell in cells.get_all_values():
-		if not genome_map.has(cell.genome):
-			genome_map.set(cell.genome, genome_map.size())
-	
-	#return {
-		#genomes = genomes.map(func (genome:Genome): return genome.serialize()),
-		#cells = _cells.serialize(func (cell:Cell): return cell.serialize(genome_map)),
-		#max_hex_distance = _max_hex_distance,
-		#step_count = _step_count
-	#}
-	
-#static func deserialize(data:Variant) -> World:
-	#var genomes:Array[Genome] = data['genomes'].map(
-		#func (entry): return Genome.deserialize(entry))
-	#var genome_map:Dictionary[Variant, Genome] = {}
-	#for index:int in range(genomes.size()):
-		#genome_map.set(index, genomes[index])
-	#var cells = HexStore.deserialize(data['cells'], 
-		#func (value): return Cell.deserialize(value, genome_map))
-	#var max_hex_distance:int = data['max_hex_distance']
-	#var world:World = World.new(cells, max_hex_distance)
-	#world._step_count = data['step_count']
-	#return world
 	
 func is_empty_cell(cell:Cell) -> bool:
 	return cell == empty_cell

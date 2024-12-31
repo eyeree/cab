@@ -1,6 +1,7 @@
 class_name HexStore extends RefCounted
 
-static var _serialization = SerializationUtil.register(HexStore)
+static func _static_init():
+	SerializationUtil.register(HexStore)
 
 var _map:Dictionary[Vector3i, Variant] = {}
 

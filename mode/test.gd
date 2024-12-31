@@ -1,18 +1,22 @@
 class_name Test extends Node3D
 
-static var _serialization = SerializationUtil.register_nested(Test, {
-	Foo = Foo, 
-	Bar = Bar
-}) \
-.ignore_properties(Base, ['y']) \
-.ignore_properties(Foo, ['z']) \
-.ignore_properties(Bar, ['z'])
+static func _static_init():
+	prints('_static_init')
+	SerializationUtil.register_nested(Test, {
+		Foo = Foo, 
+		Bar = Bar,
+		Root = Root
+	}) \
+	.ignore_properties(Base, ['y']) \
+	.ignore_properties(Foo, ['z']) \
+	.ignore_properties(Bar, ['z'])
 
 class Base:
 	var x:String = 'x'
 	var y:String = 'y'
 	
 class Foo extends Base:
+	var root:Root
 	var a:String
 	var z:String = 'z'
 	var bar:Bar
@@ -20,6 +24,12 @@ class Foo extends Base:
 class Bar extends Base:
 	var b:String
 	var z:String = 'z'
+	
+class Root:
+	var foos:Array[Foo] = []
+	
+func _init():
+	prints('_init')
 	
 func _ready():
 	
@@ -35,12 +45,27 @@ func _ready():
 	#var B:GDScript = s.get('Base')
 	#prints('F', F, ':', B, ':', F.get_base_script(), ':', F.get_global_name(), ':', F.get_instance_base_type(), ':', F.resource_name, ':', F.resource_path, ':', F.get_class(), ':', F.get_script())
 	
-	var foo = Foo.new()
-	foo.a = 'foo'
-	foo.bar = Bar.new()
-	foo.bar.b = 'bar'
+	var foo1 = Foo.new()
+	foo1.a = 'foo1'
+	foo1.bar = Bar.new()
+	foo1.bar.b = 'bar1'
+
+	var foo2 = Foo.new()
+	foo1.a = 'foo1'
+	foo2.bar = foo1.bar
 	
-	prints(foo.get_property_list())
+	var root = Root.new()
+	root.foos.append(foo1)
+	root.foos.append(foo2)
+	foo1.root = root
+	foo2.root = root
+
+	var s = SerializationUtil.serialize(root)
+	prints("s", s)
+	var r = SerializationUtil.deserialize(s)
+	prints(r, r is Root, r.foos[0] != r.foos[1], r.foos[0].bar == r.foos[1].bar)
+	prints(r.foos[0].bar, r.foos[1].bar)
+	prints(r.foos[0].root == r, r.foos[1].root == r)
 	
 	#prints(foo, foo is Foo, foo.bar, foo.bar is Bar)
 	#
