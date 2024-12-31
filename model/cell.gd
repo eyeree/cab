@@ -15,7 +15,7 @@ var cell_type:CellType:
 	get: return _cell_type
 
 var energy:float = 0.0
-var gene_state:Dictionary[Gene, Variant] = {}
+var gene_states:Array[GeneState] = []
 
 var _cell_number:int = get_next_cell_number()
 
@@ -40,17 +40,13 @@ func _to_string() -> String:
 	return "Cell:%s:%s:%d:%d" % [_genome.name, _cell_type.name, _cell_number, energy]
 
 func serialize(genome_map:Dictionary[Genome, Variant]) -> Variant:
-	
-	var mapped_gene_state = {}
-	for gene in gene_state.keys():
-		var gene_index = _cell_type.active_genes.find(gene)
-		mapped_gene_state.seet(gene_index, gene_state[gene])
-		
 	return {
 		energy = energy,
 		genome = genome_map[genome],
 		cell_type = genome.cell_types.find(cell_type),
-		gene_state = mapped_gene_state
+		gene_states = gene_states.map(
+			func (gene_state:GeneState):
+				return gene_state.serialize())
 	}
 	
 static func deserialize(data:Variant, genome_map:Dictionary[Variant, Genome]) -> Cell:
@@ -63,10 +59,10 @@ static func deserialize(data:Variant, genome_map:Dictionary[Variant, Genome]) ->
 	
 	cell.energy = data['energy']
 	
-	var mapped_gene_state = data['gene_state']
-	for gene_index in mapped_gene_state.keys():
-		var gene = cell._cell_type.active_genes[gene_index]
-		cell.gene_state[gene] = mapped_gene_state[gene_index]
+	data['gene_states'].map(
+		func (entry:Variant):
+			return GeneState.deserialize(entry, cell)
+	)
 		
 	return cell
 	

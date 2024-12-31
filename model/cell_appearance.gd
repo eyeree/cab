@@ -5,11 +5,12 @@ class_name CellAppearance extends Node3D
 var resource_path:String:
 	get: return scene_file_path
 	
-func serialize() -> Variant:
-	return resource_path
-	
-static func deserialize(data:Variant) -> CellAppearance:
-	return load(data).instantiate()
-	
 func clone() -> CellAppearance:
 	return duplicate(DuplicateFlags.DUPLICATE_USE_INSTANTIATION)
+
+#region Serialization
+
+static var _serialization = SerializationUtil.register(CellAppearance) \
+	.as_resource_path(CellAppearance)
+
+#endregion	

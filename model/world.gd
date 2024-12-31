@@ -1,7 +1,7 @@
 class_name World extends RefCounted
 
-static var empty_cell:Cell = EnvionmentGenome.empty_cell
-static var bounds_cell:Cell = EnvionmentGenome.bounds_cell
+static var empty_cell:Cell # = EnvionmentGenome.empty_cell
+static var bounds_cell:Cell # = EnvionmentGenome.bounds_cell
 
 var _cells:HexStore
 var _step_count:int

@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Cellular Auto Battle"
+config/name="Cellular AutoBata"
 run/main_scene="uid://bs4xqfk5ujxms"
 config/features=PackedStringArray("4.4", "Mobile")
 boot_splash/bg_color=Color(0.177001, 0.162603, 0.191404, 1)

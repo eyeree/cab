@@ -1,10 +1,16 @@
 class_name AppearanceSet extends Resource
 
-static func deserialize(data:Variant) -> AppearanceSet:
-	return load(data).instantiate()
+#region Serialization
+
+static var _serialization = SerializationUtil.register(AppearanceSet)
+
+static func deserialize(data:Dictionary) -> AppearanceSet:
+	return load(data['resource_path']).instantiate()
 	
-func serialize() -> Variant:
-	return resource_path
+func serialize() -> Dictionary:
+	return { 'resource_path': resource_path	}
+
+#endregion	
 	
 @export_file("*.tscn") var cell_appearances:Array[String] = []
 	

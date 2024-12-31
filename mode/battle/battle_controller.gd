@@ -47,8 +47,8 @@ func _setup():
 	var cells:HexStore = HexStore.new()
 	
 	_world = World.new(cells, 5)
-	var content_scene:PackedScene = load(content_path)
-	_grid.set_hex_content(HexIndex.CENTER, content_scene.instantiate())
+	#var content_scene:PackedScene = load(content_path)
+	#_grid.set_hex_content(HexIndex.CENTER, content_scene.instantiate())
 
 	# for index in HexIndex.CENTER.ring(2):
 	# 	var content:Node3D = content_scene.instantiate()
