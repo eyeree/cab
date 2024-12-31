@@ -1,20 +1,16 @@
 class_name Genome extends RefCounted
 
-static var _serializers = SerializationUtil.register(Genome)
+static var _serialization = SerializationUtil.register(Genome)
 
 var name:String = '(new genone)'
 var appearance_set:AppearanceSet
 var genes:Array[Gene] = []
 var cell_types:Array[CellType] = []
 
-func serialize() -> Variant:
-	return SerializationUtil.serialize_object(self)
-	
-static func deserialize(data:Variant) -> Genome:
-	var genome:Genome = SerializationUtil.deserialize_object(data)
-	genome.validate()
-	return genome
-	
+func _on_deserialized():
+	for cell_type:CellType in cell_types:
+		cell_type.genome = self
+		
 func validate():
 	var errors:Array[String] = []
 	for cell_type in cell_types:

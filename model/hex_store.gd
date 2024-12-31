@@ -1,15 +1,17 @@
 class_name HexStore extends RefCounted
 
-var _map:Dictionary[StringName, Variant] = {}
+static var _serialization = SerializationUtil.register(HexStore)
 
-func set_value(index:HexIndex, value:Variant) -> void:
+var _map:Dictionary[Vector3i, Variant] = {}
+
+func set_content(index:HexIndex, value:Variant) -> void:
 	_map.set(index._key, value)
 
-func clear_value(index:HexIndex) -> void:
-	set_value(index, null)
+func clear_content(index:HexIndex) -> void:
+	set_content(index, null)
 
-func get_value(index:HexIndex) -> Variant:
-	return _map.get(index._key)
+func get_content(index:HexIndex, default:Variant = null) -> Variant:
+	return _map.get(index._key, default)
 
 func has_index(index:HexIndex) -> bool:
 	return _map.has(index._key)
@@ -26,7 +28,7 @@ func get_all_indexes() -> Array[HexIndex]:
 	
 func visit_all(callback:Callable) -> void:
 	for index in get_all_indexes():
-		var value = get_value(index)
+		var value = get_content(index)
 		callback.call(index, value)
 
 func clear_all_values() -> void:
@@ -38,11 +40,11 @@ func duplicate() -> HexStore:
 	return new
 
 func get_ring(center:HexIndex, radius:int) -> Array[Variant]:
-	return center.ring(radius).map(get_value)
+	return center.ring(radius).map(get_content)
 
 func visit_ring(center:HexIndex, radius:int, callback:Callable) -> void:
 	for index in center.ring(radius):
-		var value = get_value(index)
+		var value = get_content(index)
 		callback.call(index, value)
 		
 func find_max_distance() -> int:
@@ -55,7 +57,7 @@ func find_max_distance() -> int:
 
 func serialize(serialize_value:Callable) -> Variant:
 	return get_all_indexes().map(
-		func (index): return [index.serialize(), serialize_value.call(get_value(index))]
+		func (index): return [index.serialize(), serialize_value.call(get_content(index))]
 	)
 
 static func deserialize(data:Variant, deserialize_value:Callable) -> HexStore:

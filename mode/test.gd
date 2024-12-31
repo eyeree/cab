@@ -1,34 +1,23 @@
 class_name Test extends Node3D
 
-static var _serializers = SerializationUtil.register_nested(Test, {
+static var _serialization = SerializationUtil.register_nested(Test, {
 	Foo = Foo, 
 	Bar = Bar
-})
-
-#static func _deserialize_Bar(data:Variant):
-	#prints('_deserialize_Bar', data)
-	#var result = Bar.new()
-	#SerializationUtil.deserialize_object(data, result)
-	#return result
+}) \
+.ignore_properties(Base, ['y']) \
+.ignore_properties(Foo, ['z']) \
+.ignore_properties(Bar, ['z'])
 
 class Base:
-	static func _identify_ignored_properties(ignored_properties:Array[StringName]):
-		ignored_properties.append('y')
 	var x:String = 'x'
 	var y:String = 'y'
 	
 class Foo extends Base:
-	static func _identify_ignored_properties(ignored_properties:Array[StringName]):
-		super._identify_ignored_properties(ignored_properties)
-		ignored_properties.append('z')
 	var a:String
 	var z:String = 'z'
 	var bar:Bar
 
 class Bar extends Base:
-	static func _identify_ignored_properties(ignored_properties:Array[StringName]):
-		super._identify_ignored_properties(ignored_properties)
-		ignored_properties.append('z')
 	var b:String
 	var z:String = 'z'
 	
@@ -41,26 +30,46 @@ func _ready():
 	#if Bar._factory is Callable:
 		#prints(Bar._factory.get_object(), Bar._factory.get_method())
 	
-	var s = self.get_script()
-	var F:GDScript = s.get('Foo')
-	prints('F', F, F.get_base_script(), F.get_global_name(), F.get_instance_base_type(), F.resource_name, F.resource_path, F.get_class(), F.get_script())
-	var f = F.new()
-	f.a = 'xxx'
-	prints('new F', f, f.a, f is Foo)
+	#var s = self.get_script()
+	#var F:GDScript = s.get('Foo')
+	#var B:GDScript = s.get('Base')
+	#prints('F', F, ':', B, ':', F.get_base_script(), ':', F.get_global_name(), ':', F.get_instance_base_type(), ':', F.resource_name, ':', F.resource_path, ':', F.get_class(), ':', F.get_script())
 	
 	var foo = Foo.new()
 	foo.a = 'foo'
 	foo.bar = Bar.new()
 	foo.bar.b = 'bar'
+	
+	prints(foo.get_property_list())
+	
+	#prints(foo, foo is Foo, foo.bar, foo.bar is Bar)
+	#
+	#var s0 = SerializationUtil.serialize_object(foo)
+	#var f0 = SerializationUtil.deserialize_object(s0)
+	#prints(f0, f0.a, f0 is Foo, f0.bar, f0.bar.b, f0.bar is Bar)
+	#prints(s0)
+	#prints(JSON.stringify(s0))
+	
+	#var s1 = var_to_str(foo)
+	#var f1 = str_to_var(s1)
+	#prints(f1, f1 is Foo, f1.bar, f1.bar is Bar)
+	
+	#var s2 = var_to_bytes(foo)
+	#var f2 = bytes_to_var(s2)
+	#prints(f2, f2 is Foo, f2.bar, f2.bar is Bar)
+
+	#var s3 = var_to_bytes_with_objects(foo)
+	#var f3 = bytes_to_var_with_objects(s3)
+	#prints(f3, f3 is Foo, f3.bar, f3.bar is Bar)
 		
-	prints('foo.a', foo.a)
-	
-	var ser = SerializationUtil.serialize_properties(foo)
-	prints('ser', ser)
-	
-	var f2 = Foo.new()
-	SerializationUtil.deserialize_properties(ser, f2)
-	prints(f2, f2.a, f2.bar, f2.bar is Bar)
+	#prints('foo.a', foo.a)
+	#
+	#var ser = SerializationUtil.serialize_properties(foo)
+	#prints('ser', ser)
+	#
+	#var f2 = Foo.new()
+	#SerializationUtil.deserialize_properties(ser, f2)
+	#prints(f2, f2.a, f2.bar, f2.bar is Bar)
 	#prints(f2.a, f2.bar.b, f2 is Foo, f2.b is Bar)
 	
 	#var s1 = var_to_str(Vector3(1, 2, 3))

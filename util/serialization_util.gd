@@ -47,12 +47,6 @@ static func remap(old_id:StringName, new_cls:Script) -> void:
 		push_error('remap of old id "%s" to unregistered class "%s".' % [ old_id, new_cls ])
 	_uid_to_script_map.set(old_id, new_cls)
 	
-static func _get_ignored_properties(cls:Script) -> Array[StringName]:
-	var ignored_properties:Array[StringName] = []
-	if cls.has_method('_identify_ignored_properties'):
-		cls.call('_identify_ignored_properties', ignored_properties)
-	return ignored_properties
-	
 class SerializationBuilder:
 	
 	func remap(old_id:StringName, new_cls:Script) -> SerializationBuilder:
@@ -65,16 +59,12 @@ class SerializationBuilder:
 		
 	func as_resource_path(cls:Script) -> SerializationBuilder:
 		return helper(cls, ResourceReferenceSerializationHelper.singelton)
+		
+	func ignore_properties(cls:Script, property_names:Array[StringName]) -> SerializationBuilder:
+		SerializationUtil.set_ignored_properties(cls, property_names)
+		return self
 
 static var builder:SerializationBuilder = SerializationBuilder.new()
-
-static func nested(root_cls:Script)
-
-static func register_resource(root_cls:Script) -> SerializationBuilder:
-	var root_id:StringName = _get_root_class_id(root_cls)
-	if root_id != '':
-		_set_helper(root_id, ResourceReferenceSerializationHelper.singelton)
-	return SerializationBuilder(root_id, root_cls)
 
 static func register(root_cls:Variant, nested_map:Dictionary[String, Variant] = {}) -> SerializationBuilder:
 	var root_id:StringName = _get_root_class_id(root_cls)
@@ -97,7 +87,6 @@ static func _register_nested(root_id:StringName, nested_map:Dictionary[String, V
 static func _register(id:StringName, cls:Script) -> void:
 	_uid_to_script_map.set(id, cls)
 	_script_to_uid_map.set(cls, id)
-	_ignored_property_map.set(cls, _get_ignored_properties(cls))
 
 static func set_helper(cls:Script, helper:SerializationHelper) -> void:
 	var id = _script_to_uid_map.get(cls)
@@ -127,15 +116,25 @@ static func serialize_array(array:Array) -> Array:
 static func serialize_dictionary(dictionary:Dictionary) -> Dictionary:
 	var result = {}
 	for key in dictionary.keys():
-		result[key] = serialize_value(dictionary[key])
+		result[serialize_value(key)] = serialize_value(dictionary[key])
 	return result
+
+static var _empty_ignored_property_list:Array[StringName] = []
+
+static func set_ignored_properties(cls:Script, property_names:Array[StringName]) -> void:
+	var base_cls:Script = cls.get_base_script()
+	while base_cls != null:
+		if _ignored_property_map.has(base_cls):
+			property_names.append_array(_ignored_property_map.get(base_cls))
+		base_cls = base_cls.get_base_script()
+	_ignored_property_map.set(cls, property_names)
 
 static func serialize_properties(object:Object) -> Dictionary:
 	
 	var cls = object.get_script()
-	if not _ignored_property_map.has(cls):
-		_ignored_property_map.set(cls, _get_ignored_properties(cls))
-	var ignored_properties:Array[StringName] = _ignored_property_map.get(cls)
+	
+	var ignored_properties:Array[StringName] = _ignored_property_map.get(cls) \
+		if _ignored_property_map.has(cls) else _empty_ignored_property_list
 		
 	var result:Dictionary = {}
 	for prop:Dictionary in object.get_property_list():
@@ -204,26 +203,28 @@ static func deserialize_value(value:Variant) -> Variant:
 			return null
 
 static func deserialize_object(data:Dictionary) -> Object:
+	var result:Object = null
 	var id:StringName = data['_class_id']
 	var helper = _id_to_helper_map.get(id)
 	if helper:
-		return helper.deserialize(data)
+		result = helper.deserialize(data)
 	else:
 		var cls:Script = _uid_to_script_map.get(id)
 		if cls == null:
 			push_error('No script for id "%s" is registered' % [id])
-			return null
 		elif cls.has_method('deserialize'):
-			return cls.call('deserialize', data)
+			result = cls.call('deserialize', data)
 		else:
-			var result = cls.new()
+			result = cls.new()
 			deserialize_properties(data, result)
-			return result
+	if result.has_method('_on_deserialized'):
+		result.call('_on_deserialized')
+	return result
 
 static func deserialize_dictionary(dictionary:Dictionary) -> Dictionary:
 	var result = {}
 	for key in dictionary.keys():
-		result[key] = deserialize_value(dictionary[key])
+		result[deserialize_value(key)] = deserialize_value(dictionary[key])
 	return result
 	
 static func deserialize_array(array:Array) -> Array:

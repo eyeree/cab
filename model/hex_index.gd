@@ -2,6 +2,8 @@ class_name HexIndex extends RefCounted
 
 # https://www.redblobgames.com/grids/hexagons/
 
+static var _serialization = SerializationUtil.register(HexIndex)
+
 enum HexDirection { NE = 0, E = 1, SE = 2, SW = 3, W = 4, NW = 5 }
 
 static var INVALID:HexIndex = HexIndex.new(2147483647, 2147483647, 2147483647)
@@ -67,7 +69,7 @@ var r:int:
 var s:int:
 	get(): return _key.z
 
-func _init(q_:int, r_:int, s_:int):
+func _init(q_:int = 0, r_:int = 0, s_:int = 0):
 	_key = Vector3i(q_, r_, s_)
 	
 func add(index:HexIndex) -> HexIndex:
