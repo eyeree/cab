@@ -7,7 +7,7 @@ static func _static_init():
 var name:String = "(new gene)"
 var required_effects:Array[StringName] = []
 
-func create_state(creator:Cell, config:GeneConfig) -> GeneState:
+func create_state(progenitor:Cell, config:GeneConfig) -> GeneState:
 	return GeneState.new()
 	
 func create_config() -> GeneConfig:

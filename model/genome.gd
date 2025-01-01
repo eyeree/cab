@@ -1,12 +1,34 @@
 class_name Genome extends RefCounted
 
-static func _static_init():
-	SerializationUtil.register(Genome)
-
 var name:String = '(new genone)'
-var appearance_set:AppearanceSet
+var appearance_set:AppearanceSet = AppearanceSet.default
 var genes:Array[Gene] = []
 var cell_types:Array[CellType] = []
+
+func _init() -> void:
+	pass
+
+func add_gene(gene:Gene) -> void:
+	if not genes.has(gene):
+		genes.append(gene)
+		
+func remove_gene(gene:Gene) -> void:
+	if not is_gene_used(gene):
+		genes.erase(gene)
+
+func is_gene_used(gene:Gene) -> bool:
+	for cell_type in cell_types:
+		if cell_type.is_gene_active(gene):
+			return true
+	return false
+	
+func add_cell_type() -> CellType:
+	var cell_type = CellType.new(self)
+	cell_types.append(cell_type)
+	return cell_type
+	
+func remove_cell_type(cell_type:CellType) -> void:
+	cell_types.erase(cell_type)
 
 func validate():
 	var errors:Array[String] = []

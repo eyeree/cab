@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="AppearanceSet" load_steps=2 format=3 uid="uid://ba67crpqdyhwb"]
-
-[ext_resource type="Script" uid="uid://ho6wkjjygk5j" path="res://model/appearance_set.gd" id="1_day70"]
-
-[resource]
-script = ExtResource("1_day70")
-cell_appearances = Array[String](["uid://be2wyq5pahuhx", "uid://hfpk7yoxgsl0"])
-metadata/_custom_type_script = ExtResource("1_day70")

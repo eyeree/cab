@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=3 uid="uid://c4pfkhm781n7w"]
+
+[ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="1_6colc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dw4rj"]
+albedo_color = Color(0.111197, 0.111197, 0.111197, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6colc"]
+albedo_color = Color(0.596236, 0.0948512, 0.172077, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5qoae"]
+albedo_color = Color(1, 0.415686, 1, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_qvpaj"]
+material = SubResource("StandardMaterial3D_5qoae")
+size = Vector3(0.25, 0.25, 0.25)
+
+[node name="EnvironmentCellToxin" type="Node3D"]
+script = ExtResource("1_6colc")
+metadata/_custom_type_script = ExtResource("1_6colc")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0.05, 0)
+height = 0.1
+sides = 6
+material = SubResource("StandardMaterial3D_dw4rj")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="CSGCylinder3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.284085, 0)
+radius = 0.132
+height = 0.1
+sides = 6
+material = SubResource("StandardMaterial3D_6colc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CSGCylinder3D/CSGCylinder3D2"]
+transform = Transform3D(1, 0, -1.77636e-15, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.110927, -0.222275)
+mesh = SubResource("PrismMesh_qvpaj")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="CSGCylinder3D/CSGCylinder3D2"]
+transform = Transform3D(0.5, -0.866026, -1.77636e-15, -3.78552e-08, -2.18557e-08, 1, -0.866026, -0.5, -4.37114e-08, -0.202618, -0.110927, -0.110177)
+mesh = SubResource("PrismMesh_qvpaj")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="CSGCylinder3D/CSGCylinder3D2"]
+transform = Transform3D(-0.5, -0.866026, -3.78552e-08, 0, -4.37114e-08, 1, -0.866026, 0.5, 2.18557e-08, -0.19747, -0.110927, 0.107694)
+mesh = SubResource("PrismMesh_qvpaj")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="CSGCylinder3D/CSGCylinder3D2"]
+transform = Transform3D(-1, -8.9407e-08, -3.55271e-15, 0, -4.37114e-08, 1, -8.9407e-08, 1, 4.37114e-08, 0.000999995, -0.110927, 0.224921)
+mesh = SubResource("PrismMesh_qvpaj")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="CSGCylinder3D/CSGCylinder3D2"]
+transform = Transform3D(-0.5, 0.866026, 3.78552e-08, 0, -4.37114e-08, 1, 0.866026, 0.5, 2.18557e-08, 0.197291, -0.110927, 0.110042)
+mesh = SubResource("PrismMesh_qvpaj")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="CSGCylinder3D/CSGCylinder3D2"]
+transform = Transform3D(0.5, 0.866026, 3.78552e-08, 0, -4.37114e-08, 1, 0.866026, -0.5, -2.18557e-08, 0.195638, -0.110927, -0.113277)
+mesh = SubResource("PrismMesh_qvpaj")
+skeleton = NodePath("../..")

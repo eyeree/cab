@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://bkjqo0op5kwfi"]
+
+[ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="1_ooewc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tpf0u"]
+albedo_color = Color(0.634224, 0.218454, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_v5ctb"]
+material = SubResource("StandardMaterial3D_tpf0u")
+height = 0.01
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ohu1u"]
+albedo_color = Color(0.894118, 0.545098, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_d56es"]
+material = SubResource("StandardMaterial3D_ohu1u")
+radius = 0.25
+height = 0.25
+is_hemisphere = true
+
+[node name="SimpleBCellB" type="Node3D"]
+script = ExtResource("1_ooewc")
+supported_effects = Array[String](["uid://3h0ed54r6bqa", "uid://cbool5fegnid0"])
+metadata/_custom_type_script = ExtResource("1_ooewc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, 0)
+mesh = SubResource("CylinderMesh_v5ctb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0099923, 0)
+mesh = SubResource("SphereMesh_d56es")

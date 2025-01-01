@@ -44,9 +44,7 @@ func _on_mouse_exited_hex(_index:HexIndex):
 	_grid.clear_selected_index()
 
 func _setup():
-	var cells:HexStore = HexStore.new()
-	
-	_world = World.new(cells, 5)
+	_world = World.create()
 	#var content_scene:PackedScene = load(content_path)
 	#_grid.set_hex_content(HexIndex.CENTER, content_scene.instantiate())
 

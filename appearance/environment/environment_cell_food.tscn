@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://5j8f1fmqepn5"]
+
+[ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="1_r4jsq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dw4rj"]
+albedo_color = Color(0.111197, 0.111197, 0.111197, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r4jsq"]
+albedo_color = Color(1, 1, 0.196078, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_td165"]
+material = SubResource("StandardMaterial3D_r4jsq")
+inner_radius = 0.1
+outer_radius = 0.25
+
+[node name="EnvironmentCellBorder" type="Node3D"]
+script = ExtResource("1_r4jsq")
+metadata/_custom_type_script = ExtResource("1_r4jsq")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0.05, 0)
+height = 0.1
+sides = 6
+material = SubResource("StandardMaterial3D_dw4rj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CSGCylinder3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0756302, 0)
+mesh = SubResource("TorusMesh_td165")

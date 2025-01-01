@@ -97,7 +97,24 @@ class SceneFilePathSerializationHelper extends SerializationHelper:
 		var resource_path = data[SCENE_FILE_PATH]
 		var packed_scene:PackedScene = load(resource_path)
 		return packed_scene.instantiate()
+
+class SingeltonSerializationHelper extends SerializationHelper:
+
+	var singelton:Object
+	
+	func _init(singelton_:Object):
+		singelton = singelton_	
+	
+	func serialize(_ctx:SerializationContext, object:Object) -> Dictionary:
+		if object == singelton:
+			return { }
+		else:
+			push_error('cannot serialize object %s as singelton' % object)
+			return { }
 			
+	func deserialize(_ctx:DeserializationContext, data:Dictionary, _ref:Dictionary) -> Object:
+		return singelton
+					
 #endregion
 
 #region Registration
@@ -117,6 +134,9 @@ class SerializationBuilder:
 		
 	func use_scene_file_path_for(cls:Script) -> SerializationBuilder:
 		return helper(cls, SceneFilePathSerializationHelper.singelton)
+
+	func use_singelton_for(cls:Script, singelton:Object) -> SerializationBuilder:
+		return helper(cls, SingeltonSerializationHelper.new(singelton))
 		
 	func ignore_properties(cls:Script, property_names:Array[StringName]) -> SerializationBuilder:
 		SerializationUtil.set_ignored_properties(cls, property_names)

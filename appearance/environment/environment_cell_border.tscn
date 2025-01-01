@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqs1ujlq333hi"]
+
+[ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="1_dw4rj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dw4rj"]
+albedo_color = Color(0, 0, 0, 1)
+
+[node name="EnvironmentCellBorder" type="Node3D"]
+script = ExtResource("1_dw4rj")
+metadata/_custom_type_script = ExtResource("1_dw4rj")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0.05, 0)
+height = 0.1
+sides = 6
+material = SubResource("StandardMaterial3D_dw4rj")

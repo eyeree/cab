@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://hfpk7yoxgsl0"]
-
-[ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="1_grg48"]
-
-[node name="CellStyleB" type="Node3D"]
-script = ExtResource("1_grg48")
-supported_effects = Array[String](["uid://cbool5fegnid0", "uid://c47sqiwj56b2j"])
-metadata/_custom_type_script = ExtResource("1_grg48")

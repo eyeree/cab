@@ -1,14 +1,8 @@
 class_name World extends RefCounted
 
 static func _static_init():
-	SerializationUtil.register(World)
-
-static var empty_cell:Cell # = EnvionmentGenome.empty_cell
-static var bounds_cell:Cell # = EnvionmentGenome.bounds_cell
-
-var cells:HexStore
-var step_count:int
-var max_hex_distance:int
+	SerializationUtil.register(World) \
+		.ignore_properties(World, ['bounds_cell', 'empty_cell'])
 
 static var _next_cell_number:int = 1
 static func get_next_cell_number() -> int:
@@ -19,18 +13,32 @@ static func get_next_cell_number() -> int:
 static func debug(msg:String, args:Array) -> void:
 	if true: prints("World", msg % args)
 
-static func create(initial_state:HexStore, max_hex_distance:int) -> void:
-	
-	if initial_state.find_max_distance() > max_hex_distance:
-		push_error("World initial_state max distance greater than specified max distance.")
-		max_hex_distance = initial_state.find_max_distance()
+class WorldOptions:
+	static var default = WorldOptions.new()
+	var max_hex_distance:int = 10
+	var empty_cell_type:CellType = EnvionmentGenome.empty_cell_type
 		
+static func create(options:WorldOptions = WorldOptions.default) -> World:	
 	var result:World = World.new()
-	result.max_hex_distance = max_hex_distance
-	result.cells = initial_state.duplicate()
-	
-	debug("create : initial_state: %s : max_hex_distance: %d", [initial_state, max_hex_distance])
-	
+	result.max_hex_distance = options.max_hex_distance
+	result.cells = HexStore.new()
+	result.empty_cell_type = options.empty_cell_type
+	result.empty_cell = options.empty_cell_type.create_cell()
+	debug("create | options: %s", [options])
+	return result
+
+var cells:HexStore
+var step_count:int
+var max_hex_distance:int
+
+var empty_cell_type:CellType
+var empty_cell:Cell
+
+var bounds_cell:Cell = EnvionmentGenome.bounds_cell_type.create_cell()
+
+func _on_deserialized() -> void:
+	empty_cell = empty_cell_type.create_cell()
+		
 func step() -> void:
 	step_count += 1
 	debug("step : step_count: %d", [step_count])
