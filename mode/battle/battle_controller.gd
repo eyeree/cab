@@ -45,6 +45,13 @@ func _on_mouse_exited_hex(_index:HexIndex):
 
 func _setup():
 	_world = World.create()
+	
+	var genome1 = Genome.new()
+	genome1.name = "Genome1"
+	
+	var genome2 = Genome.new()
+	genome2.name = "Genome2"
+	
 	#var content_scene:PackedScene = load(content_path)
 	#_grid.set_hex_content(HexIndex.CENTER, content_scene.instantiate())
 

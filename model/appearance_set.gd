@@ -39,7 +39,7 @@ var cell_appearances:Array[CellAppearance]:
 			var files = DirAccess.get_files_at(_base_dir)
 			var cell_base_name = _base_name + '_cell_'
 			for file in files:
-				if file.start_with(cell_base_name):
+				if file.starts_with(cell_base_name):
 					var packed_scene:PackedScene = load(file)
 					var cell_appearance:CellAppearance = packed_scene.instanciate()
 					_cell_appearances.append(cell_appearance)

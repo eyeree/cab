@@ -1,52 +1,48 @@
 class_name HexStore extends RefCounted
 
-static func _static_init():
-	SerializationUtil.register(HexStore)
-
-var _map:Dictionary[Vector3i, Variant] = {}
+var _map:Dictionary[HexIndex, Variant] = {}
 
 func set_content(index:HexIndex, value:Variant) -> void:
-	_map.set(index._key, value)
+	_map.set(index, value)
 
 func clear_content(index:HexIndex) -> void:
 	set_content(index, null)
 
 func get_content(index:HexIndex, default:Variant = null) -> Variant:
-	return _map.get(index._key, default)
+	return _map.get(index, default)
 
-func has_index(index:HexIndex) -> bool:
-	return _map.has(index._key)
+func has_content_at(index:HexIndex) -> bool:
+	return _map.has(index)
 	
-func get_all_values() -> Array[Variant]:
+func get_all_content() -> Array[Variant]:
 	return _map.values()
 
 func get_all_indexes() -> Array[HexIndex]:
-	var indexes:Array[HexIndex] = []
-	for key in _map.keys():
-		var index:HexIndex = HexIndex.from_key(key)
-		indexes.push_back(index)
-	return indexes
+	return _map.keys()
 	
 func visit_all(callback:Callable) -> void:
 	for index in get_all_indexes():
 		var value = get_content(index)
 		callback.call(index, value)
 
-func clear_all_values() -> void:
+func clear_all_content() -> void:
 	_map = {}
+	
+func size() -> int:
+	return _map.size()
 	
 func duplicate() -> HexStore:
 	var new = HexStore.new()
-	visit_all(new.set_value)
+	visit_all(new.set_content)
 	return new
 
-func get_ring(center:HexIndex, radius:int) -> Array[Variant]:
+func get_ring_content(center:HexIndex, radius:int) -> Array[Variant]:
 	return center.ring(radius).map(get_content)
 
 func visit_ring(center:HexIndex, radius:int, callback:Callable) -> void:
 	for index in center.ring(radius):
-		var value = get_content(index)
-		callback.call(index, value)
+		var content = get_content(index)
+		callback.call(index, content)
 		
 func find_max_distance() -> int:
 	var max_distance:int = 0
@@ -58,13 +54,14 @@ func find_max_distance() -> int:
 
 func serialize(serialize_value:Callable) -> Variant:
 	return get_all_indexes().map(
-		func (index): return [index.serialize(), serialize_value.call(get_content(index))]
+		func (index): 
+			return [index.serialize(), serialize_value.call(get_content(index))]
 	)
 
 static func deserialize(data:Variant, deserialize_value:Callable) -> HexStore:
 	var hex_store = HexStore.new()
 	for entry in data:
-		hex_store.set_value(
+		hex_store.set_content(
 			HexIndex.deserialize(entry[0]),
 			deserialize_value.call(entry[1])
 		)

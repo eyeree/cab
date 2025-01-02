@@ -4,6 +4,7 @@ var name:String = '(new genone)'
 var appearance_set:AppearanceSet = AppearanceSet.default
 var genes:Array[Gene] = []
 var cell_types:Array[CellType] = []
+var hidden:bool = false
 
 func _init() -> void:
 	pass

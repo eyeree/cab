@@ -11,24 +11,25 @@ static func _static_init() -> void:
 	
 	genome = Genome.new()
 	genome.name = 'Envionment'
+	genome.hidden = true
 	genome.appearance_set = load("res://appearance/environment/environment_appearance_set.tres")
 	
 	bounds_cell_type = genome.add_cell_type()
 	bounds_cell_type.name = 'Bounds'
-	bounds_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('Bounds')
+	bounds_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('EnvironmentCellBounds')
 	
 	empty_cell_type = genome.add_cell_type()
 	empty_cell_type.name = 'Empty'
-	empty_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('Empty')
+	empty_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('EnvironmentCellEmpty')
 
 	agar_cell_type = genome.add_cell_type()
 	agar_cell_type.name = 'Agar'
-	agar_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('Agar')
+	agar_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('EnvironmentCellAgar')
 	
 	food_cell_type = genome.add_cell_type()
 	food_cell_type.name = 'Food'
-	food_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('Food')
+	food_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('EnvironmentCellFood')
 
 	toxin_cell_type = genome.add_cell_type()
 	toxin_cell_type.name = 'Toxin'
-	toxin_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('Toxin')
+	toxin_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('EnvironmentCellToxin')

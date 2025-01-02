@@ -2,25 +2,35 @@ class_name HexIndex extends RefCounted
 
 # https://www.redblobgames.com/grids/hexagons/
 
-static func _static_init():
-	SerializationUtil.register(HexIndex)
-
 enum HexDirection { NE = 0, E = 1, SE = 2, SW = 3, W = 4, NW = 5 }
 
-static var INVALID:HexIndex = HexIndex.new(2147483647, 2147483647, 2147483647)
-static var CENTER:HexIndex = HexIndex.new(0, 0, 0)
+static var INVALID:HexIndex = HexIndex.from(-1, -1, -1)
+static var CENTER:HexIndex = HexIndex.from(0, 0, 0)
 	
-static var _direction_vectors = [
-	HexIndex.new(+1, -1, 0), # NE
-	HexIndex.new(+1, 0, -1), # E
-	HexIndex.new(0, +1, -1), # SE
-	HexIndex.new(-1, +1, 0), # SW
-	HexIndex.new(-1, 0, +1), # W
-	HexIndex.new(0, -1, +1), # NW
+static var _direction_vectors:Array[HexIndex] = [
+	HexIndex.from(+1, -1, 0), # NE
+	HexIndex.from(+1, 0, -1), # E
+	HexIndex.from(0, +1, -1), # SE
+	HexIndex.from(-1, +1, 0), # SW
+	HexIndex.from(-1, 0, +1), # W
+	HexIndex.from(0, -1, +1), # NW
 ]
 
-static func from_axial(q_:int, r_:int) -> HexIndex:
-	return HexIndex.new(q_, r_, -q_ - r_)
+## Number of hexes in a specified number of rings around a center hex, plus the center hex.
+##       1 ->     7
+##       2 ->    19
+##       5 ->    91
+##      10 ->   331
+##      17 ->   919
+##      20 ->  1261
+##      57 ->  9919
+##     100 -> 30301 
+static func hex_count(rings:int) -> int:
+	return 1 + 3 * rings * (rings+1)
+
+static func from(q_:int, r_:int, s_:int = -q_ - r_) -> HexIndex:
+	var key:Vector3i = Vector3i(q_, r_, s_)
+	return _from_key(key)
 	
 static func from_point(point:Vector2, hex_outer_radius:float) -> HexIndex:
 	# pixel_to_pointy_hex https://www.redblobgames.com/grids/hexagons/#pixel-to-hex	
@@ -34,9 +44,9 @@ static func round_axial(q_:float, r_:float) -> HexIndex:
 	q_ -= q_round 
 	r_ -= r_round
 	if abs(q_) >= abs(r_):
-		return HexIndex.from_axial(q_round + roundi(q_ + 0.5*r_), r_round)
+		return HexIndex.from(q_round + roundi(q_ + 0.5*r_), r_round)
 	else:
-		return HexIndex.from_axial(q_round, r_round + roundi(r_ + 0.5*q_))
+		return HexIndex.from(q_round, r_round + roundi(r_ + 0.5*q_))
 
 static func round_cube(q_:float, r_:float, s_:float) -> HexIndex:
 	var q_round:int = roundi(q_)
@@ -54,11 +64,16 @@ static func round_cube(q_:float, r_:float, s_:float) -> HexIndex:
 	else:
 		s_round = -q_round - r_round
 
-	return HexIndex.new(q_round, r_round, s_round)
+	return HexIndex.from(q_round, r_round, s_round)
 
-static func from_key(key_:Vector3i) -> HexIndex:
-	return HexIndex.new(key_.x, key_.y, key_.z)
-		
+static var _instances:Dictionary[Vector3i, HexIndex] = {}
+static func _from_key(key_:Vector3i) -> HexIndex:
+	var index:HexIndex = _instances.get(key_)
+	if index == null:
+		index = HexIndex.new(key_)
+		_instances.set(key_, index)
+	return index
+	
 var _key:Vector3i
 
 var q:int:
@@ -70,17 +85,17 @@ var r:int:
 var s:int:
 	get(): return _key.z
 
-func _init(q_:int = 0, r_:int = 0, s_:int = 0):
-	_key = Vector3i(q_, r_, s_)
+func _init(key_:Vector3i):
+	_key = key_
 	
 func add(index:HexIndex) -> HexIndex:
-	return HexIndex.new(q + index.q, r + index.r, s + index.s)
+	return HexIndex.from(q + index.q, r + index.r, s + index.s)
 
 func subtract(index:HexIndex) -> HexIndex:
-	return HexIndex.new(q - index.q, r - index.r, s - index.s)
+	return HexIndex.from(q - index.q, r - index.r, s - index.s)
 	
 func scale(factor:int) -> HexIndex:
-	return HexIndex.new(q * factor, r * factor, s * factor)
+	return HexIndex.from(q * factor, r * factor, s * factor)
 	
 func neighbor(direction:HexDirection) -> HexIndex:
 	return add(_direction_vectors[direction])   
@@ -101,6 +116,14 @@ func ring(radius:int) -> Array[HexIndex]:
 			index = index.neighbor(direction)
 	return results	
 
+func spiral(radius:int, include_center:bool = false) -> Array[HexIndex]:
+	var results:Array[HexIndex] = []
+	if include_center:
+		results.append(self)
+	for k in range(radius):
+		results.append_array(ring(k))
+	return results
+	
 func to_axial() -> Vector2i:
 	return Vector2i(q, r)	
 	
@@ -121,4 +144,4 @@ func serialize() -> Variant:
 	return [q, r, s]
 	
 static func deserialize(data:Variant) -> HexIndex:
-	return HexIndex.new(data[0], data[1], data[2])
+	return HexIndex.from(data[0], data[1], data[2])

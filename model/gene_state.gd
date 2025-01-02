@@ -1,13 +1,12 @@
 class_name GeneState extends RefCounted
 
-static func _static_init():
-	SerializationUtil.register(GeneState)
-
 var gene:Gene
-var cell:Cell
 
-func use_energy(index:HexIndex, world:World, cell:Cell) -> void:
+func _init(gene_:Gene):
+	gene = gene_
+	
+func perform_actions(index:HexIndex, world:World, cell:Cell) -> void:
 	pass
 	
-func aquire_energy(index:HexIndex, world:World, cell:Cell) -> void:
+func update_state(index:HexIndex, world:World, cell:Cell) -> void:
 	pass
