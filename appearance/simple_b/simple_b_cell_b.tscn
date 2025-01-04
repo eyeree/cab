@@ -7,10 +7,12 @@ albedo_color = Color(0.634224, 0.218454, 0, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_v5ctb"]
 material = SubResource("StandardMaterial3D_tpf0u")
+top_radius = 0.45
+bottom_radius = 0.45
 height = 0.01
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ohu1u"]
-albedo_color = Color(0.894118, 0.545098, 0, 1)
+albedo_color = Color(0.988235, 0.560784, 0.196078, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_d56es"]
 material = SubResource("StandardMaterial3D_ohu1u")
@@ -27,5 +29,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, 0)
 mesh = SubResource("CylinderMesh_v5ctb")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0099923, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00356253, 0)
 mesh = SubResource("SphereMesh_d56es")

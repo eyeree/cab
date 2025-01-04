@@ -17,7 +17,8 @@ shader_parameter/outside_color = Color(0, 0, 0, 1)
 shader_parameter/line_size = 0.13
 shader_parameter/max_hex_distance = 5
 shader_parameter/hex_outer_radius = 0.0524864
-shader_parameter/selected_index = Vector2i(0, 0)
+shader_parameter/selected_index = Vector2i(1000, 1000)
+shader_parameter/highlighted_index_count = 0
 shader_parameter/highlighted_indexes = null
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sle3t"]

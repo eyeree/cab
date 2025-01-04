@@ -7,16 +7,16 @@ albedo_color = Color(0, 0.545098, 0, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_v5ctb"]
 material = SubResource("StandardMaterial3D_tpf0u")
+top_radius = 0.45
+bottom_radius = 0.45
 height = 0.01
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ohu1u"]
-albedo_color = Color(0, 1, 0, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_52ug6"]
+albedo_color = Color(0.109804, 0.847059, 0.109804, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_d56es"]
-material = SubResource("StandardMaterial3D_ohu1u")
-radius = 0.25
-height = 0.25
-is_hemisphere = true
+[sub_resource type="PrismMesh" id="PrismMesh_xv0wo"]
+material = SubResource("StandardMaterial3D_52ug6")
+size = Vector3(0.4, 0.2, 0.4)
 
 [node name="SimpleACellB" type="Node3D"]
 script = ExtResource("1_ohu1u")
@@ -27,5 +27,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, 0)
 mesh = SubResource("CylinderMesh_v5ctb")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0099923, 0)
-mesh = SubResource("SphereMesh_d56es")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("PrismMesh_xv0wo")

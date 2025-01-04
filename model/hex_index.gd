@@ -2,7 +2,7 @@ class_name HexIndex extends RefCounted
 
 # https://www.redblobgames.com/grids/hexagons/
 
-static var INVALID:HexIndex = HexIndex.from(-1, -1, -1)
+static var INVALID:HexIndex = HexIndex.from(10000, 10000, 10000)
 static var CENTER:HexIndex = HexIndex.from(0, 0, 0)
 
 #region Direction
@@ -62,12 +62,12 @@ static var ALL_DIAGONALS:Array[HexDiagonal] = [
 ]
 
 static var DIAGONAL_VECTORS:Array[HexIndex] = [
-	HexIndex.from(+1, +1, -2), # N
+	HexIndex.from(+1, -2, +1), # N
 	HexIndex.from(+2, -1, -1), # NE
-	HexIndex.from(+1, -2, +1), # SE
-	HexIndex.from(-1, -1, +2), # S
+	HexIndex.from(+1, +1, -2), # SE
+	HexIndex.from(-1, +2, -1), # S
 	HexIndex.from(-2, +1, +1), # SW
-	HexIndex.from(-1, +2, -1), # NW
+	HexIndex.from(-1, -1, +2), # NW
 ]
 
 static func rotate_diagnonal_right(diagnonal:HexDiagonal, steps:int = 1) -> HexDiagonal:

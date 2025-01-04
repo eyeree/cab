@@ -13,6 +13,8 @@ class_name Grid extends Node3D
 
 func _ready() -> void:
 	_on_grid_size_set()
+	set_selected_index(HexIndex.INVALID)
+	clear_highlighted_indexes()
 	
 #endregion
 
@@ -83,8 +85,10 @@ func set_highlighted_indexes(indexes:Array[HexIndex]) -> void:
 		packed_indexes.append(index.q)
 		packed_indexes.append(index.r)
 	_grid_material.set_shader_parameter('highlighted_indexes', packed_indexes)
+	_grid_material.set_shader_parameter('highlighted_index_count', indexes.size())
 	
 func clear_highlighted_indexes() -> void:
+	_grid_material.set_shader_parameter('highlighted_index_count', 0)
 	_grid_material.set_shader_parameter('highlighted_indexes', null)
 
 #endregion

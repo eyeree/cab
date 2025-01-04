@@ -12,6 +12,7 @@ uniform float line_size = 0.01; // : hint_range(0.1, 50, 0.1) = 0.1;
 uniform int max_hex_distance = 3;
 uniform float hex_outer_radius = 0.08;
 uniform ivec2 selected_index = ivec2(1000);
+uniform int highlighted_index_count = 3;
 uniform ivec2 highlighted_indexes[1000];
 
 int axial_distance_from_origin(ivec2 axial) {
@@ -81,7 +82,7 @@ void fragment( )
 		vec4 line_color = normal_line_color;
 		vec4 background_color = normal_background_color;
 
-		for (int i = 0; i < highlighted_indexes.length(); i++) {
+		for (int i = 0; i < highlighted_index_count; i++) {
 			if(current_axial == highlighted_indexes[i]) {
 				line_color = highlight_line_color;
 				background_color = highlight_background_color;
