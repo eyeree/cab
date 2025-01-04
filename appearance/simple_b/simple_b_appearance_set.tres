@@ -1,10 +1,8 @@
-[gd_resource type="Resource" script_class="AppearanceSet" load_steps=3 format=3 uid="uid://crebatxblxe01"]
+[gd_resource type="Resource" script_class="AppearanceSet" load_steps=2 format=3 uid="uid://crebatxblxe01"]
 
 [ext_resource type="Script" uid="uid://ho6wkjjygk5j" path="res://model/appearance_set.gd" id="1_6ki51"]
-[ext_resource type="Texture2D" uid="uid://dcfmpubuwbtv0" path="res://appearance/simple_b/simple_b_thumbnail.png" id="2_yutvo"]
 
 [resource]
 script = ExtResource("1_6ki51")
-cell_appearances = Array[String](["uid://be2wyq5pahuhx", "uid://hfpk7yoxgsl0"])
-thumbnail = ExtResource("2_yutvo")
+hidden = false
 metadata/_custom_type_script = ExtResource("1_6ki51")

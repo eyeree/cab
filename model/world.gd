@@ -35,7 +35,7 @@ signal size_changed(rings:int)
 
 class WorldOptions:
 	var rings:int = 10
-	var empty_cell_type_:CellType = EnvionmentGenome.empty_cell_type
+	var empty_cell_type:CellType = EnvionmentGenome.empty_cell_type
 	var initial_content:HexStore = HexStore.new()
 		
 func _init(options:WorldOptions = WorldOptions.new()):	
@@ -65,8 +65,7 @@ func _on_rings_set(new_value:int) -> void:
 		for radius in range(old_value, new_value):
 			for index in HexIndex.CENTER.ring(radius+1):
 				var cell = empty_cell_type.create_cell()
-				_cells.set_content(index, cell)
-				cell_changed.emit(index, cell)
+				set_cell(index, cell)
 
 func _on_empty_cell_type_set(new_empty_cell_type:CellType) -> void:
 	var old_empty_cell_type = _empty_cell_type
@@ -78,10 +77,9 @@ func _on_empty_cell_type_set(new_empty_cell_type:CellType) -> void:
 		var existing_cell = _cells.get_content(index)
 		if existing_cell == null or existing_cell.cell_type == old_empty_cell_type:
 			var new_cell = empty_cell_type.create_cell()
-			_cells.set_content(index, new_cell)
-			cell_changed.emit(index, new_cell)
+			set_cell(index, new_cell)
 			num_empty_cells += 1
-	debug("_on_empty_cell_type_set | num_empty_cells: %d" % [empty_cell_type])
+	debug("_on_empty_cell_type_set | num_empty_cells: %d" % [num_empty_cells])
 			
 func step() -> void:
 	step_count += 1
@@ -123,45 +121,6 @@ func set_cell(index:HexIndex, cell:Cell) -> void:
 	_cells.set_content(index, cell)
 	
 	cell_changed.emit(index, cell)
-
-#region Cell Creation
-
-class CreateCellRequest:
-	var cell_type:CellType
-	var progenitor:Cell
-	
-	func _init(cell_type_:CellType, progenitor_:Cell):
-		cell_type = cell_type_
-		progenitor = progenitor_
-		
-var _created_cells:HexStore = HexStore.new()
-
-func request_create_cell(index:HexIndex, cell_type:CellType, progenitor:Cell) -> void:
-	
-	if index.distance_to_center() > rings:
-		push_error("progenitor %s created %s at index %s which is greater than the allowed max distance." 
-			% [progenitor, cell_type, index])
-		return
-			
-	if not is_empty_cell(_cells.get_content(index)):
-		push_error("progenitor %s created %s at index %s which was already occupied by cell %s." 
-			% [progenitor, cell_type, index, _cells.get_content(index)])
-		return
-		
-	if not _created_cells.has_content(index):
-		_created_cells.set_content(index, [])
-		
-	var request = CreateCellRequest.new(cell_type, progenitor)
-	_created_cells.get_content(index).append(request)	
-
-func resolve_create_cell_requests() -> void:
-	for index:HexIndex in _created_cells.get_all_indexes():
-		var requests = _created_cells.get_content(index)
-		# TODO
-		var request:CreateCellRequest = requests[0]
-		var cell = request.cell_type.create_cell(request.progenitor)
-		set_cell(index, cell)
-#endregion
 	
 func is_empty_cell(cell:Cell) -> bool:
 	return cell.cell_type == empty_cell_type

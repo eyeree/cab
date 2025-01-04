@@ -32,7 +32,6 @@ func remove_cell_type(cell_type:CellType) -> void:
 	cell_types.erase(cell_type)
 
 func validate():
-	var errors:Array[String] = []
 	for cell_type in cell_types:
 		if not appearance_set.has_cell_appearance(cell_type.cell_appearance):
 			push_error("Cell type %s cell appearance %s not found in appearance set %s." % [cell_type, appearance_set])

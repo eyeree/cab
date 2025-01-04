@@ -2,14 +2,17 @@ shader_type spatial;
 render_mode unshaded;
 
 uniform vec4 normal_line_color: source_color = vec4( 0.0, 1.0, 0.3, 1.0 );
-uniform vec4 selected_line_color: source_color = vec4( 1.0, 0.0, 0.0, 1.0 );
 uniform vec4 normal_background_color: source_color = vec4( 0.0, 0.0, 0.0, 1.0 );
+uniform vec4 selected_line_color: source_color = vec4( 1.0, 0.0, 0.0, 1.0 );
 uniform vec4 selected_background_color: source_color = vec4( 0.5, 0.0, 0.0, 1.0 );
+uniform vec4 highlight_line_color: source_color = vec4( 1.0, 0.0, 0.0, 1.0 );
+uniform vec4 highlight_background_color: source_color = vec4( 0.3, 0.0, 0.0, 1.0 );
 uniform vec4 outside_color: source_color = vec4( 0.5, 0.0, 0.0, 1.0 );
 uniform float line_size = 0.01; // : hint_range(0.1, 50, 0.1) = 0.1;
 uniform int max_hex_distance = 3;
 uniform float hex_outer_radius = 0.08;
 uniform ivec2 selected_index = ivec2(1000);
+uniform ivec2 highlighted_indexes[1000];
 
 int axial_distance_from_origin(ivec2 axial) {
     return (abs(axial.x)
@@ -77,6 +80,15 @@ void fragment( )
 
 		vec4 line_color = normal_line_color;
 		vec4 background_color = normal_background_color;
+
+		for (int i = 0; i < highlighted_indexes.length(); i++) {
+			if(current_axial == highlighted_indexes[i]) {
+				line_color = highlight_line_color;
+				background_color = highlight_background_color;
+				break;
+			}
+		}
+
 		if (current_axial == selected_index) {
 			line_color = selected_line_color;
 			background_color = selected_background_color;

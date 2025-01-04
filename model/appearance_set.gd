@@ -22,7 +22,7 @@ static func get_all_appearance_sets() -> Array[AppearanceSet]:
 
 var _base_name:String:
 	get:
-		return resource_path.get_basename().replace('_appearance_set', '')
+		return resource_path.get_basename().get_file().replace('_appearance_set', '')
 		
 var _base_dir:String:
 	get:
@@ -32,28 +32,27 @@ var thumbnail:Texture2D:
 	get:
 		return load(_base_name + '_thumbnail.png')
 		
-var _cell_appearances:Array[CellAppearance] = []
-var cell_appearances:Array[CellAppearance]:
+var _cell_appearances:Array[PackedScene] = []
+var cell_appearances:Array[PackedScene]:
 	get:
 		if _cell_appearances.size() == 0:
 			var files = DirAccess.get_files_at(_base_dir)
 			var cell_base_name = _base_name + '_cell_'
-			for file in files:
-				if file.starts_with(cell_base_name):
-					var packed_scene:PackedScene = load(file)
-					var cell_appearance:CellAppearance = packed_scene.instanciate()
-					_cell_appearances.append(cell_appearance)
+			for file:String in files:
+				if file.begins_with(cell_base_name):
+					var packed_scene:PackedScene = load(_base_dir.path_join(file))
+					_cell_appearances.append(packed_scene)
 		return _cell_appearances
 	
-func get_default_cell_appearance() -> CellAppearance:
+func get_default_cell_appearance() -> PackedScene:
 	return cell_appearances[0]
 	
-func has_cell_appearance(cell_appearance:CellAppearance) -> bool:
-	return cell_appearances.any(func (entry): return cell_appearance.resource_path == entry)
+func has_cell_appearance(cell_appearance:PackedScene) -> bool:
+	return cell_appearances.any(func (entry): return cell_appearance.resource_path == entry.resource_path)
 
-func get_cell_appearance_by_name(name:String) -> CellAppearance:
-	for cell_appearance:CellAppearance in cell_appearances:
-		if cell_appearance.name == name:
+func get_cell_appearance_by_name(name:String) -> PackedScene:
+	for cell_appearance:PackedScene in cell_appearances:
+		if cell_appearance.resource_path.get_file().get_basename() == name:
 			return cell_appearance
 	push_error('No cell appearance named %s was found in appearance set %s' % [name, resource_path])
 	return null

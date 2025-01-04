@@ -2,12 +2,19 @@ class_name HexIndex extends RefCounted
 
 # https://www.redblobgames.com/grids/hexagons/
 
-enum HexDirection { NE = 0, E = 1, SE = 2, SW = 3, W = 4, NW = 5 }
-
 static var INVALID:HexIndex = HexIndex.from(-1, -1, -1)
 static var CENTER:HexIndex = HexIndex.from(0, 0, 0)
+
+#region Direction
+
+enum HexDirection { NE = 0, E = 1, SE = 2, SW = 3, W = 4, NW = 5 }
+
+static var ALL_DIRECTIONS:Array[HexDirection] = [
+	HexDirection.NE, HexDirection.E, HexDirection.SE, 
+	HexDirection.SW, HexDirection.W, HexDirection.NW
+]
 	
-static var _direction_vectors:Array[HexIndex] = [
+static var DIRECTION_VECTORS:Array[HexIndex] = [
 	HexIndex.from(+1, -1, 0), # NE
 	HexIndex.from(+1, 0, -1), # E
 	HexIndex.from(0, +1, -1), # SE
@@ -15,6 +22,82 @@ static var _direction_vectors:Array[HexIndex] = [
 	HexIndex.from(-1, 0, +1), # W
 	HexIndex.from(0, -1, +1), # NW
 ]
+
+static func rotate_direction_right(direction:HexDirection, steps:int = 1) -> HexDirection:
+	return ((direction + steps) % 6) as HexDirection
+
+static func rotate_direction_left(direction:HexDirection, steps:int = 1) -> HexDirection:
+	return ((direction - steps) % 6) as HexDirection
+	
+static func rotate_directions_right(directions:Array[HexDirection], steps:int = 1) -> Array[HexDirection]:
+	var result:Array[HexDirection] = directions.duplicate()
+	for i in range(result.size()):
+		result[i] = rotate_direction_right(result[i], steps)
+	return result
+
+static func rotate_directions_left(directions:Array[HexDirection], steps:int = 1) -> Array[HexDirection]:
+	var result:Array[HexDirection] = directions.duplicate()
+	for i in range(result.size()):
+		result[i] = rotate_direction_left(result[i], steps)
+	return result
+		
+static func orient_direction(orientation:HexDirection, direction:HexDirection) -> HexDirection:
+	return ((orientation + direction) % 6) as HexDirection
+
+static func orient_directions(orientation:HexDirection, directions:Array[HexDirection]) -> Array[HexDirection]:
+	var result:Array[HexDirection] = directions.duplicate()
+	for i in range(result.size()):
+		result[i] = orient_direction(orientation, result[i])
+	return result
+
+#endregion
+
+#region Diagonal
+
+enum HexDiagonal { N = 0, NE = 1, SE = 2, S = 3, SW = 4, NW = 5 }
+
+static var ALL_DIAGONALS:Array[HexDiagonal] = [
+	HexDiagonal.N, HexDiagonal.NE, HexDiagonal.SE,
+	HexDiagonal.S, HexDiagonal.SW, HexDiagonal.NW
+]
+
+static var DIAGONAL_VECTORS:Array[HexIndex] = [
+	HexIndex.from(+1, +1, -2), # N
+	HexIndex.from(+2, -1, -1), # NE
+	HexIndex.from(+1, -2, +1), # SE
+	HexIndex.from(-1, -1, +2), # S
+	HexIndex.from(-2, +1, +1), # SW
+	HexIndex.from(-1, +2, -1), # NW
+]
+
+static func rotate_diagnonal_right(diagnonal:HexDiagonal, steps:int = 1) -> HexDiagonal:
+	return ((diagnonal + steps) % 6) as HexDiagonal
+
+static func rotate_diagnonal_left(diagnonal:HexDiagonal, steps:int = 1) -> HexDiagonal:
+	return ((diagnonal - steps) % 6) as HexDiagonal
+	
+static func rotate_diagnonals_right(diagnonals:Array[HexDiagonal], steps:int = 1) -> Array[HexDiagonal]:
+	var result:Array[HexDiagonal] = diagnonals.duplicate()
+	for i in range(result.size()):
+		result[i] = rotate_diagnonal_right(result[i], steps)
+	return result
+
+static func rotate_diagnonals_left(diagnonals:Array[HexDiagonal], steps:int = 1) -> Array[HexDiagonal]:
+	var result:Array[HexDiagonal] = diagnonals.duplicate()
+	for i in range(result.size()):
+		result[i] = rotate_diagnonal_left(result[i], steps)
+	return result
+
+static func orient_diagonal(orientation:HexDirection, diagonal:HexDiagonal) -> HexDiagonal:
+	return ((orientation + diagonal) % 6) as HexDiagonal
+
+static func orient_diagonals(orientation:HexDirection, diagnonals:Array[HexDiagonal]) -> Array[HexDiagonal]:
+	var result:Array[HexDiagonal] = diagnonals.duplicate()
+	for i in range(result.size()):
+		result[i] = orient_diagonal(orientation, result[i])
+	return result
+		
+#endregion
 
 ## Number of hexes in a specified number of rings around a center hex, plus the center hex.
 ##       1 ->     7
@@ -75,6 +158,7 @@ static func _from_key(key_:Vector3i) -> HexIndex:
 	return index
 	
 var _key:Vector3i
+var _neighbors:Dictionary[HexDirection, HexIndex] = {}
 
 var q:int:
 	get(): return _key.x
@@ -98,7 +182,14 @@ func scale(factor:int) -> HexIndex:
 	return HexIndex.from(q * factor, r * factor, s * factor)
 	
 func neighbor(direction:HexDirection) -> HexIndex:
-	return add(_direction_vectors[direction])   
+	var neighbor_index:HexIndex = _neighbors.get(direction)
+	if neighbor_index == null:
+		neighbor_index = add(DIRECTION_VECTORS[direction])
+		_neighbors.set(direction, neighbor_index)
+	return neighbor_index
+	
+func diagonal_neighbor(diagonal:HexDiagonal) -> HexIndex:
+	return add(DIAGONAL_VECTORS[diagonal])
 	
 func distance_to(index:HexIndex) -> int:
 	var difference:HexIndex = subtract(index)
@@ -109,19 +200,19 @@ func distance_to_center() -> int:
 	
 func ring(radius:int) -> Array[HexIndex]:
 	var results:Array[HexIndex] = []
-	var index = add(_direction_vectors[4].scale(radius))
+	var index = add(DIRECTION_VECTORS[4].scale(radius))
 	for direction in HexDirection.values():
 		for hex in range(0, radius):
 			results.append(index)
 			index = index.neighbor(direction)
 	return results	
 
-func spiral(radius:int, include_center:bool = false) -> Array[HexIndex]:
+func spiral(radius:int, include_center:bool = true) -> Array[HexIndex]:
 	var results:Array[HexIndex] = []
 	if include_center:
 		results.append(self)
 	for k in range(radius):
-		results.append_array(ring(k))
+		results.append_array(ring(k+1))
 	return results
 	
 func to_axial() -> Vector2i:

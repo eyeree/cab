@@ -20,7 +20,7 @@ boot_splash/minimum_display_time=2000
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
 
 [gui]
 

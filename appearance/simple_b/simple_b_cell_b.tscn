@@ -20,7 +20,6 @@ is_hemisphere = true
 
 [node name="SimpleBCellB" type="Node3D"]
 script = ExtResource("1_ooewc")
-supported_effects = Array[String](["uid://3h0ed54r6bqa", "uid://cbool5fegnid0"])
 metadata/_custom_type_script = ExtResource("1_ooewc")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

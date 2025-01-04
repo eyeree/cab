@@ -112,7 +112,7 @@ class SingeltonSerializationHelper extends SerializationHelper:
 			push_error('cannot serialize object %s as singelton' % object)
 			return { }
 			
-	func deserialize(_ctx:DeserializationContext, data:Dictionary, _ref:Dictionary) -> Object:
+	func deserialize(_ctx:DeserializationContext, _data:Dictionary, _ref:Dictionary) -> Object:
 		return singelton
 					
 #endregion

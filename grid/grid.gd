@@ -13,7 +13,7 @@ class_name Grid extends Node3D
 
 func _ready() -> void:
 	_on_grid_size_set()
-
+	
 #endregion
 
 #region: Grid Size
@@ -43,10 +43,10 @@ class GridSizeInfo:
 		grid_material.set_shader_parameter('line_size', line_size)
 			
 static var _grid_size_info_map: Dictionary[GridSize, GridSizeInfo] = {
-	GridSize.SMALL: GridSizeInfo.new(3, 0.11),
-	GridSize.MEDIUM: GridSizeInfo.new(5, 0.13),
-	GridSize.LARGE: GridSizeInfo.new(10, 0.17),
-	GridSize.HUGE: GridSizeInfo.new(20, 0.21),
+	GridSize.SMALL: GridSizeInfo.new(5, 0.13),
+	GridSize.MEDIUM: GridSizeInfo.new(10, 0.17),
+	GridSize.LARGE: GridSizeInfo.new(20, 0.21),
+	GridSize.HUGE: GridSizeInfo.new(40, 0.30),
 }
 
 @export var grid_size:GridSize = GridSize.SMALL:
@@ -57,13 +57,15 @@ static var _grid_size_info_map: Dictionary[GridSize, GridSizeInfo] = {
 
 var _grid_size_info:GridSizeInfo = _grid_size_info_map[grid_size]
 
+var rings:int:
+	get: return _grid_size_info.hex_max_distance
+
 func _on_grid_size_set():
 	if not is_inside_tree(): return
 	clear_all_hex_content()
 	_grid_size_info.apply_grid_material_settings(_grid_material)
 	prints('hex_outer_radius', _grid_size_info.hex_outer_radius)
 	prints('hex_inner_radius', _grid_size_info.hex_inner_radius)
-
 
 #endregion
 	
@@ -74,6 +76,16 @@ func set_selected_index(index:HexIndex) -> void:
 	
 func clear_selected_index() -> void:
 	_grid_material.set_shader_parameter('selected_index', HexIndex.INVALID.to_axial())
+
+func set_highlighted_indexes(indexes:Array[HexIndex]) -> void:
+	var packed_indexes:PackedInt32Array = []
+	for index:HexIndex in indexes:
+		packed_indexes.append(index.q)
+		packed_indexes.append(index.r)
+	_grid_material.set_shader_parameter('highlighted_indexes', packed_indexes)
+	
+func clear_highlighted_indexes() -> void:
+	_grid_material.set_shader_parameter('highlighted_indexes', null)
 
 #endregion
   
@@ -92,21 +104,21 @@ func _remove_content_from_tree(content:Node3D):
 	content.queue_free()
 	
 func set_hex_content(index:HexIndex, content:Node3D):
-	var current:Node3D = _hex_content.get_value(index) as Node3D
+	var current:Node3D = _hex_content.get_content(index) as Node3D
 	if current: _remove_content_from_tree(current)
-	_hex_content.set_value(index, content)
+	_hex_content.set_content(index, content)
 	if content: _add_content_to_tree(index, content)
 	
 func clear_hex_content(index:HexIndex):
 	set_hex_content(index, null)
 
 func get_hex_content(index:HexIndex) -> Node3D:	
-	return _hex_content.get_value(index) as Node3D
+	return _hex_content.get_content(index) as Node3D
 	
 func clear_all_hex_content() -> void:
-	for content:Node3D in _hex_content.get_all_values():
+	for content:Node3D in _hex_content.get_all_content():
 		_remove_content_from_tree(content)
-	_hex_content.clear_all_values()
+	_hex_content.clear_all_content()
 	
 #endregion
 
@@ -146,7 +158,20 @@ func _input(event: InputEvent) -> void:
 				if hex_index.distance_to_center() <= _grid_size_info.hex_max_distance:                   
 					_mouse_hex_index = hex_index
 					mouse_entered_hex.emit(hex_index)
+					prints('mouse_entered_hex', hex_index)
 
+	if event is InputEventKey:
+		if event.keycode == KEY_Z and event.pressed and not event.echo:
+			match grid_size:
+				GridSize.SMALL:
+					grid_size = GridSize.MEDIUM
+				GridSize.MEDIUM:
+					grid_size = GridSize.LARGE
+				GridSize.LARGE:
+					grid_size = GridSize.HUGE
+				GridSize.HUGE:
+					grid_size = GridSize.SMALL
+		
 signal mouse_entered_hex(index:HexIndex)
 signal mouse_exited_hex(index:HexIndex)
 

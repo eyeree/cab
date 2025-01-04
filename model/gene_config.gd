@@ -1,4 +1,6 @@
 class_name GeneConfig extends RefCounted
 
-static func _static_init():
-	SerializationUtil.register(GeneConfig)
+var gene_type:Script
+
+func _init(gene_type_:Script) -> void:
+	gene_type = gene_type_
