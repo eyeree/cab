@@ -156,8 +156,6 @@ static func _from_key(key_:Vector3i) -> HexIndex:
 	if index == null:
 		index = HexIndex.new(key_)
 		_instances.set(key_, index)
-		if (key_.x == 0 && key_.y == 0 && key_.z == 0):
-			prints('added index 0, 0, 0', index)
 	return index
 	
 var _key:Vector3i

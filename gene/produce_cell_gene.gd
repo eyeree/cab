@@ -26,9 +26,13 @@ func _find_claimable_cell(world:World, index:HexIndex) -> ClaimableCellGene:
 		#prints('_find_claimable_cell not empty', direction)
 	return null
 	
-func update_state(_index:HexIndex, _world:World, _cell:Cell) -> void:
-	pass
-	
+func update_state(index:HexIndex, world:World, _cell:Cell) -> void:
+	var claimable_cell_gene:ClaimableCellGene = _find_claimable_cell(world, index)
+	if claimable_cell_gene == null:
+		energy_wanted = 0
+	else:
+		energy_wanted = _cell_type.energy_cost
+		
 class ProduceCellGeneConfig extends GeneConfig:
 	var cell_type:CellType
 	

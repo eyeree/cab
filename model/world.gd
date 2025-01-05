@@ -54,16 +54,12 @@ func update_state() -> void:
 	_cells.visit_all(_cell_update_state)
 	
 func _cell_perform_actions(index:HexIndex, cell:Cell):
-	if not is_empty_cell(cell): debug("_cell_perform_actions | index: %s | cell: %s", [index, cell])
 	cell.perform_actions(index, self)
-	if not is_empty_cell(cell): debug("  --> cell: %s", [cell])
-	
-func _cell_update_state(index:HexIndex, cell:Cell):
-	if not is_empty_cell(cell): debug("_cell_update_state | index: %s | cell: %s" % [index, cell])
-	cell.update_state(index, self)
-	if not is_empty_cell(cell): debug("  --> cell: %s" % [cell])
 	if cell.is_dead:
 		set_cell(index, EnvionmentGenome.empty_cell_type.create_cell())
+	
+func _cell_update_state(index:HexIndex, cell:Cell):
+	cell.update_state(index, self)
 
 func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
 	for index in center.ring(radius):

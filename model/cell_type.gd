@@ -16,13 +16,13 @@ func _init(genome_:Genome, cell_appearance_:PackedScene = genome_.appearance_set
 	cell_appearance = cell_appearance_
 	
 func add_gene_config(gene_config:GeneConfig) -> void:
-	prints('add_gene_config', gene_config.gene_type.name)
 	gene_configs.append(gene_config)
+			
+func remove_gene_config(gene_config:GeneConfig) -> void:
+	gene_configs.erase(gene_config)
 	
 func add_gene_type(gene_type:GeneType) -> GeneConfig:
-	prints('add_gene_type', gene_type.name)
 	var gene_config = gene_type.create_config(self)
-	prints('  gene_config.gene_type', gene_config.gene_type.name)
 	add_gene_config(gene_config)
 	return gene_config
 	
@@ -36,9 +36,12 @@ func has_gene_type(gene_type:GeneType) -> bool:
 		if gene_config.gene_type == gene_type:
 			return true
 	return false
-			
-func remove_gene_config(gene_config:GeneConfig) -> void:
-	gene_configs.erase(gene_config)
+
+func add_gene(gene_class:Script) -> GeneConfig:
+	return add_gene_type(gene_class.gene_type)	
+
+func has_gene(gene_class:Script) -> bool:
+	return has_gene_type(gene_class.gene_type)
 	
 func create_cell(progenitor:Cell = null) -> Cell:
 	return Cell.new(progenitor, self)

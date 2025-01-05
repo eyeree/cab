@@ -9,7 +9,7 @@ func _init(config:ResistDamageGeneConfig) -> void:
 	resisted_percent = config.resisted_percent
 	resisted_type = config.resisted_type
 	
-func damage_resistance(damange_amount:int, damange_type:Cell.DamageType) -> int:
+func apply_damage_resistance(damange_amount:int, damange_type:Cell.DamageType) -> int:
 	if damange_type == resisted_type or resisted_type == Cell.DamageType.Universal:
 		return resisted_amount + roundi(damange_amount * resisted_percent)
 	else:

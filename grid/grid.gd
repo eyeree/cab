@@ -65,8 +65,6 @@ func _on_grid_size_set():
 	if not is_inside_tree(): return
 	clear_all_hex_content()
 	_grid_size_info.apply_grid_material_settings(_grid_material)
-	prints('hex_outer_radius', _grid_size_info.hex_outer_radius)
-	prints('hex_inner_radius', _grid_size_info.hex_inner_radius)
 
 #endregion
 	
