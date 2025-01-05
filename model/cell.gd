@@ -12,38 +12,57 @@ var cell_appearance:CellAppearance
 
 var cell_number:int
 
-var energy:float = 0.0
-var damage:float = 0.0
-var new_energy:float = 0.0
+var energy:int = 0
+var new_energy:int = 0
+var life:int = 0
+var new_life:int = 0
 var genes:Array[Gene] = []
 
-var damage_percent:float:
-	get: return damage / cell_type.energy_cost
+var max_life:int:
+	get: return cell_type.energy_cost
+
+var life_percent:float:
+	get: return float(life) / max_life
 	
-var is_dead:bool:
-	get: return damage >= cell_type.energy_cost
-
 var is_alive:bool:
-	get: return not is_dead
+	get: return life > 0
 
-func _init(cell_type_:CellType) -> void:
+var is_dead:bool:
+	get: return life <= 0
+
+func _init(progenitor:Cell, cell_type_:CellType) -> void:
 	cell_type = cell_type_
 	genome = cell_type.genome
+	life = cell_type.energy_cost
+	
+	genes.assign(
+		cell_type.gene_configs.map(
+			func (gene_config:GeneConfig): 
+				return gene_config.create_gene(progenitor)))
+					
 	cell_appearance = cell_type.cell_appearance.instantiate()
+	cell_appearance.attach(self)
 
 func perform_actions(index:HexIndex, world:World) -> void:
 	for gene_state in genes:
 		gene_state.perform_actions(index, world, self)
 	
 func update_state(index:HexIndex, world:World) -> void:
+	
+	energy += new_energy
+	new_energy = 0
+	
+	life += new_life
+	new_life = 0
+	
 	for gene_state in genes:
 		gene_state.update_state(index, world, self)
 		
-func take_damage(damage_amount:float, damage_type:DamageType):
+func take_damage(damage_amount:int, damage_type:DamageType):
 	for gene_state in genes:
 		damage_amount -= gene_state.damage_resistance(damage_amount, damage_type)
 		if damage_amount <= 0: return
-	damage += damage_amount
+	life -= damage_amount
 	
 func get_gene(type:Script) -> Gene:
 	for gene in genes:
@@ -52,4 +71,5 @@ func get_gene(type:Script) -> Gene:
 	return null
 
 func _to_string() -> String:
-	return "Cell:%s:%s:%d:%0.0f:%0.2f" % [genome.name, cell_type.name, cell_number, energy, damage_percent]
+	return "Cell:%s:%s:%d{ energy: %0.0f, new_energy: %0.0f, life: %0.0f, new_life: %0.0f }" \
+		% [genome.name, cell_type.name, cell_number, energy, new_energy, life, new_life]

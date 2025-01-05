@@ -2,9 +2,6 @@ class_name HexIndex extends RefCounted
 
 # https://www.redblobgames.com/grids/hexagons/
 
-static var INVALID:HexIndex = HexIndex.from(10000, 10000, 10000)
-static var CENTER:HexIndex = HexIndex.from(0, 0, 0)
-
 #region Direction
 
 enum HexDirection { NE = 0, E = 1, SE = 2, SW = 3, W = 4, NW = 5 }
@@ -112,8 +109,11 @@ static func hex_count(rings:int) -> int:
 	return 1 + 3 * rings * (rings+1)
 
 static func from(q_:int, r_:int, s_:int = -q_ - r_) -> HexIndex:
-	var key:Vector3i = Vector3i(q_, r_, s_)
-	return _from_key(key)
+	#if (q_ == 0 && r_ == 0 && s_ == 0):
+		#return _from_key(Vector3i.ZERO)
+	#else:
+		var key:Vector3i = Vector3i(q_, r_, s_)
+		return _from_key(key)
 	
 static func from_point(point:Vector2, hex_outer_radius:float) -> HexIndex:
 	# pixel_to_pointy_hex https://www.redblobgames.com/grids/hexagons/#pixel-to-hex	
@@ -150,11 +150,14 @@ static func round_cube(q_:float, r_:float, s_:float) -> HexIndex:
 	return HexIndex.from(q_round, r_round, s_round)
 
 static var _instances:Dictionary[Vector3i, HexIndex] = {}
+
 static func _from_key(key_:Vector3i) -> HexIndex:
 	var index:HexIndex = _instances.get(key_)
 	if index == null:
 		index = HexIndex.new(key_)
 		_instances.set(key_, index)
+		if (key_.x == 0 && key_.y == 0 && key_.z == 0):
+			prints('added index 0, 0, 0', index)
 	return index
 	
 var _key:Vector3i
@@ -236,3 +239,6 @@ func serialize() -> Variant:
 	
 static func deserialize(data:Variant) -> HexIndex:
 	return HexIndex.from(data[0], data[1], data[2])
+
+static var INVALID:HexIndex = HexIndex.from(10000, 10000, 10000)
+static var CENTER:HexIndex = HexIndex.from(0, 0, 0)

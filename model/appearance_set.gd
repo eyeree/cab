@@ -10,9 +10,10 @@ static var default:AppearanceSet:
 
 static func get_all_appearance_sets() -> Array[AppearanceSet]:
 	var result:Array[AppearanceSet] = []
-	var sub_dirs = DirAccess.get_directories_at("res://appearance")
+	var base_dir:String = "res://appearance"
+	var sub_dirs = DirAccess.get_directories_at(base_dir)
 	for sub_dir:String in sub_dirs:
-		var files = DirAccess.get_files_at(sub_dir)
+		var files = DirAccess.get_files_at(base_dir.path_join(sub_dir))
 		for file:String in files:
 			if file.ends_with("_appearance_set.tres"):
 				result.append(load(file))
@@ -36,13 +37,18 @@ var _cell_appearances:Array[PackedScene] = []
 var cell_appearances:Array[PackedScene]:
 	get:
 		if _cell_appearances.size() == 0:
-			var files = DirAccess.get_files_at(_base_dir)
 			var cell_base_name = _base_name + '_cell_'
-			for file:String in files:
-				if file.begins_with(cell_base_name):
-					var packed_scene:PackedScene = load(_base_dir.path_join(file))
-					_cell_appearances.append(packed_scene)
+			_add_cell_appearances_from_dir(_base_dir, cell_base_name)
+			for sub_dir in DirAccess.get_directories_at(_base_dir):
+				_add_cell_appearances_from_dir(_base_dir.path_join(sub_dir), cell_base_name)
 		return _cell_appearances
+
+func _add_cell_appearances_from_dir(dir:String, cell_base_name:String) -> void:
+	var files = DirAccess.get_files_at(dir)
+	for file:String in files:
+		if file.begins_with(cell_base_name) and file.ends_with('.tscn'):
+			var packed_scene:PackedScene = load(dir.path_join(file))
+			_cell_appearances.append(packed_scene)
 	
 func get_default_cell_appearance() -> PackedScene:
 	return cell_appearances[0]

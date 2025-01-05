@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://dhfungrs048gu"]
+
+[ext_resource type="Script" uid="uid://kckkiu27lorn" path="res://appearance/environment/empty/environment_cell_empty.gd" id="1_x1tuy"]
+[ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="2_5d6q5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gjv6y"]
+albedo_color = Color(0, 0, 0, 1)
+
+[node name="EnvironmentCellEmpty" type="Node3D"]
+script = ExtResource("1_x1tuy")
+metadata/_custom_type_script = ExtResource("2_5d6q5")
+
+[node name="Base" type="CSGCylinder3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0.005, 0)
+height = 0.01
+sides = 6
+material = SubResource("StandardMaterial3D_gjv6y")
+
+[node name="1_of_1" type="Node3D" parent="Base"]
+unique_name_in_owner = true
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0.01, 0)
+
+[node name="1_of_2" type="Node3D" parent="Base"]
+unique_name_in_owner = true
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, -0.187606, 0.01, -0.108315)
+
+[node name="2_of_2" type="Node3D" parent="Base"]
+unique_name_in_owner = true
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0.228052, 0.01, 0.131666)
+
+[node name="1_of_3" type="Node3D" parent="Base"]
+unique_name_in_owner = true
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.12239, 0.01, -0.211986)
+
+[node name="2_of_3" type="Node3D" parent="Base"]
+unique_name_in_owner = true
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.133761, 0.01, 0.223356)
+
+[node name="3_of_3" type="Node3D" parent="Base"]
+unique_name_in_owner = true
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.252329, 0.01, 0.00220437)

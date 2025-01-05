@@ -1,4 +1,3 @@
-@tool
 class_name Grid extends Node3D
 	  
 #region: External References
@@ -162,7 +161,6 @@ func _input(event: InputEvent) -> void:
 				if hex_index.distance_to_center() <= _grid_size_info.hex_max_distance:                   
 					_mouse_hex_index = hex_index
 					mouse_entered_hex.emit(hex_index)
-					prints('mouse_entered_hex', hex_index)
 
 	if event is InputEventKey:
 		if event.keycode == KEY_Z and event.pressed and not event.echo:

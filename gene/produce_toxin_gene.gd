@@ -1,22 +1,6 @@
 class_name ProduceToxinGene extends Gene
 
-static func _static_init():
-	name = 'ProduceToxin'
-	
-static func create_config(_cell_type:CellType) -> ProduceToxinGeneConfig:
-	return ProduceToxinGeneConfig.new(ProduceToxinGene)
-
-static func create_gene(progenitor:Cell, config:GeneConfig) -> Gene:
-	
-	if _is_not_config_type(config, ProduceToxinGeneConfig):
-		return super.create_gene(progenitor, config)
-		
-	return ProduceCellGene.new(config)
-	
-class ProduceToxinGeneConfig extends GeneConfig:
-	var damage:float = 1.0
-	
-var damage:float
+var damage:int
 
 func _init(config:ProduceToxinGeneConfig) -> void:
 	damage = config.damage
@@ -29,3 +13,21 @@ func perform_actions(index:HexIndex, world:World, _cell:Cell) -> void:
 				
 func update_state(_index:HexIndex, _world:World, _cell:Cell) -> void:
 	pass
+
+class ProduceToxinGeneConfig extends GeneConfig:
+	
+	var damage:int = 1
+	
+	func create_gene(_progenitor:Cell) -> ProduceToxinGene:
+		return ProduceToxinGene.new(self)
+		
+class ProduceToxinGeneType extends GeneType:
+
+	func _init():
+		name = 'ProduceToxin'
+	
+	func create_config(_cell_type:CellType) -> ProduceToxinGeneConfig:
+		return ProduceToxinGeneConfig.new(self)
+
+static var gene_type = ProduceToxinGeneType.new()
+	

@@ -17,7 +17,7 @@ var _is_running:bool = false
 
 var _step_timer:SceneTreeTimer = null
 
-var _world:World
+var _world:World = World.new()
 
 func _ready() -> void:
 	
@@ -31,6 +31,8 @@ func _ready() -> void:
 	
 	_grid.mouse_entered_hex.connect(_on_mouse_entered_hex)
 	_grid.mouse_exited_hex.connect(_on_mouse_exited_hex)
+
+	_world.cell_changed.connect(_on_world_cell_changed)
 	
 	_setup()
 	
@@ -43,51 +45,57 @@ func _on_mouse_entered_hex(index:HexIndex):
 func _on_mouse_exited_hex(_index:HexIndex):
 	_grid.clear_selected_index()
 
+func _on_world_cell_changed(index:HexIndex, cell:Cell) -> void:
+	_grid.set_hex_content(index, cell.cell_appearance)
+
 func _setup():
+	
+	_grid.clear_all_hex_content()
 	
 	var world_options = World.WorldOptions.new()
 	world_options.rings = _grid.rings
-	
-	_world = World.new(world_options)
-	_world.cell_changed.connect(
-		func (index:HexIndex, cell:Cell):
-			_grid.set_hex_content(index, cell.cell_appearance))
+	world_options.initial_content = _get_initial_content()
+	_world.init(world_options)
+
+func _get_initial_content() -> HexStore:
 	
 	var genome1 = Genome.new()
 	genome1.name = "Genome1"
 	genome1.appearance_set = load("res://appearance/simple_a/simple_a_appearance_set.tres")
+	genome1.add_gene_type(FreeEnergyGene.gene_type)
+	genome1.add_gene_type(ProduceCellGene.gene_type)
+	
 	var cell_type_1a = genome1.add_cell_type()
 	cell_type_1a.name = '1A'
 	cell_type_1a.cell_appearance = genome1.appearance_set.get_cell_appearance_by_name('simple_a_cell_a')
+	cell_type_1a.add_gene_type(FreeEnergyGene.gene_type)
+	cell_type_1a.add_gene_type(ProduceCellGene.gene_type)
 
 	var genome2 = Genome.new()
 	genome2.name = "Genome2"
 	genome2.appearance_set = load("res://appearance/simple_b/simple_b_appearance_set.tres")
+	genome2.add_gene_type(FreeEnergyGene.gene_type)
+	genome2.add_gene_type(ProduceCellGene.gene_type)
+
 	var cell_type_2a = genome2.add_cell_type()
 	cell_type_2a.name = '2A'
 	cell_type_2a.cell_appearance = genome2.appearance_set.get_cell_appearance_by_name('simple_b_cell_b')
-	
-	_world.set_cell(HexIndex.CENTER.diagonal_neighbor(HexIndex.HexDiagonal.N), cell_type_1a.create_cell())
-	_world.set_cell(HexIndex.CENTER.diagonal_neighbor(HexIndex.HexDiagonal.SE), cell_type_2a.create_cell())
-	_world.set_cell(HexIndex.CENTER.diagonal_neighbor(HexIndex.HexDiagonal.SW), cell_type_2a.create_cell())
-	
-	#var highlighted_indexes:Array[HexIndex] = []
-	#for diagonal:HexIndex.HexDiagonal in HexIndex.ALL_DIAGONALS:
-		#var center = HexIndex.CENTER.DIAGONAL_VECTORS[diagonal].scale((_grid_size_info.hex_max_distance / 3)+1)
-		#highlighted_indexes.append_array(center.spiral(1))
-	#set_highlighted_indexes(highlighted_indexes)	
-	
-	#var content_scene:PackedScene = load(content_path)
-	#_grid.set_hex_content(HexIndex.CENTER, content_scene.instantiate())
+	cell_type_2a.add_gene_type(FreeEnergyGene.gene_type)
+	cell_type_2a.add_gene_type(ProduceCellGene.gene_type)
 
-	# for index in HexIndex.CENTER.ring(2):
-	# 	var content:Node3D = content_scene.instantiate()
-	# 	_grid.set_hex_content(index, content)
+	var initial_content:HexStore = HexStore.new()	
+	
+	initial_content.set_content(HexIndex.CENTER.diagonal_neighbor(HexIndex.HexDiagonal.N), cell_type_1a.create_cell())
+	initial_content.set_content(HexIndex.CENTER.diagonal_neighbor(HexIndex.HexDiagonal.SE), cell_type_2a.create_cell())
+	initial_content.set_content(HexIndex.CENTER.diagonal_neighbor(HexIndex.HexDiagonal.SW), cell_type_2a.create_cell())
+
+	return initial_content
 	
 func _step() -> void:
 	prints('step')
 	_reset_button.disabled = false
 	if _is_running:	_start_step_timer()
+	_world.step()
 
 func _reset() -> void:
 	_reset_button.disabled = true

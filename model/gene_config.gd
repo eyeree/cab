@@ -1,6 +1,10 @@
 class_name GeneConfig extends RefCounted
 
-var gene_type:Script
+var gene_type:GeneType
 
-func _init(gene_type_:Script) -> void:
+func _init(gene_type_:GeneType) -> void:
 	gene_type = gene_type_
+
+func create_gene(_progenitor:Cell) -> Gene:
+	push_error('GeneConfig for GeneType %s did not override create_gene' % [gene_type.name])
+	return null

@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dhfungrs048gu"]
-
-[ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="1_gjv6y"]
-
-[node name="EnvironmentCellEmpty" type="Node3D"]
-script = ExtResource("1_gjv6y")
-metadata/_custom_type_script = ExtResource("1_gjv6y")

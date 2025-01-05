@@ -2,24 +2,24 @@ class_name Genome extends RefCounted
 
 var name:String = '(new genone)'
 var appearance_set:AppearanceSet = AppearanceSet.default
-var genes:Array[Gene] = []
+var gene_types:Array[GeneType] = []
 var cell_types:Array[CellType] = []
 var hidden:bool = false
 
 func _init() -> void:
 	pass
 
-func add_gene(gene:Gene) -> void:
-	if not genes.has(gene):
-		genes.append(gene)
+func add_gene_type(gene_type:GeneType) -> void:
+	if not gene_types.has(gene_type):
+		gene_types.append(gene_type)
 		
-func remove_gene(gene:Gene) -> void:
-	if not is_gene_used(gene):
-		genes.erase(gene)
+func remove_gene_type(gene_type:GeneType) -> void:
+	if not is_gene_type_used(gene_type):
+		gene_types.erase(gene_type)
 
-func is_gene_used(gene:Gene) -> bool:
+func is_gene_type_used(gene_type:GeneType) -> bool:
 	for cell_type in cell_types:
-		if cell_type.is_gene_active(gene):
+		if cell_type.has_gene_type(gene_type):
 			return true
 	return false
 	
@@ -35,10 +35,10 @@ func validate():
 	for cell_type in cell_types:
 		if not appearance_set.has_cell_appearance(cell_type.cell_appearance):
 			push_error("Cell type %s cell appearance %s not found in appearance set %s." % [cell_type, appearance_set])
-		for active_gene in cell_type.active_genes:
-			if not has_gene(active_gene.gene):
-				push_error("Cell type %s active gene %s not found in genome genes." % [cell_type, active_gene.gene])
+		for gene_config in cell_type.gene_configs:
+			if not has_gene_type(gene_config.gene_type):
+				push_error("Cell type %s active gene %s not found in genome gene_types." % [cell_type, gene_config.gene_type])
 			
-func has_gene(gene:Gene) -> bool:
-	return genes.any(func (entry): return entry == gene)
+func has_gene_type(gene_type:GeneType) -> bool:
+	return gene_types.any(func (entry): return entry == gene_type)
 	
