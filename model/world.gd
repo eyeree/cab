@@ -4,12 +4,6 @@ static func _static_init():
 	SerializationUtil.register(World) \
 		.ignore_properties(World, ['bounds_cell', 'empty_cell'])
 
-static var _next_cell_number:int = 1
-static func get_next_cell_number() -> int:
-	var cell_number = _next_cell_number
-	_next_cell_number += 1
-	return cell_number
-	
 static var empty_args:Array = []
 static func debug(msg:String, args:Array = empty_args) -> void:
 	if false: prints("World", msg % args)
@@ -21,7 +15,12 @@ var _step_count:int = 0
 var step_count:int:
 	get: return _step_count
 
-static var bounds_cell:Cell = EnvionmentGenome.bounds_cell_type.create_cell()
+var _cell_number:int = 0
+func allocate_cell_number() -> int:
+	_cell_number += 1
+	return _cell_number
+	
+static var bounds_cell:Cell = EnvironmentGenome.bounds_cell_type.create_cell()
 
 signal cell_changed(index:HexIndex, new_cell:Cell)
 
@@ -35,12 +34,13 @@ func init(options:WorldOptions = WorldOptions.new()):
 	
 	_rings = options.rings
 	_step_count = 0
+	_cell_number = 0
 	
 	_cells = HexStore.new()
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var content:Cell = options.initial_content.get_content(index)
 		if content == null:
-			content = EnvionmentGenome.empty_cell_type.create_cell()
+			content = EnvironmentGenome.empty_cell_type.create_cell()
 		set_cell(index, content)
 	
 func step() -> void:
@@ -56,7 +56,7 @@ func update_state() -> void:
 func _cell_perform_actions(index:HexIndex, cell:Cell):
 	cell.perform_actions(index, self)
 	if cell.is_dead:
-		set_cell(index, EnvionmentGenome.empty_cell_type.create_cell())
+		set_cell(index, EnvironmentGenome.empty_cell_type.create_cell())
 	
 func _cell_update_state(index:HexIndex, cell:Cell):
 	cell.update_state(index, self)
@@ -81,12 +81,13 @@ func set_cell(index:HexIndex, cell:Cell) -> void:
 		push_error("cell %s distance at %s greater than allowed max distance." % [cell, index])
 		return
 		
+	cell.cell_number = allocate_cell_number()
 	_cells.set_content(index, cell)
 	
 	cell_changed.emit(index, cell)
 	
 func is_empty_cell(cell:Cell) -> bool:
-	return cell.cell_type == EnvionmentGenome.empty_cell_type
+	return cell.cell_type == EnvironmentGenome.empty_cell_type
 	
 func is_bounds_cell(cell:Cell) -> bool:
 	return cell == bounds_cell

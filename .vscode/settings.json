@@ -1,5 +1,11 @@
 {
     "cSpell.words": [
-        "roundi"
-    ]
+        "roundi",
+        "stylebox"
+    ],
+    "files.exclude": {
+        "**/*.import": true,
+        "**/*.tmp": true,
+        "**/*.uid": true
+    }
 }

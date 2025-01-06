@@ -1,4 +1,4 @@
-class_name EnvionmentGenome extends Genome
+class_name EnvironmentGenome extends Genome
 
 static var genome:Genome
 
@@ -10,11 +10,11 @@ static var toxin_cell_type:CellType
 static func _static_init() -> void:
 	
 	genome = Genome.new()
-	genome.name = 'Envionment'
+	genome.name = 'Environment'
 	genome.hidden = true
 	genome.appearance_set = load("res://appearance/environment/environment_appearance_set.tres")
 	genome.gene_types.append_array([
-		ImortalityGene.gene_type, 
+		ImmortalityGene.gene_type, 
 		ClaimableCellGene.gene_type,
 		ProvideFoodGene.gene_type,
 		ProduceToxinGene.gene_type
@@ -23,22 +23,22 @@ static func _static_init() -> void:
 	bounds_cell_type = genome.add_cell_type()
 	bounds_cell_type.name = 'Bounds'
 	bounds_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('environment_cell_bounds')
-	bounds_cell_type.add_gene(ImortalityGene)
+	bounds_cell_type.add_gene(ImmortalityGene)
 	
 	empty_cell_type = genome.add_cell_type()
 	empty_cell_type.name = 'Empty'
 	empty_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('environment_cell_empty')
-	empty_cell_type.add_gene(ImortalityGene)
+	empty_cell_type.add_gene(ImmortalityGene)
 	empty_cell_type.add_gene(ClaimableCellGene)
 	
 	food_cell_type = genome.add_cell_type()
 	food_cell_type.name = 'Food'
 	food_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('environment_cell_food')
-	food_cell_type.add_gene(ImortalityGene)
+	food_cell_type.add_gene(ImmortalityGene)
 	food_cell_type.add_gene(ProvideFoodGene)
 
 	toxin_cell_type = genome.add_cell_type()
 	toxin_cell_type.name = 'Toxin'
 	toxin_cell_type.cell_appearance = genome.appearance_set.get_cell_appearance_by_name('environment_cell_toxin')
-	toxin_cell_type.add_gene(ImortalityGene)
+	toxin_cell_type.add_gene(ImmortalityGene)
 	toxin_cell_type.add_gene(ProduceToxinGene)

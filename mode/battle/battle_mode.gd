@@ -1,6 +1,4 @@
-class_name BattleController extends Node
-
-@export_file("*.tscn") var content_path:String
+class_name BattleMode extends Node
 
 @onready var _step_button: Button = %StepButton
 @onready var _reset_button: Button = %ResetButton
@@ -8,6 +6,7 @@ class_name BattleController extends Node
 @onready var _pause_button: Button = %PauseButton
 @onready var _run_speed_slider: HSlider = %RunSpeedSlider
 @onready var _grid: Grid = %Grid
+@onready var cell_details_panel: CellDetailsPanel = %CellDetailsPanel
 
 const _min_run_step_delta:float = 0.05
 const _max_run_step_delta:float = 2.0
@@ -18,6 +17,9 @@ var _is_running:bool = false
 var _step_timer:SceneTreeTimer = null
 
 var _world:World = World.new()
+
+var _selected_index:HexIndex = HexIndex.INVALID
+var _mouse_index:HexIndex = HexIndex.INVALID
 
 func _ready() -> void:
 	
@@ -31,6 +33,7 @@ func _ready() -> void:
 	
 	_grid.mouse_entered_hex.connect(_on_mouse_entered_hex)
 	_grid.mouse_exited_hex.connect(_on_mouse_exited_hex)
+	_grid.hex_selected.connect(_on_hex_selected)
 
 	_world.cell_changed.connect(_on_world_cell_changed)
 	
@@ -41,12 +44,36 @@ func _ready() -> void:
 	
 func _on_mouse_entered_hex(index:HexIndex):
 	_grid.set_selected_index(index)
+	_show_cell(index)
+	_mouse_index = index
 
 func _on_mouse_exited_hex(_index:HexIndex):
+	_show_selected_cell()
+	_mouse_index = HexIndex.INVALID
+
+func _on_hex_selected(index:HexIndex):
+	_selected_index = index
+	_grid.set_highlighted_indexes([_selected_index])
 	_grid.clear_selected_index()
+	_mouse_index = HexIndex.INVALID
 
 func _on_world_cell_changed(index:HexIndex, cell:Cell) -> void:
 	_grid.set_hex_content(index, cell.cell_appearance)
+	if index == _mouse_index:
+		_show_cell(_mouse_index)
+	elif index == _selected_index:
+		_show_cell(_selected_index)
+
+func _show_cell(index:HexIndex) -> void:
+	var cell:Cell = _world.get_cell(index)
+	cell_details_panel.show_cell(cell)
+
+func _show_selected_cell() -> void:
+	_grid.clear_selected_index()
+	if _selected_index == HexIndex.INVALID:
+		cell_details_panel.hide_panel()
+	else:
+		_show_cell(_selected_index)
 
 func _setup():
 	
@@ -56,6 +83,9 @@ func _setup():
 	world_options.rings = _grid.rings
 	world_options.initial_content = _get_initial_content()
 	_world.init(world_options)
+
+	_show_selected_cell()
+
 
 func _get_initial_content() -> HexStore:
 	

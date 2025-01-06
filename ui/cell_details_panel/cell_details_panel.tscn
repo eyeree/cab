@@ -1,0 +1,147 @@
+[gd_scene load_steps=2 format=3 uid="uid://b128myar7a7y1"]
+
+[ext_resource type="Script" uid="uid://tn051d30ouhs" path="res://ui/cell_details_panel/cell_details_panel.gd" id="1_tl2sj"]
+
+[node name="CellDetailsPanel" type="PanelContainer"]
+offset_right = 8.0
+offset_bottom = 8.0
+script = ExtResource("1_tl2sj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="CellTitle" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"FormValueLabel"
+text = "(cell title)"
+text_overrun_behavior = 3
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="EnergyLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"FormLabel"
+text = "Energy:"
+
+[node name="EnergyEdit" type="LineEdit" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLineEdit"
+text = "0"
+alignment = 2
+
+[node name="EnergyHistoryLabel" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLabel"
+text = "(0)"
+horizontal_alignment = 2
+
+[node name="NewEnergyLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"FormLabel"
+text = "New Energy:"
+
+[node name="NewEnergyEdit" type="LineEdit" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLineEdit"
+text = "0"
+alignment = 2
+
+[node name="NewEnergyHistoryLabel" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLabel"
+text = "(0)"
+horizontal_alignment = 2
+
+[node name="EnergyWantedLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"FormLabel"
+text = "Energy Wanted:"
+
+[node name="EnergyWantedEdit" type="LineEdit" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLineEdit"
+text = "0"
+alignment = 2
+
+[node name="EnergyWantedHistoryLabel" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLabel"
+text = "(0)"
+horizontal_alignment = 2
+
+[node name="LifeLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"FormLabel"
+text = "Life:"
+
+[node name="LifeEdit" type="LineEdit" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLineEdit"
+text = "0"
+alignment = 2
+
+[node name="LifeHistoryLabel" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLabel"
+text = "(0)"
+horizontal_alignment = 2
+
+[node name="NewLifeLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"FormLabel"
+text = "New Life:"
+
+[node name="NewLifeEdit" type="LineEdit" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLineEdit"
+text = "0"
+alignment = 2
+
+[node name="NewLifeHistoryLabel" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLabel"
+text = "(0)"
+horizontal_alignment = 2
+
+[node name="MaxLifeLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"FormLabel"
+text = "Max Life:"
+
+[node name="MaxLifeEdit" type="LineEdit" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLineEdit"
+text = "0"
+alignment = 2
+
+[node name="MaxLifeHistoryLabel" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FormValueLabel"
+horizontal_alignment = 2

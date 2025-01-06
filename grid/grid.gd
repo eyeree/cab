@@ -149,30 +149,28 @@ func _input(event: InputEvent) -> void:
 		
 		if _camera_control.ActualMouseState != CameraControl.E_MOUSE_ACTION_STATES.IDLE:
 			return
+			
+		var hex_index = _get_mouse_hex_index()
+		if hex_index != _mouse_hex_index:			
+			if _mouse_hex_index != HexIndex.INVALID:
+				mouse_exited_hex.emit(_mouse_hex_index)
+			_mouse_hex_index = hex_index
+			if _mouse_hex_index != HexIndex.INVALID:
+				mouse_entered_hex.emit(_mouse_hex_index)
 
-		var grid_position:Vector2 = _mouse_position_to_grid_position()
-		if grid_position != Vector2.INF:
-			var hex_index:HexIndex = HexIndex.from_point(grid_position, _grid_size_info.hex_outer_radius)
-			if hex_index != _mouse_hex_index:
-				if hex_index != null:
-					mouse_exited_hex.emit(hex_index)
-				if hex_index.distance_to_center() <= _grid_size_info.hex_max_distance:                   
-					_mouse_hex_index = hex_index
-					mouse_entered_hex.emit(hex_index)
-
-	if event is InputEventKey:
-		if event.keycode == KEY_Z and event.pressed and not event.echo:
-			match grid_size:
-				GridSize.SMALL:
-					grid_size = GridSize.MEDIUM
-				GridSize.MEDIUM:
-					grid_size = GridSize.LARGE
-				GridSize.LARGE:
-					grid_size = GridSize.HUGE
-				GridSize.HUGE:
-					grid_size = GridSize.SMALL
+	elif Input.is_action_just_pressed("GridSelect"):
+		var hex_index = _get_mouse_hex_index()
+		hex_selected.emit(hex_index)
+		
+func _get_mouse_hex_index() -> HexIndex:
+	var grid_position:Vector2 = _mouse_position_to_grid_position()
+	if grid_position == Vector2.INF: return HexIndex.INVALID
+	var hex_index:HexIndex = HexIndex.from_point(grid_position, _grid_size_info.hex_outer_radius)
+	if hex_index.distance_to_center() > _grid_size_info.hex_max_distance: return HexIndex.INVALID
+	return hex_index
 		
 signal mouse_entered_hex(index:HexIndex)
 signal mouse_exited_hex(index:HexIndex)
+signal hex_selected(index:HexIndex)
 
 #endregion
