@@ -35,4 +35,4 @@ class RepairDamageGeneType extends GeneType:
 	func create_config(_cell_type:CellType) -> RepairDamageGeneConfig:
 		return RepairDamageGeneConfig.new(self)
 
-static var gene_type:RepairDamageGeneType = RepairDamageGeneType.new()
+static var gene_type_ = RepairDamageGeneType.new()

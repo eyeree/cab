@@ -38,10 +38,10 @@ func has_gene_type(gene_type:GeneType) -> bool:
 	return false
 
 func add_gene(gene_class:Script) -> GeneConfig:
-	return add_gene_type(gene_class.gene_type)	
+	return add_gene_type(gene_class.gene_type_)	
 
 func has_gene(gene_class:Script) -> bool:
-	return has_gene_type(gene_class.gene_type)
+	return has_gene_type(gene_class.gene_type_)
 	
 func create_cell(progenitor:Cell = null) -> Cell:
 	return Cell.new(progenitor, self)

@@ -11,17 +11,23 @@ var default_spacing = 4
 var default_background_color = Color(0.176, 0.176, 0.176)
 var default_border_color = Color(0.223, 0.223, 0.223)
 var default_font_color = Color(1, 1, 1)
+
 var form_value_font_color = default_font_color
 var form_label_font_color = Color(0.545, 0.545, 0.545)
+
+var detail_border_color = Color(0.223, 0.223, 0.223)
+var sub_detail_border_color = Color(0.202, 0.202, 0.202)
 
 var title_background_color = Color.BLACK
 var title_border_color = default_border_color
 var title_font_color = Color(255, 204, 255)
 var title_font_outline_color = Color(114, 0, 114)
 
+var default_font_size = 12
+
 func define_theme():	
 	
-	define_default_font_size(16)
+	define_default_font_size(default_font_size)
 	
 	var panel_style = stylebox_flat({
 		bg_color = default_background_color,
@@ -32,13 +38,28 @@ func define_theme():
 		panel = panel_style
 	})
 	
+	define_variant_style("DetailTitleLabel", "Label", {
+		font_size = default_font_size + 4
+	})
+
+	define_variant_style("SubDetailTitleLabel", "Label", {
+		font_size = default_font_size + 2
+	})
+	
 	define_variant_style("DetailPanel", "PanelContainer", {
 		panel = inherit(panel_style, {
-			border_color = default_border_color,
+			border_color = detail_border_color,
 			border_ = border_width(2)
 		})
-	})	
-	
+	})
+
+	define_variant_style("SubDetailPanel", "PanelContainer", {
+		panel = inherit(panel_style, {
+			border_color = sub_detail_border_color,
+			border_ = border_width(1)
+		})
+	})
+
 	define_variant_style("TitlePanel", "PanelContainer", {
 		panel = stylebox_flat({
 			bg_color = title_background_color,

@@ -9,8 +9,8 @@ var hidden:bool = false
 func _init() -> void:
 	pass
 
-func add_gene(gene_script:Script) -> void:
-	add_gene_type(gene_script.gene_type)
+func add_gene(gene_class:Script) -> void:
+	add_gene_type(gene_class.gene_type_)
 	
 func add_gene_type(gene_type:GeneType) -> void:
 	if not gene_types.has(gene_type):

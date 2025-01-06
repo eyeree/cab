@@ -33,12 +33,12 @@ class ResistDamageGeneType extends GeneType:
 	func create_config(_cell_type:CellType) -> ResistDamageGeneConfig:
 		return ResistDamageGeneConfig.new(self)
 
-static var gene_type:ResistDamageGeneType = ResistDamageGeneType.new()
+static var gene_type_ = ResistDamageGeneType.new()
 
 static var damage_immunity_config:ResistDamageGeneConfig = _get_config_for_damage_immunity()
 
 static func _get_config_for_damage_immunity() -> ResistDamageGeneConfig:
-		var config = ResistDamageGeneConfig.new(gene_type)
+		var config = ResistDamageGeneConfig.new(gene_type_)
 		config.resisted_type = Cell.DamageType.Universal
 		config.resisted_amount = 0
 		config.resisted_percent = 1.0

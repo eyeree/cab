@@ -17,13 +17,18 @@ static func get_all_gene_types() -> Array[GeneType]:
 		_load_gene_types_from_directory(BASE_PATH)
 		var sub_dirs = DirAccess.get_directories_at(BASE_PATH)
 		for sub_dir:String in sub_dirs:
-			_load_gene_types_from_directory(sub_dir)			
+			var sub_dir_path = BASE_PATH.path_join(sub_dir)
+			_load_gene_types_from_directory(sub_dir_path)			
 	return _gene_types
 	
-static func _load_gene_types_from_directory(dir:String) -> void:
-	var files = DirAccess.get_files_at(dir)
+static func _load_gene_types_from_directory(dir_path:String) -> void:
+	var files = DirAccess.get_files_at(dir_path)
 	for file:String in files:
 		if file.ends_with("_gene.gd"):
-			var gene_script:Script = load(file)
-			var gene_type:GeneType = gene_script.gene_type
-			_gene_types.append(gene_type)
+			var file_path = dir_path.path_join(file)
+			var gene_script:Script = load(file_path)
+			var gene_type:GeneType = gene_script.get('gene_type_')
+			if gene_type == null:
+				push_error("Gene %s did not define gene_type_" % [file_path])
+			else:
+				_gene_types.append(gene_type)

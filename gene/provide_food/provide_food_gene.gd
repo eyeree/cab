@@ -23,5 +23,5 @@ class ProvideFoodGeneType extends GeneType:
 	func create_config(_cell_type:CellType) -> ProvideFoodGeneConfig:
 		return ProvideFoodGeneConfig.new(self)
 
-static var gene_type = ProvideFoodGeneType.new()
+static var gene_type_ = ProvideFoodGeneType.new()
 	

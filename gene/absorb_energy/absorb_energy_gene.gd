@@ -26,4 +26,4 @@ class AbsorbEnergyGeneType extends GeneType:
 	func create_config(_cell_type:CellType) -> AbsorbEnergyGeneConfig:
 		return AbsorbEnergyGeneConfig.new(self)
 
-static var gene_type = AbsorbEnergyGeneType.new()
+static var gene_type_ = AbsorbEnergyGeneType.new()

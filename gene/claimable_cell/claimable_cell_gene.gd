@@ -51,4 +51,4 @@ class ClaimableCellGeneType extends GeneType:
 	func create_config(_cell_type:CellType) -> GeneConfig:
 		return ClaimableCellGeneConfig.new(self)
 			
-static var gene_type = ClaimableCellGeneType.new()
+static var gene_type_ = ClaimableCellGeneType.new()

@@ -52,4 +52,4 @@ class  ProduceCellGeneType extends GeneType:
 	func create_config(cell_type:CellType) -> ProduceCellGeneConfig:
 		return ProduceCellGeneConfig.new(self, cell_type)
 		
-static var gene_type = ProduceCellGeneType.new()
+static var gene_type_ = ProduceCellGeneType.new()

@@ -13,6 +13,7 @@ class_name CellDetailsPanel extends PanelContainer
 @onready var life_history_label: Label = %LifeHistoryLabel
 @onready var new_life_history_label: Label = %NewLifeHistoryLabel
 @onready var max_life_history_label: Label = %MaxLifeHistoryLabel
+@onready var gene_container: VBoxContainer = %GeneContainer
 
 var _cell:Cell = null
 
@@ -34,6 +35,17 @@ func show_cell(cell:Cell) -> void:
 	_show_history_prop(history, 'energy_wanted', energy_wanted_history_label)
 	_show_history_prop(history, 'life', life_history_label)
 	_show_history_prop(history, 'new_life', new_life_history_label)
+
+	if _cell != cell:
+		for child in gene_container.get_children():
+			gene_container.remove_child(child)
+		for gene in cell.genes:
+			gene_container.add_child(gene.get_detail_ui())
+			
+	for i in range(cell.genes.size()):
+		var gene = cell.genes[i]
+		var detail_ui = gene_container.get_child(i)
+		detail_ui.show_gene(gene)
 	
 	if cell != _cell:
 		if _cell: _cell.state_changed.disconnect(_on_cell_state_changed)

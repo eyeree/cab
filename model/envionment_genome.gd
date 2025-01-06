@@ -13,12 +13,10 @@ static func _static_init() -> void:
 	genome.name = 'Environment'
 	genome.hidden = true
 	genome.appearance_set = load("res://appearance/environment/environment_appearance_set.tres")
-	genome.gene_types.append_array([
-		ImmortalityGene.gene_type, 
-		ClaimableCellGene.gene_type,
-		ProvideFoodGene.gene_type,
-		ProduceToxinGene.gene_type
-	])
+	genome.add_gene(ImmortalityGene)
+	genome.add_gene(ClaimableCellGene)
+	genome.add_gene(ProvideFoodGene)
+	genome.add_gene(ProduceToxinGene)
 	
 	bounds_cell_type = genome.add_cell_type()
 	bounds_cell_type.name = 'Bounds'

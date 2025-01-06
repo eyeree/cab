@@ -21,4 +21,4 @@ class ImmortalityGeneType extends GeneType:
 	func create_config(_cell_type:CellType) -> ImmortalityGeneConfig:
 		return ImmortalityGeneConfig.new(self)
 
-static var gene_type:ImmortalityGeneType = ImmortalityGeneType.new()
+static var gene_type_ = ImmortalityGeneType.new()

@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxouqwi6lhxsx"]
+
+[ext_resource type="Script" uid="uid://cp3npaf5y51af" path="res://gene/default/default_detail_ui.gd" id="1_lya7j"]
+
+[node name="DefaultDetailUI" type="PanelContainer"]
+offset_right = 8.0
+offset_bottom = 8.0
+theme_type_variation = &"SubDetailPanel"
+script = ExtResource("1_lya7j")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SubDetailTitleLabel"
+text = "Absorb Energy"
