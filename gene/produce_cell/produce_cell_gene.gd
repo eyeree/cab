@@ -23,7 +23,6 @@ func _find_claimable_cell(world:World, index:HexIndex) -> ClaimableCellGene:
 		var claimable_cell_gene:ClaimableCellGene = target_cell.get_gene(ClaimableCellGene)
 		if claimable_cell_gene and claimable_cell_gene.is_claimable:
 			return claimable_cell_gene
-		#prints('_find_claimable_cell not empty', direction)
 	return null
 	
 func update_state(index:HexIndex, world:World, _cell:Cell) -> void:

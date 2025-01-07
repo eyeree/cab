@@ -24,6 +24,7 @@ static func get_all_gene_types() -> Array[GeneType]:
 static func _load_gene_types_from_directory(dir_path:String) -> void:
 	var files = DirAccess.get_files_at(dir_path)
 	for file:String in files:
+		file = file.replace('.remap', '')
 		if file.ends_with("_gene.gd"):
 			var file_path = dir_path.path_join(file)
 			var gene_script:Script = load(file_path)

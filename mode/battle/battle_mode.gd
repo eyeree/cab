@@ -91,10 +91,7 @@ func _get_initial_content() -> HexStore:
 	
 	var genome1 = Genome.new()
 	genome1.name = "Genome1"
-	var a:AppearanceSet2 = preload("res://appearance_2/simple_a/simple_a_appearance_set.tres")
-	prints('_get_initial_content', a)
 	genome1.appearance_set = preload("res://appearance/simple_a/simple_a_appearance_set.tres")
-	prints('_get_initial_content', genome1.appearance_set)
 	genome1.add_gene(AbsorbEnergyGene)
 	genome1.add_gene(RepairDamageGene)
 	genome1.add_gene(ProduceCellGene)

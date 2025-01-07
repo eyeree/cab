@@ -62,7 +62,6 @@ func _input(event:InputEvent) -> void:
 				_on_move_end()
 
 	if event is InputEventMouseMotion:
-		#prints('grid_position', _get_grid_position(event.position))
 		match _mouse_movement_mode:
 			MouseMovementMode.Rotate:
 				_rotate(event.relative)
@@ -79,7 +78,6 @@ func _rotate(_amount:Vector2):
 	pass
 	
 func _on_move_start(mouse_position:Vector2) -> void:
-	prints('_on_move_start', mouse_position)
 	_last_grid_position = _get_grid_position(mouse_position)
 	#if _drag_position.length() <= 0.5:
 	_mouse_movement_mode = MouseMovementMode.Move
@@ -110,7 +108,6 @@ func _get_grid_position(mouse_position:Vector2) -> Vector3:
 	var end = origin + normal * 100
 	var ray_dir = (origin - end).normalized()
 	var angle = abs(ray_dir.dot(Vector3.BACK))
-	prints('mouse_position:', mouse_position, '- origin:', origin, '- normal:', normal, '- intersection:', intersection, '- angle:', angle)
 	
 	if intersection != null:
 		return intersection  

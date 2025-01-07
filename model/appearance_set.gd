@@ -1,8 +1,5 @@
 class_name AppearanceSet extends Resource
 
-static func _static_init():
-	prints('AppearanceSet')
-	
 static var default:AppearanceSet:
 	get:
 		return load("res://appearance/simple_a/simple_a_appearance_set.tres")
@@ -14,6 +11,7 @@ static func get_all_appearance_sets() -> Array[AppearanceSet]:
 	for sub_dir:String in sub_dirs:
 		var files = DirAccess.get_files_at(base_dir.path_join(sub_dir))
 		for file:String in files:
+			file = file.replace('.remap', '')
 			if file.ends_with("_appearance_set.tres"):
 				result.append(load(file))
 	return result
@@ -35,7 +33,6 @@ var thumbnail:Texture2D:
 var _cell_appearances:Array[PackedScene] = []
 var cell_appearances:Array[PackedScene]:
 	get:
-		prints('AppearanceSet2.cell_appearances get', _cell_appearances)
 		if _cell_appearances.size() == 0:
 			var cell_base_name = _base_name + '_cell_'
 			_add_cell_appearances_from_dir(_base_dir, cell_base_name)
@@ -44,10 +41,8 @@ var cell_appearances:Array[PackedScene]:
 		return _cell_appearances
 
 func _add_cell_appearances_from_dir(dir:String, cell_base_name:String) -> void:
-	prints('AppearanceSet2.cell_appearances get', dir, cell_base_name)
 	var files = DirAccess.get_files_at(dir)
 	for file:String in files:
-		prints('  file:', file)
 		file = file.replace('.remap', '')
 		if file.begins_with(cell_base_name) and file.ends_with('.tscn'):
 			var packed_scene:PackedScene = load(dir.path_join(file))

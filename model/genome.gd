@@ -7,7 +7,6 @@ var cell_types:Array[CellType] = []
 var hidden:bool = false
 
 func _init() -> void:
-	prints('Genome _init', AppearanceSet.default, AppearanceSet2.default)
 	appearance_set = AppearanceSet.default
 
 func add_gene(gene_class:Script) -> void:
