@@ -12,7 +12,7 @@ static func _static_init() -> void:
 	genome = Genome.new()
 	genome.name = 'Environment'
 	genome.hidden = true
-	genome.appearance_set = load("res://appearance/environment/environment_appearance_set.tres")
+	genome.appearance_set = preload("res://appearance/environment/environment_appearance_set.tres")
 	genome.add_gene(ImmortalityGene)
 	genome.add_gene(ClaimableCellGene)
 	genome.add_gene(ProvideFoodGene)

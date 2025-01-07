@@ -1,9 +1,5 @@
 class_name World extends RefCounted
 
-static func _static_init():
-	SerializationUtil.register(World) \
-		.ignore_properties(World, ['bounds_cell', 'empty_cell'])
-
 static var empty_args:Array = []
 static func debug(msg:String, args:Array = empty_args) -> void:
 	if false: prints("World", msg % args)

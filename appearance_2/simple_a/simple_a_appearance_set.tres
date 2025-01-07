@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="AppearanceSet2" load_steps=2 format=3 uid="uid://detiekq8bjsq"]
+
+[ext_resource type="Script" uid="uid://55olew2wdikf" path="res://model/appearance_set_2.gd" id="1_45ul1"]
+
+[resource]
+script = ExtResource("1_45ul1")
+hidden = false
+metadata/_custom_type_script = ExtResource("1_45ul1")

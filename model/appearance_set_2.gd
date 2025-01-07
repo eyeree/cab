@@ -1,0 +1,66 @@
+class_name AppearanceSet2 extends Resource
+
+static func _static_init():
+	prints('AppearanceSet2')
+	
+static var default:AppearanceSet2:
+	get:
+		return load("res://appearance_2/simple_a/simple_a_appearance_set.tres")
+
+static func get_all_appearance_sets() -> Array[AppearanceSet2]:
+	var result:Array[AppearanceSet2] = []
+	var base_dir:String = "res://appearance_2"
+	var sub_dirs = DirAccess.get_directories_at(base_dir)
+	for sub_dir:String in sub_dirs:
+		var files = DirAccess.get_files_at(base_dir.path_join(sub_dir))
+		for file:String in files:
+			if file.ends_with("_appearance_set.tres"):
+				result.append(load(file))
+	return result
+	
+@export var hidden:bool = false
+
+var _base_name:String:
+	get:
+		return resource_path.get_basename().get_file().replace('_appearance_set', '')
+		
+var _base_dir:String:
+	get:
+		return resource_path.get_base_dir()
+	
+var thumbnail:Texture2D:
+	get:
+		return load(_base_name + '_thumbnail.png')
+		
+var _cell_appearances:Array[PackedScene] = []
+var cell_appearances:Array[PackedScene]:
+	get:
+		prints('AppearanceSet2.cell_appearances get', _cell_appearances)
+		if _cell_appearances.size() == 0:
+			var cell_base_name = _base_name + '_cell_'
+			_add_cell_appearances_from_dir(_base_dir, cell_base_name)
+			for sub_dir in DirAccess.get_directories_at(_base_dir):
+				_add_cell_appearances_from_dir(_base_dir.path_join(sub_dir), cell_base_name)
+		return _cell_appearances
+
+func _add_cell_appearances_from_dir(dir:String, cell_base_name:String) -> void:
+	prints('AppearanceSet2.cell_appearances get', dir, cell_base_name)
+	var files = DirAccess.get_files_at(dir)
+	for file:String in files:
+		prints('  file:', file)
+		if file.begins_with(cell_base_name) and file.ends_with('.tscn'):
+			var packed_scene:PackedScene = load(dir.path_join(file))
+			_cell_appearances.append(packed_scene)
+	
+func get_default_cell_appearance() -> PackedScene:
+	return cell_appearances[0]
+	
+func has_cell_appearance(cell_appearance:PackedScene) -> bool:
+	return cell_appearances.any(func (entry): return cell_appearance.resource_path == entry.resource_path)
+
+func get_cell_appearance_by_name(name:String) -> PackedScene:
+	for cell_appearance:PackedScene in cell_appearances:
+		if cell_appearance.resource_path.get_file().get_basename() == name:
+			return cell_appearance
+	push_error('No cell appearance named %s was found in appearance set %s' % [name, resource_path])
+	return null
