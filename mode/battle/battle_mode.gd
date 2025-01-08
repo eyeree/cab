@@ -49,13 +49,11 @@ func _on_mouse_entered_hex(index:HexIndex):
 
 func _on_mouse_exited_hex(_index:HexIndex):
 	_show_selected_cell()
-	_mouse_index = HexIndex.INVALID
 
 func _on_hex_selected(index:HexIndex):
 	_selected_index = index
 	_grid.set_highlighted_indexes([_selected_index])
-	_grid.clear_selected_index()
-	_mouse_index = HexIndex.INVALID
+	_show_selected_cell()
 
 func _on_world_cell_changed(index:HexIndex, cell:Cell) -> void:
 	_grid.set_hex_content(index, cell.cell_appearance)
@@ -70,6 +68,7 @@ func _show_cell(index:HexIndex) -> void:
 
 func _show_selected_cell() -> void:
 	_grid.clear_selected_index()
+	_mouse_index = HexIndex.INVALID
 	if _selected_index == HexIndex.INVALID:
 		cell_details_panel.hide_panel()
 	else:
