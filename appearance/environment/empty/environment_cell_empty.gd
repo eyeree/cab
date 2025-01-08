@@ -43,6 +43,6 @@ func _on_claim_added(claim:ClaimableCellGene.Claim) -> void:
 			_2_of_3.visible = true
 			_3_of_3.visible = true
 			_claims[0].reparent(_1_of_3, false)
-			_claims[0].reparent(_2_of_3, false)
+			_claims[1].reparent(_2_of_3, false)
 			_3_of_3.add_child(cell_appearance)
 	_base.visible = true

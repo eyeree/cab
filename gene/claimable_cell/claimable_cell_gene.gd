@@ -3,18 +3,15 @@ class_name ClaimableCellGene extends Gene
 signal claim_added(claim:Claim)
 
 var _claims:Array[Claim] = []
-var _resolve_claims:bool = false
-
-var is_claimable:bool:
-	get: return not _resolve_claims
+var is_claimable:bool = true
 	
 func perform_actions(index:HexIndex, world:World, _cell:Cell) -> void:
-	if _resolve_claims:
+	if not is_claimable:
 		resolve_claims(index, world)
 	
 func update_state(_index:HexIndex, _world:World, _cell:Cell) -> void:
 	if _claims.size() > 0:
-		_resolve_claims = true
+		is_claimable = false
 
 func add_claim(progenitor:Cell, cell_type:CellType) -> void:
 	var claim = Claim.new(progenitor, cell_type)
@@ -25,6 +22,9 @@ func resolve_claims(index:HexIndex, world:World):
 	# TODO
 	var claim:Claim = _claims[0]
 	var new_cell = claim.cell_type.create_cell(claim.progenitor)
+	new_cell.history.append({
+		previous_cell = self
+	})
 	world.set_cell(index, new_cell)
 
 class Claim:

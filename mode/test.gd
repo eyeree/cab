@@ -1,5 +1,10 @@
 class_name Test extends Node3D
 
+class Foo:
+	var foo:String = 'foo'
+	var bar:int = 10
+
 func _ready():
-	prints(GeneType.get_all_gene_types())
+	var foo:Foo = Foo.new()
+	prints(foo)
 	

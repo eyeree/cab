@@ -22,6 +22,7 @@ var genes:Array[Gene] = []
 var immortal:bool = false
 
 var history:Array[Dictionary] = []
+var history_index:int = 0 # reverse index
 
 func update_history(new_props:Dictionary) -> void:
 	if history.is_empty():
@@ -65,7 +66,8 @@ func _init(progenitor:Cell, cell_type_:CellType) -> void:
 func perform_actions(index:HexIndex, world:World) -> void:
 	history.append({
 		energy = energy,
-		life = life
+		life = life,
+		energy_wanted = energy_wanted,
 	})
 	for gene in genes:
 		gene.perform_actions(index, world, self)
@@ -74,7 +76,6 @@ func update_state(index:HexIndex, world:World) -> void:
 
 	update_history({
 		new_energy = new_energy,
-		energy_wanted = energy_wanted,
 		new_life = new_life
 	})
 	
@@ -113,6 +114,19 @@ func has_gene(type:Script) -> bool:
 		if is_instance_of(gene, type): 
 			return true
 	return false
+	
+func previous_state() -> Cell:
+	history_index -= 1
+	var history_state = history[history.size() + history_index]
+	if history_state.has('previous_cell'):
+		return history_state['previous_cell']
+	energy = history_state['energy']
+	life = history_state['life']
+	energy_wanted = history_state['energy_wanted']
+	return null
+	
+func next_state() -> void:
+	history_index += 1
 	
 func _to_string() -> String:
 	return "Cell:%s:%s:%d{ energy: %0.0f, new_energy: %0.0f, life: %0.0f, new_life: %0.0f }" \

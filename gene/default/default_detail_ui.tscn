@@ -16,3 +16,23 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SubDetailTitleLabel"
 text = "Absorb Energy"
+
+[node name="PropertyGridContainer" type="GridContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"FormGridContainer"
+columns = 2
+
+[node name="TemplateLabel" type="Label" parent="VBoxContainer/PropertyGridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"FormLabel"
+text = "Energy Per Step:"
+
+[node name="TemplateLineEdit" type="LineEdit" parent="VBoxContainer/PropertyGridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
