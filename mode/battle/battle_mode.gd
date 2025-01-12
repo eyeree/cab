@@ -18,7 +18,7 @@ var _is_running:bool = false
 
 var _step_timer:SceneTreeTimer = null
 
-var _world:World = World.new()
+var _world_history:WorldHistory = null
 
 var _selected_index:HexIndex = HexIndex.INVALID
 var _mouse_index:HexIndex = HexIndex.INVALID
@@ -40,14 +40,9 @@ func _ready() -> void:
 	_grid.mouse_exited_hex.connect(_on_mouse_exited_hex)
 	_grid.hex_selected.connect(_on_hex_selected)
 
-	_world.cell_changed.connect(_on_world_cell_changed)
-	
 	current_step.max_value = max_steps.value
-	
-	_setup()
-	
-	_reset()
-	_pause()
+
+	battle()	
 	
 func _on_mouse_entered_hex(index:HexIndex):
 	_grid.set_selected_index(index)
@@ -70,8 +65,10 @@ func _on_world_cell_changed(index:HexIndex, cell:Cell) -> void:
 		_show_cell(_selected_index)
 
 func _show_cell(index:HexIndex) -> void:
-	var cell:Cell = _world.get_cell(index)
-	cell_details_panel.show_cell(cell)
+	pass
+	# FIX
+	#var cell:Cell = _world.get_cell(index)
+	#cell_details_panel.show_cell(cell)
 
 func _show_selected_cell() -> void:
 	_grid.clear_selected_index()
@@ -81,17 +78,59 @@ func _show_selected_cell() -> void:
 	else:
 		_show_cell(_selected_index)
 
-func _setup():
+class BattleOptions extends RefCounted:
+	var rings:int = 10
+	var steps:int = 1000
+	var initial_content:HexStore
 	
-	_grid.clear_all_hex_content()
+var _load_thread:Thread = null
+
+func battle(options:BattleOptions = BattleOptions.new()) -> void:
+
+	if _load_thread:
+		_load_thread.wait_to_finish()
+		_load_thread = null
+		
+	_load_thread = Thread.new()
+	_load_thread.start(_load.bind(options))
+	
+func _exit_tree() -> void:
+	if _load_thread:
+		_load_thread.wait_to_finish()
+		_load_thread = null
+	
+func _run_started() -> void:
+	prints('run started')
+
+func _run_progress(steps_done:int) -> void:
+	prints('run progress', steps_done)	
+	
+func _run_finished() -> void:
+	prints('run finished')
+
+func _load(battle_options:BattleOptions) -> void:
+	
+	battle_options.rings = _grid.rings # FIX
+	battle_options.initial_content = _get_initial_content() # FIX
+	
+	_world_history = WorldHistory.new(battle_options.rings, battle_options.steps)
 	
 	var world_options = World.WorldOptions.new()
-	world_options.rings = _grid.rings
-	world_options.initial_content = _get_initial_content()
-	_world.init(world_options)
-
-	_show_selected_cell()
-
+	world_options.rings = battle_options.rings
+	world_options.initial_content = battle_options.initial_content
+	world_options.world_history = _world_history
+	var world = World.new(world_options)
+	
+	_run_started.call_deferred()
+	var start = Time.get_ticks_msec()
+	world.run(battle_options.steps, 
+		func (steps_done:int, elapsed_usec:int):
+			var end = Time.get_ticks_msec()
+			prints('cell number', steps_done, world._cell_number, ClaimableCellGene.num_claims, elapsed_usec, end - start)
+			start = end
+	)
+			#_run_progress.call_deferred(steps_done))			
+	_run_finished.call_deferred()
 
 func _get_initial_content() -> HexStore:
 	
@@ -135,30 +174,32 @@ func _get_initial_content() -> HexStore:
 func _on_max_steps_changed() -> void:
 	current_step.max_value = max_steps.value
 	
-func _on_current_step_changed() -> void:
-	prints('_on_current_step_changed')
+func _on_current_step_changed(_value) -> void:
+	#prints('_on_current_step_changed')
+	pass
 	
 func _step() -> void:
 	_reset_button.disabled = false
-	_world.step()
-	current_step.value = _world.step_count
-	if _world.step_count >= max_steps.value:
-		_is_running = false
-		_run_button.disabled = true
-		_pause_button.disabled = true
-		_reset_button.disabled = false
-		_step_button.disabled = true
-	else:
-		if _is_running:	_start_step_timer()
+	# fix
+	#_world.step()
+	#current_step.value = _world.step_count
+	#if _world.step_count >= max_steps.value:
+		#_is_running = false
+		#_run_button.disabled = true
+		#_pause_button.disabled = true
+		#_reset_button.disabled = false
+		#_step_button.disabled = true
+	#else:
+		#if _is_running:	_start_step_timer()
 		
 
 func _reset() -> void:
-	_setup()
 	_reset_button.disabled = true
 	_run_button.disabled = false
 	_pause_button.disabled = true
 	_step_button.disabled = false
-	current_step.value = _world.step_count
+	# FIX
+	#current_step.value = _world.step_count
 
 func _run() -> void:
 	_step_button.disabled = true

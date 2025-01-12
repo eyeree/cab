@@ -8,7 +8,6 @@ enum DamageType {
 
 var genome:Genome
 var cell_type:CellType
-var cell_appearance:CellAppearance
 
 var cell_number:int
 
@@ -20,21 +19,6 @@ var new_life:int = 0
 
 var genes:Array[Gene] = []
 var immortal:bool = false
-
-var history:Array[Dictionary] = []
-var history_index:int = 0 # reverse index
-
-func update_history(new_props:Dictionary) -> void:
-	if history.is_empty():
-		history.append({})
-	history[history.size()-1].merge(new_props)
-
-var last_history:Dictionary:
-	get:
-		if history.size() > 0:
-			return history[history.size()-1]
-		else:
-			return {}
 
 var max_life:int:
 	get: return cell_type.energy_cost
@@ -59,49 +43,41 @@ func _init(progenitor:Cell, cell_type_:CellType) -> void:
 				return gene_config.create_gene(progenitor)))
 					
 	immortal = has_gene(ImmortalityGene)
-	
-	cell_appearance = cell_type.cell_appearance.instantiate()
-	cell_appearance.attach(self)
 
-func perform_actions(index:HexIndex, world:World) -> void:
-	history.append({
-		energy = energy,
-		life = life,
-		energy_wanted = energy_wanted,
-	})
+func perform_actions(index:HexIndex, world:World, cell_history:Dictionary) -> void:
 	for gene in genes:
-		gene.perform_actions(index, world, self)
+		gene.perform_actions(index, world, self, cell_history)
 	
-func update_state(index:HexIndex, world:World) -> void:
+func update_state(index:HexIndex, world:World, cell_history:Dictionary) -> void:
 
-	update_history({
-		new_energy = new_energy,
-		new_life = new_life
-	})
-	
 	energy += new_energy
-	new_energy = 0
 	
 	life = min(life + new_life, max_life)
-	new_life = 0
-	
-	if not immortal:
-		life -= 1
 	
 	energy_wanted = 0
 	for gene in genes:
-		gene.update_state(index, world, self)
+		gene.update_state(index, world, self, cell_history)
 		energy_wanted += gene.energy_wanted
 
-	state_changed.emit(index, self)		
+	cell_history['cell_type'] = cell_type
+	cell_history['energy'] = energy
+	cell_history['life'] = life
+	cell_history['energy_wanted'] = energy_wanted
+	cell_history['new_energy'] = new_energy
+	cell_history['new_life'] = new_life
+	
+	new_energy = 0
+	new_life = 0
 
-signal state_changed(index:HexIndex, cell:Cell)
+	if not immortal:
+		life -= 1
 
-func take_damage(damage_amount:int, damage_type:DamageType):
+func take_damage(damage_amount:int, damage_type:DamageType) -> int:
 	for gene in genes:
 		damage_amount -= gene.apply_damage_resistance(damage_amount, damage_type)
-		if damage_amount <= 0: return
+		if damage_amount <= 0: return 0
 	life -= damage_amount
+	return damage_amount
 	
 func get_gene(type:Script) -> Gene:
 	for gene in genes:
@@ -114,20 +90,7 @@ func has_gene(type:Script) -> bool:
 		if is_instance_of(gene, type): 
 			return true
 	return false
-	
-func previous_state() -> Cell:
-	history_index -= 1
-	var history_state = history[history.size() + history_index]
-	if history_state.has('previous_cell'):
-		return history_state['previous_cell']
-	energy = history_state['energy']
-	life = history_state['life']
-	energy_wanted = history_state['energy_wanted']
-	return null
-	
-func next_state() -> void:
-	history_index += 1
-	
+
 func _to_string() -> String:
 	return "Cell:%s:%s:%d{ energy: %0.0f, new_energy: %0.0f, life: %0.0f, new_life: %0.0f }" \
 		% [genome.name, cell_type.name, cell_number, energy, new_energy, life, new_life]

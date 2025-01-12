@@ -3,10 +3,10 @@ class_name ProvideFoodGene extends Gene
 func _init(_config:ProvideFoodGeneConfig) -> void:
 	pass
 
-func perform_actions(_index:HexIndex, _world:World, _cell:Cell) -> void:
+func perform_actions(_index:HexIndex, _world:World, _cell:Cell, _cell_history:Dictionary) -> void:
 	pass
 				
-func update_state(_index:HexIndex, _world:World, _cell:Cell) -> void:
+func update_state(_index:HexIndex, _world:World, _cell:Cell, _cell_history:Dictionary) -> void:
 	pass
 
 class ProvideFoodGeneConfig extends GeneConfig:

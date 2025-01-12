@@ -1,36 +1,49 @@
 class_name ProduceCellGene extends Gene
 	
 var _cell_type:CellType
+var _claimed_index:HexIndex = null
+var _claimable_cell_gene:ClaimableCellGene = null
 
 func _init(config:ProduceCellGeneConfig):
 	_cell_type = config.cell_type
 
-func perform_actions(index:HexIndex, world:World, cell:Cell) -> void:
+func perform_actions(index:HexIndex, world:World, cell:Cell, cell_history:Dictionary) -> void:
+	
+	if _claimed_index == null:
+		return
 	
 	if cell.energy < _cell_type.energy_cost:
 		return
 		
-	var claimable_cell_gene:ClaimableCellGene = _find_claimable_cell(world, index)
-	if claimable_cell_gene == null:
-		return
-		
 	cell.energy -= _cell_type.energy_cost
-	claimable_cell_gene.add_claim(cell, _cell_type)
+	_claimable_cell_gene.add_claim(cell, _cell_type)
+	
+	_claimed_index = null
+	_claimable_cell_gene = null
+	
+	cell_history['claim_cell'] = { 
+		claimed_index = _claimed_index,
+		cell_type = _cell_type
+	}
 			
-func _find_claimable_cell(world:World, index:HexIndex) -> ClaimableCellGene:
+func update_state(index:HexIndex, world:World, _cell:Cell, cell_history:Dictionary) -> void:
+	energy_wanted = 0
 	for direction in HexIndex.ALL_DIRECTIONS:
-		var target_cell:Cell = world.get_cell(index.neighbor(direction))
+		var target_index:HexIndex = index.neighbor(direction)
+		var target_cell:Cell = world.get_cell(target_index)
+		if target_cell == null:
+			target_cell = EnvironmentGenome.empty_cell_type.create_cell()
+			world.set_cell(target_index, target_cell)
 		var claimable_cell_gene:ClaimableCellGene = target_cell.get_gene(ClaimableCellGene)
 		if claimable_cell_gene and claimable_cell_gene.is_claimable:
-			return claimable_cell_gene
-	return null
-	
-func update_state(index:HexIndex, world:World, _cell:Cell) -> void:
-	var claimable_cell_gene:ClaimableCellGene = _find_claimable_cell(world, index)
-	if claimable_cell_gene == null:
-		energy_wanted = 0
-	else:
-		energy_wanted = _cell_type.energy_cost
+			_claimed_index = target_index
+			_claimable_cell_gene = claimable_cell_gene
+			cell_history['target_cell'] = {
+				target_index = target_index,
+				cell_type = _cell_type
+			}
+			energy_wanted = _cell_type.energy_cost
+			break
 		
 class ProduceCellGeneConfig extends GeneConfig:
 	var cell_type:CellType

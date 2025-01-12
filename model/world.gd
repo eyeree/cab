@@ -4,12 +4,9 @@ static var empty_args:Array = []
 static func debug(msg:String, args:Array = empty_args) -> void:
 	if false: prints("World", msg % args)
 
-var _rings:int = 0
-var _cells:HexStore = HexStore.new()
-var _step_count:int = 0
-
-var step_count:int:
-	get: return _step_count
+var _rings:int
+var _cells:HexStore
+var _world_history:WorldHistory
 
 var _cell_number:int = 0
 func allocate_cell_number() -> int:
@@ -22,40 +19,66 @@ signal cell_changed(index:HexIndex, new_cell:Cell)
 
 class WorldOptions:
 	var rings:int = 10
-	var initial_content:HexStore = HexStore.new()
+	var initial_content:HexStore
+	var world_history:WorldHistory
 		
-func init(options:WorldOptions = WorldOptions.new()):	
-	debug("init | rings_: %d | initial_content.size(): %d | hex_count: %d" 
-		% [options.rings, options.initial_content.size(), HexIndex.hex_count(options.rings)])
+func _init(options:WorldOptions):	
 	
 	_rings = options.rings
-	_step_count = 0
+	_world_history = options.world_history
+	
 	_cell_number = 0
 	
 	_cells = HexStore.new()
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var content:Cell = options.initial_content.get_content(index)
-		if content == null:
-			content = EnvironmentGenome.empty_cell_type.create_cell()
-		set_cell(index, content)
-	
-func step() -> void:
-	_step_count += 1
-	debug("step | _step_count: %d", [_step_count])
-	_cells.visit_all(_cell_perform_actions)
-	_cells.visit_all(_cell_update_state)
+		if content != null:
+			set_cell(index, content)
+		
+	var count:int = 0
+	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
+		count += 1
+		var cell:Cell = get_cell(index)
+		var cell_history:Dictionary = _world_history.make_history(0, index)
+		if cell:
+			cell.update_state(index, self, cell_history)	
+			
+	prints('cell count', count)
+		
+func run(steps:int, on_progress:Callable) -> void:
+	var progress_steps:int = steps / 100
+	var chunk_start:int = Time.get_ticks_msec()
+	for step_number in range(steps):
+		var step_start:int = Time.get_ticks_msec()
+		_step(step_number + 1)
+		var step_end:int = Time.get_ticks_msec()
+		var step_elapsed:int = step_end - step_start
+		if step_number % progress_steps == 0:
+			var chunk_end:int = Time.get_ticks_msec()
+			var chunk_elapsed:int = chunk_end - chunk_start
+			var per_step:int = chunk_elapsed / progress_steps
+			#on_progress.call(step_number, elapsed)		
+			prints('cell number', progress_steps, step_number, _cell_number, ClaimableCellGene.num_claims, step_elapsed, chunk_elapsed, per_step)
+			chunk_start = chunk_end
+			
+func _step(step_number:int) -> void:
+	_cells.visit_all(_cell_perform_actions) #.bind(step_number))
+	_cells.visit_all(_cell_update_state) #.bind(step_number))
 
-func update_state() -> void:
-	debug("update_state | _step_count: %d", [_step_count])
-	_cells.visit_all(_cell_update_state)
+#var hack:Dictionary = {}
+
+func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int = 0):
+	var cell_history:Dictionary = _world_history.make_history(step_number, index)
+	if cell:
+		cell.perform_actions(index, self, cell_history)
+		if cell.is_dead:
+			cell_history['died'] = true
+			set_cell(index, null)
 	
-func _cell_perform_actions(index:HexIndex, cell:Cell):
-	cell.perform_actions(index, self)
-	if cell.is_dead:
-		set_cell(index, EnvironmentGenome.empty_cell_type.create_cell())
-	
-func _cell_update_state(index:HexIndex, cell:Cell):
-	cell.update_state(index, self)
+func _cell_update_state(index:HexIndex, cell:Cell, step_number:int = 0):
+	var cell_history:Dictionary = _world_history.get_history(step_number, index)
+	if cell:
+		cell.update_state(index, self, cell_history)
 
 func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
 	for index in center.ring(radius):
@@ -67,8 +90,6 @@ func get_cell(index:HexIndex) -> Cell:
 		return bounds_cell
 	else:
 		var result = _cells.get_content(index)
-		if result == null:
-			push_error('null cell at index', index, HexIndex.CENTER)
 		return result
 	
 func set_cell(index:HexIndex, cell:Cell) -> void:

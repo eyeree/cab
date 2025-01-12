@@ -7,12 +7,13 @@ func _init(config:RepairDamageGeneConfig) -> void:
 	repaired_amount = config.repaired_amount
 	repaired_percent = config.repaired_percent
 	
-func perform_actions(_index:HexIndex, _world:World, cell:Cell) -> void:
+func perform_actions(_index:HexIndex, _world:World, cell:Cell, cell_history:Dictionary) -> void:
 	var added_life = min(max_repair_amount(cell), cell.energy)
 	cell.new_life += added_life
 	cell.energy -= added_life
+	cell_history['repair_damage'] = added_life
 
-func update_state(_index:HexIndex, _world:World, cell:Cell) -> void:
+func update_state(_index:HexIndex, _world:World, cell:Cell, _cell_history:Dictionary) -> void:
 	energy_wanted = max_repair_amount(cell)
 	
 func max_repair_amount(cell:Cell) -> int:

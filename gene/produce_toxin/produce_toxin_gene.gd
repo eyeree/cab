@@ -5,14 +5,15 @@ var damage:int
 func _init(config:ProduceToxinGeneConfig) -> void:
 	damage = config.damage
 
-func perform_actions(index:HexIndex, world:World, _cell:Cell) -> void:
+func perform_actions(index:HexIndex, world:World, _cell:Cell, cell_history:Dictionary) -> void:
+	var damage_delt:Dictionary = {}
 	world.visit_ring(index, 1, 
-		func (_index:HexIndex, target:Cell):
-			target.take_damage(damage, Cell.DamageType.Chemical)
+		func (index:HexIndex, target:Cell):
+			var actual_damage = target.take_damage(damage, Cell.DamageType.Chemical)
+			damage_delt[index] = actual_damage
 	)
-				
-func update_state(_index:HexIndex, _world:World, _cell:Cell) -> void:
-	pass
+	cell_history['produce_toxin'] = damage
+	cell_history['damage_delt'] = damage_delt
 
 class ProduceToxinGeneConfig extends GeneConfig:
 	
