@@ -8,9 +8,9 @@ func _init(config:ProduceToxinGeneConfig) -> void:
 func perform_actions(index:HexIndex, world:World, _cell:Cell, cell_history:Dictionary) -> void:
 	var damage_delt:Dictionary = {}
 	world.visit_ring(index, 1, 
-		func (index:HexIndex, target:Cell):
+		func (target_index:HexIndex, target:Cell):
 			var actual_damage = target.take_damage(damage, Cell.DamageType.Chemical)
-			damage_delt[index] = actual_damage
+			damage_delt[target_index] = actual_damage
 	)
 	cell_history['produce_toxin'] = damage
 	cell_history['damage_delt'] = damage_delt

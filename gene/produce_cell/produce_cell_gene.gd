@@ -7,7 +7,7 @@ var _claimable_cell_gene:ClaimableCellGene = null
 func _init(config:ProduceCellGeneConfig):
 	_cell_type = config.cell_type
 
-func perform_actions(index:HexIndex, world:World, cell:Cell, cell_history:Dictionary) -> void:
+func perform_actions(_index:HexIndex, _world:World, cell:Cell, cell_history:Dictionary) -> void:
 	
 	if _claimed_index == null:
 		return

@@ -24,7 +24,7 @@ func resolve_claims(index:HexIndex, world:World, cell_history:Dictionary):
 	var claim:Claim = _claims[0]
 	var new_cell = claim.cell_type.create_cell(claim.progenitor)
 	world.set_cell(index, new_cell)
-	cell_history['resolved_claim'] = claim.cell_type
+	cell_history['resolved_claim'] = true
 
 class Claim:
 	

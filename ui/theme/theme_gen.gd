@@ -7,10 +7,13 @@ func setup():
 	set_save_path("res://ui/theme/generated/default_theme.tres")
 
 var default_spacing = 4
+var default_font_size = 12
 
 var default_background_color = Color(0.176, 0.176, 0.176)
 var default_border_color = Color(0.223, 0.223, 0.223)
 var default_font_color = Color(1, 1, 1)
+
+var overlay_background_color = Color(0.176, 0.176, 0.176, 0.5)
 
 var form_value_font_color = default_font_color
 var form_label_font_color = Color(0.545, 0.545, 0.545)
@@ -22,8 +25,6 @@ var title_background_color = Color.BLACK
 var title_border_color = default_border_color
 var title_font_color = Color(255, 204, 255)
 var title_font_outline_color = Color(114, 0, 114)
-
-var default_font_size = 12
 
 func define_theme():	
 	
@@ -49,7 +50,8 @@ func define_theme():
 	define_variant_style("DetailPanel", "PanelContainer", {
 		panel = inherit(panel_style, {
 			border_color = detail_border_color,
-			border_ = border_width(2)
+			border_ = border_width(2),
+			content_margin_ = content_margins(default_spacing * 2)
 		})
 	})
 
@@ -101,4 +103,21 @@ func define_theme():
 
 	define_variant_style("FormGridContainer", "GridContainer", {
 		h_separation = default_spacing
+	})
+
+	define_variant_style("OverlayLabel", "Label", {
+		font_size = default_font_size * 2
+	})
+	
+	define_variant_style("OverlayPanelInner", "PanelContainer", {
+		panel = inherit(panel_style, {
+			content_margin_ = content_margins(default_spacing * 4)
+		})
+	})
+	
+	define_variant_style("OverlayPanelOuter", "Panel", {
+		panel = inherit(panel_style, {
+			content_margin_ = content_margins(0),
+			bg_color = overlay_background_color
+		})
 	})

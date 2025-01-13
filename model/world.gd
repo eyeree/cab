@@ -35,47 +35,46 @@ func _init(options:WorldOptions):
 		if content != null:
 			set_cell(index, content)
 		
-	var count:int = 0
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
-		count += 1
 		var cell:Cell = get_cell(index)
-		var cell_history:Dictionary = _world_history.make_history(0, index)
 		if cell:
+			var cell_history:Dictionary = _world_history.get_history(0, index)
 			cell.update_state(index, self, cell_history)	
-			
-	prints('cell count', count)
 		
 func run(steps:int, on_progress:Callable) -> void:
+	@warning_ignore("integer_division")
 	var progress_steps:int = steps / 100
 	var chunk_start:int = Time.get_ticks_msec()
+	var chunk_size:int = 0
 	for step_number in range(steps):
-		var step_start:int = Time.get_ticks_msec()
-		_step(step_number + 1)
-		var step_end:int = Time.get_ticks_msec()
-		var step_elapsed:int = step_end - step_start
-		if step_number % progress_steps == 0:
+		_step(step_number + 1) # + 1 due to initial state history entry
+		chunk_size += 1
+		if chunk_size == progress_steps:
 			var chunk_end:int = Time.get_ticks_msec()
 			var chunk_elapsed:int = chunk_end - chunk_start
-			var per_step:int = chunk_elapsed / progress_steps
-			#on_progress.call(step_number, elapsed)		
-			prints('cell number', progress_steps, step_number, _cell_number, ClaimableCellGene.num_claims, step_elapsed, chunk_elapsed, per_step)
+			var ms_per_step:float = float(chunk_elapsed) / float(chunk_size)
+			on_progress.call(step_number + 1, ms_per_step)	# + 1 to get steps done
 			chunk_start = chunk_end
+			chunk_size = 0
+	if chunk_size > 0:
+		var chunk_end:int = Time.get_ticks_msec()
+		var chunk_elapsed:int = chunk_end - chunk_start
+		var ms_per_step:float = float(chunk_elapsed) / float(chunk_size)
+		on_progress.call(steps, ms_per_step)
 			
 func _step(step_number:int) -> void:
-	_cells.visit_all(_cell_perform_actions) #.bind(step_number))
-	_cells.visit_all(_cell_update_state) #.bind(step_number))
+	_cells.visit_all(_cell_perform_actions.bind(step_number))
+	_cells.visit_all(_cell_update_state.bind(step_number))
 
-#var hack:Dictionary = {}
-
-func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int = 0):
-	var cell_history:Dictionary = _world_history.make_history(step_number, index)
+func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int):
+	var cell_history:Dictionary = _world_history.get_history(step_number, index)
 	if cell:
 		cell.perform_actions(index, self, cell_history)
 		if cell.is_dead:
 			cell_history['died'] = true
 			set_cell(index, null)
 	
-func _cell_update_state(index:HexIndex, cell:Cell, step_number:int = 0):
+func _cell_update_state(index:HexIndex, cell:Cell, step_number:int):
 	var cell_history:Dictionary = _world_history.get_history(step_number, index)
 	if cell:
 		cell.update_state(index, self, cell_history)
