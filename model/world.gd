@@ -46,7 +46,8 @@ func run(steps:int, on_progress:Callable) -> void:
 		var start_ms:int = Time.get_ticks_msec()
 		_step(step_number)
 		var end_ms:int = Time.get_ticks_msec()
-		on_progress.call(step_number, end_ms - start_ms)
+		var stop = on_progress.call(step_number, end_ms - start_ms)
+		if stop: return
 			
 func _step(step_number:int) -> void:
 	_cells.visit_all(_cell_perform_actions.bind(step_number))

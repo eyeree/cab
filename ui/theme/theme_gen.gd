@@ -13,7 +13,7 @@ var default_background_color = Color(0.176, 0.176, 0.176)
 var default_border_color = Color(0.223, 0.223, 0.223)
 var default_font_color = Color(1, 1, 1)
 
-var overlay_background_color = Color(0.176, 0.176, 0.176, 0.5)
+var overlay_background_color = Color(0.176, 0.176, 0.176, 0.65)
 
 var form_value_font_color = default_font_color
 var form_label_font_color = Color(0.545, 0.545, 0.545)
@@ -106,7 +106,7 @@ func define_theme():
 	})
 
 	define_variant_style("OverlayLabel", "Label", {
-		font_size = default_font_size * 2
+		font_size = default_font_size * 6
 	})
 	
 	define_variant_style("OverlayPanelInner", "PanelContainer", {

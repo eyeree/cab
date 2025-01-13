@@ -14,6 +14,7 @@ class_name BattleMode extends Node
 @onready var _overlay_panel: Panel = %OverlayPanel
 @onready var _current_step_value: Label = %CurrentStepValue
 @onready var _num_steps_value: Label = %NumStepsValue
+@onready var _overlay_label: Label = %OverlayLabel
 
 const _min_run_speed_delta:float = 0.01
 const _max_run_speed_delta:float = 2.0
@@ -32,6 +33,9 @@ var _num_steps:int
 var _current_step:int
 var _loaded_steps:int
 
+var _load_thread:Thread = null
+var _stop_loading:bool = false
+
 func _ready() -> void:
 	
 	_first_step_button.pressed.connect(_first_step)
@@ -48,7 +52,7 @@ func _ready() -> void:
 	_grid.mouse_exited_hex.connect(_on_mouse_exited_hex)
 	_grid.hex_selected.connect(_on_hex_selected)
 
-	battle()	
+	battle()
 	
 func _on_mouse_entered_hex(index:HexIndex):
 	_grid.set_selected_index(index)
@@ -89,8 +93,6 @@ class BattleOptions extends RefCounted:
 	var steps:int = 500
 	var initial_content:HexStore
 	
-var _load_thread:Thread = null
-
 func battle(options:BattleOptions = BattleOptions.new()) -> void:
 	
 	_grid.clear_all_hex_content()
@@ -119,16 +121,20 @@ func battle(options:BattleOptions = BattleOptions.new()) -> void:
 	_last_step_button.disabled = true
 
 	if _load_thread:
+		_stop_loading = true
 		_load_thread.wait_to_finish()
 		_load_thread = null
+		_stop_loading = false
 		
 	_load_thread = Thread.new()
 	_load_thread.start(_load.bind(options))
 	
+	_countdown()
+	
 func _exit_tree() -> void:
-	if _load_thread:
+	if _load_thread and _load_thread.is_alive():
+		_stop_loading = true
 		_load_thread.wait_to_finish()
-		_load_thread = null
 		
 func _load(battle_options:BattleOptions) -> void:
 	
@@ -146,12 +152,12 @@ func _load(battle_options:BattleOptions) -> void:
 	_load_started.call_deferred()
 	world.run(battle_options.steps, 
 		func (steps_done:int, ms_per_step:float):
-			_load_progress.call_deferred(steps_done, ms_per_step))			
+			_load_progress.call_deferred(steps_done, ms_per_step)
+			return _stop_loading)			
 	_load_finished.call_deferred()
 
 func _load_started() -> void:
-	_current_step_slider.editable = true	
-	_set_step(0)
+	pass
 
 func _load_progress(steps_done:int, ms_per_step:float) -> void:
 	var was_waiting = _current_step > _loaded_steps and _current_step <= steps_done
@@ -165,6 +171,19 @@ func _load_progress(steps_done:int, ms_per_step:float) -> void:
 	
 func _load_finished() -> void:
 	pass
+	
+func _countdown() -> void:
+	_overlay_panel.visible = true
+	_overlay_label.text = '3'
+	await get_tree().create_timer(1).timeout
+	_overlay_label.text = '2'
+	await get_tree().create_timer(1).timeout
+	_overlay_label.text = '1'
+	await get_tree().create_timer(1).timeout
+	_overlay_panel.visible = false
+	_current_step_slider.editable = true
+	_set_step(0)
+	_run()
 	
 func _get_initial_content() -> HexStore:
 	
@@ -286,7 +305,14 @@ func _update_ui() -> void:
 	_current_step_value.text = str(_current_step)
 		
 func _wait_for_load() -> void:
+	_overlay_label.text = "Loading..."
 	_overlay_panel.visible = true
 	
 func _update_grid() -> void:
 	_overlay_panel.visible = false
+
+#func _notification(what):
+	#if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		#if _load_thread and _load_thread.is_alive():
+			#_load_thread.
+		#get_tree().quit() 
