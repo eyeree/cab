@@ -21,6 +21,7 @@ const _max_run_speed_delta:float = 2.0
 
 var _is_running:bool = false
 var _run_timer:SceneTreeTimer = null
+var _run_waiting:bool = false
 
 var _world_history:WorldHistory = null
 
@@ -129,26 +130,6 @@ func _exit_tree() -> void:
 		_load_thread.wait_to_finish()
 		_load_thread = null
 		
-func _load_started() -> void:
-	prints('load started')
-	_loaded_steps = 1
-	_current_step_slider.editable = true	
-	_set_step(0)
-
-func _load_progress(steps_done:int, ms_per_step:float) -> void:
-	prints('load progress - steps_done: %d - ms_per_step: %0.2f' % [steps_done, ms_per_step])	
-	var was_waiting = _current_step > _loaded_steps and _current_step <= steps_done
-	_loaded_steps = steps_done
-	_load_progress_bar.value = _loaded_steps
-	if was_waiting:
-		if _is_running:
-			_next_step()
-		else:
-			_update_grid()
-	
-func _load_finished() -> void:
-	prints('load finished')
-
 func _load(battle_options:BattleOptions) -> void:
 	
 	battle_options.rings = _grid.rings # FIX
@@ -168,6 +149,23 @@ func _load(battle_options:BattleOptions) -> void:
 			_load_progress.call_deferred(steps_done, ms_per_step))			
 	_load_finished.call_deferred()
 
+func _load_started() -> void:
+	_current_step_slider.editable = true	
+	_set_step(0)
+
+func _load_progress(steps_done:int, ms_per_step:float) -> void:
+	var was_waiting = _current_step > _loaded_steps and _current_step <= steps_done
+	_loaded_steps = steps_done
+	_load_progress_bar.value = _loaded_steps
+	if _is_running and _run_waiting and _current_step + 1 == _loaded_steps:
+		_run_waiting = false
+		_next_step()
+	elif was_waiting:
+		_update_grid()
+	
+func _load_finished() -> void:
+	pass
+	
 func _get_initial_content() -> HexStore:
 	
 	var genome1 = Genome.new()
@@ -208,6 +206,8 @@ func _get_initial_content() -> HexStore:
 	
 func _on_current_step_changed(value) -> void:
 	_set_step(value)
+	if _is_running and _run_waiting and _current_step <= _loaded_steps:
+		_start_run_timer()
 	
 func _first_step() -> void:
 	_set_step(0)
@@ -215,8 +215,11 @@ func _first_step() -> void:
 func _previous_step() -> void:
 	if _current_step > 0:
 		_set_step(_current_step - 1)
+	else:
+		prints('_previous_step error', _current_step)
 	
 func _run() -> void:
+	_run_waiting = false
 	_is_running = true
 	_next_step()
 
@@ -228,16 +231,17 @@ func _pause() -> void:
 func _next_step() -> void:
 	if _current_step < _num_steps:
 		var next_step = _current_step + 1
-		if _is_running:	
-			if next_step < _num_steps:
-				if next_step < _loaded_steps:
-					_start_run_timer()
-					_set_step(next_step)
-			else:
-				_is_running = false
-				_set_step(next_step)
+		if _is_running and next_step > _loaded_steps:	
+			_run_waiting = true		
 		else:
+			if _is_running:
+				if next_step == _num_steps:
+					_is_running = false
+				else:
+					_start_run_timer()
 			_set_step(next_step)
+	else:
+		prints('_next_step error', _current_step, _num_steps)
 
 func _last_step() -> void:
 	_is_running = false
@@ -286,4 +290,3 @@ func _wait_for_load() -> void:
 	
 func _update_grid() -> void:
 	_overlay_panel.visible = false
-	

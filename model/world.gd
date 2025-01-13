@@ -42,25 +42,11 @@ func _init(options:WorldOptions):
 			cell.update_state(index, self, cell_history)	
 		
 func run(steps:int, on_progress:Callable) -> void:
-	@warning_ignore("integer_division")
-	var progress_steps:int = steps / 100
-	var chunk_start:int = Time.get_ticks_msec()
-	var chunk_size:int = 0
-	for step_number in range(steps):
-		_step(step_number + 1) # + 1 due to initial state history entry
-		chunk_size += 1
-		if chunk_size == progress_steps:
-			var chunk_end:int = Time.get_ticks_msec()
-			var chunk_elapsed:int = chunk_end - chunk_start
-			var ms_per_step:float = float(chunk_elapsed) / float(chunk_size)
-			on_progress.call(step_number + 1, ms_per_step)	# + 1 to get steps done
-			chunk_start = chunk_end
-			chunk_size = 0
-	if chunk_size > 0:
-		var chunk_end:int = Time.get_ticks_msec()
-		var chunk_elapsed:int = chunk_end - chunk_start
-		var ms_per_step:float = float(chunk_elapsed) / float(chunk_size)
-		on_progress.call(steps, ms_per_step)
+	for step_number in range(1, steps + 1):
+		var start_ms:int = Time.get_ticks_msec()
+		_step(step_number)
+		var end_ms:int = Time.get_ticks_msec()
+		on_progress.call(step_number, end_ms - start_ms)
 			
 func _step(step_number:int) -> void:
 	_cells.visit_all(_cell_perform_actions.bind(step_number))
