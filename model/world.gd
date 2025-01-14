@@ -40,16 +40,8 @@ func _init(options:WorldOptions):
 		if cell:
 			var cell_history:Dictionary = _world_history.get_history_entry(index, 0)
 			cell.update_state(index, self, cell_history)	
-		
-func run(steps:int, on_progress:Callable) -> void:
-	for step_number in range(1, steps + 1):
-		var start_ms:int = Time.get_ticks_msec()
-		_step(step_number)
-		var end_ms:int = Time.get_ticks_msec()
-		var stop = on_progress.call(step_number, end_ms - start_ms)
-		if stop: return
 			
-func _step(step_number:int) -> void:
+func step(step_number:int) -> void:
 	_cells.visit_all(_cell_perform_actions.bind(step_number))
 	_cells.visit_all(_cell_update_state.bind(step_number))
 

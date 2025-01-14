@@ -24,6 +24,7 @@ var _is_running:bool = false
 var _run_timer:SceneTreeTimer = null
 var _run_waiting:bool = false
 
+var _world:World = null
 var _world_history:WorldHistory = null
 
 var _selected_index:HexIndex = HexIndex.INVALID
@@ -121,16 +122,22 @@ func battle(options:BattleOptions = BattleOptions.new()) -> void:
 	_pause_button.disabled = true
 	_next_step_button.disabled = true
 	_last_step_button.disabled = true
-
-	if _load_thread:
-		_stop_loading = true
-		_load_thread.wait_to_finish()
-		_load_thread = null
-		_stop_loading = false
-		
-	_load_thread = Thread.new()
-	_load_thread.start(_load.bind(options))
 	
+	if OS.has_feature('nothreads'):
+		
+		_load(options)
+		
+	else:
+		
+		if _load_thread:
+			_stop_loading = true
+			_load_thread.wait_to_finish()
+			_load_thread = null
+			_stop_loading = false
+			
+		_load_thread = Thread.new()
+		_load_thread.start(_load.bind(options))
+		
 	_countdown()
 	
 func _exit_tree() -> void:
@@ -149,14 +156,41 @@ func _load(battle_options:BattleOptions) -> void:
 	world_options.rings = battle_options.rings
 	world_options.initial_content = battle_options.initial_content
 	world_options.world_history = _world_history
-	var world = World.new(world_options)
+	_world = World.new(world_options)
 	
-	_load_started.call_deferred()
-	world.run(battle_options.steps, 
-		func (steps_done:int, ms_per_step:float):
-			_load_progress.call_deferred(steps_done, ms_per_step)
-			return _stop_loading)			
-	_load_finished.call_deferred()
+	if OS.has_feature('nothreads'):
+		
+		_load_in_process = true
+	
+	else:
+		_load_started.call_deferred()
+		for step_number in range(1, _num_steps + 1):
+			var start_ms:int = Time.get_ticks_msec()
+			_world.step(step_number)
+			var end_ms:int = Time.get_ticks_msec()
+			_load_progress.call_deferred(step_number, end_ms - start_ms)
+			if _stop_loading: break
+		_load_finished.call_deferred()
+		
+var _load_in_process:bool = false
+
+func _process(_delta: float) -> void:
+	if not _load_in_process: return
+	if _loaded_steps == 0:
+		_load_started()
+	var total_ms:int = 0
+	while total_ms < 32:
+		var step_number:int = _loaded_steps + 1
+		var start_ms:int = Time.get_ticks_msec()
+		_world.step(step_number)
+		var end_ms:int = Time.get_ticks_msec()
+		var elapsed_ms:int = end_ms - start_ms
+		total_ms += elapsed_ms
+		_load_progress(step_number, elapsed_ms)
+		if _loaded_steps == _num_steps:
+			_load_in_process = false
+			_load_finished()
+			break
 
 func _load_started() -> void:
 	_update_grid()
@@ -303,7 +337,7 @@ func _update_ui() -> void:
 	_pause_button.disabled = not _is_running
 	_next_step_button.disabled = _current_step == _num_steps or _is_running
 	_last_step_button.disabled = _current_step == _num_steps
-	_current_step_slider.value = _current_step
+	_current_step_slider.set_value_no_signal(_current_step)
 	_current_step_value.text = str(_current_step)
 		
 func _wait_for_load() -> void:
