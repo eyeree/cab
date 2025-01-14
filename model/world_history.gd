@@ -8,5 +8,8 @@ func _init(radius:int, steps:int) -> void:
 		hex_history.resize(steps + 1) # + 1 for initial state
 		history.set_content(index, hex_history)
 
-func get_history(step:int, index:HexIndex) -> Dictionary:
+func get_history_entry(index:HexIndex, step:int) -> Dictionary:
 	return history.get_content(index)[step]
+	
+func get_history(index:HexIndex) -> Array[Dictionary]:
+	return history.get_content(index)

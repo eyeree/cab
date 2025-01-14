@@ -31,6 +31,7 @@ var _mouse_index:HexIndex = HexIndex.INVALID
 
 var _num_steps:int
 var _current_step:int
+var _displayed_step:int
 var _loaded_steps:int
 
 var _load_thread:Thread = null
@@ -99,6 +100,7 @@ func battle(options:BattleOptions = BattleOptions.new()) -> void:
 	
 	_num_steps = options.steps
 	_current_step = 0
+	_displayed_step = -1
 	_loaded_steps = 0
 
 	_num_steps_value.text = str(_num_steps)
@@ -106,7 +108,7 @@ func battle(options:BattleOptions = BattleOptions.new()) -> void:
 	
 	_current_step_slider.max_value = _num_steps
 	_current_step_slider.min_value = 0
-	_current_step_slider.value = 0
+	_current_step_slider.set_value_no_signal(0)
 	_current_step_slider.editable = false
 	
 	_load_progress_bar.min_value = 0
@@ -157,7 +159,7 @@ func _load(battle_options:BattleOptions) -> void:
 	_load_finished.call_deferred()
 
 func _load_started() -> void:
-	pass
+	_update_grid()
 
 func _load_progress(steps_done:int, ms_per_step:float) -> void:
 	var was_waiting = _current_step > _loaded_steps and _current_step <= steps_done
@@ -309,8 +311,27 @@ func _wait_for_load() -> void:
 	_overlay_panel.visible = true
 	
 func _update_grid() -> void:
-	_overlay_panel.visible = false
+	_overlay_panel.visible = _displayed_step == -1
+	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
+		var history:Array[Dictionary] = _world_history.get_history(index)
+		var current_history:Dictionary = history[_current_step]
+		var cell_type = current_history.get('cell_type')
+		if _displayed_step == -1 or history[_displayed_step].get('cell_type') != cell_type:
+			_set_cell_appearance(index, cell_type)
+		_set_cell_state(index, current_history)
+	_displayed_step = _current_step
 
+func _set_cell_appearance(index:HexIndex, cell_type:CellType):
+	var cell_appearance:CellAppearance = cell_type.cell_appearance.instantiate() \
+		if cell_type else null
+	var current_cell_appearance:CellAppearance = _grid.set_hex_content(index, cell_appearance)
+	if current_cell_appearance: current_cell_appearance.queue_free()
+	
+func _set_cell_state(index:HexIndex, state:Dictionary):
+	var cell_appearance:CellAppearance = _grid.get_hex_content(index)
+	if cell_appearance:
+		cell_appearance.set_state(state)
+	
 #func _notification(what):
 	#if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		#if _load_thread and _load_thread.is_alive():

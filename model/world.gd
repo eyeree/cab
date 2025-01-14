@@ -38,7 +38,7 @@ func _init(options:WorldOptions):
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var cell:Cell = get_cell(index)
 		if cell:
-			var cell_history:Dictionary = _world_history.get_history(0, index)
+			var cell_history:Dictionary = _world_history.get_history_entry(index, 0)
 			cell.update_state(index, self, cell_history)	
 		
 func run(steps:int, on_progress:Callable) -> void:
@@ -54,7 +54,7 @@ func _step(step_number:int) -> void:
 	_cells.visit_all(_cell_update_state.bind(step_number))
 
 func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int):
-	var cell_history:Dictionary = _world_history.get_history(step_number, index)
+	var cell_history:Dictionary = _world_history.get_history_entry(index, step_number)
 	if cell:
 		cell.perform_actions(index, self, cell_history)
 		if cell.is_dead:
@@ -62,7 +62,7 @@ func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int):
 			set_cell(index, null)
 	
 func _cell_update_state(index:HexIndex, cell:Cell, step_number:int):
-	var cell_history:Dictionary = _world_history.get_history(step_number, index)
+	var cell_history:Dictionary = _world_history.get_history_entry(index, step_number)
 	if cell:
 		cell.update_state(index, self, cell_history)
 

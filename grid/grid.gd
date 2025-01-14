@@ -104,11 +104,12 @@ func _remove_content_from_tree(content:Node3D):
 	_grid_plane.remove_child(content)
 	content.queue_free()
 	
-func set_hex_content(index:HexIndex, content:Node3D):
+func set_hex_content(index:HexIndex, content:Node3D) -> Node3D:
 	var current:Node3D = _hex_content.get_content(index) as Node3D
 	if current: _remove_content_from_tree(current)
 	_hex_content.set_content(index, content)
 	if content: _add_content_to_tree(index, content)
+	return current
 	
 func clear_hex_content(index:HexIndex):
 	set_hex_content(index, null)
