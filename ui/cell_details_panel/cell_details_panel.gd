@@ -18,45 +18,49 @@ class_name CellDetailsPanel extends PanelContainer
 var _cell:Cell = null
 
 func _ready() -> void:
-	hide_panel()
+	#hide_panel()
+	pass
 	
-func show_cell(cell:Cell) -> void:
-	cell_title.text = "%s:%s:%d" % [cell.genome.name, cell.cell_type.name, cell.cell_number]
-	energy_edit.text = str(cell.energy)
-	new_energy_edit.text = str(cell.new_energy)
-	energy_wanted_edit.text = str(cell.energy_wanted)
-	life_edit.text = str(cell.life)
-	new_life_edit.text = str(cell.new_life)
-	max_life_edit.text = str(cell.max_life)
+func show_cell_state(state:Dictionary) -> void:
 	
-	var history:Dictionary = cell.last_history
-	_show_history_prop(history, 'energy', energy_history_label)
-	_show_history_prop(history, 'new_energy', new_energy_history_label)
-	_show_history_prop(history, 'energy_wanted', energy_wanted_history_label)
-	_show_history_prop(history, 'life', life_history_label)
-	_show_history_prop(history, 'new_life', new_life_history_label)
-
-	if _cell != cell:
-		for child in gene_container.get_children():
-			gene_container.remove_child(child)
-		for gene in cell.genes:
-			gene_container.add_child(gene.get_detail_ui())
-			
-	for i in range(cell.genes.size()):
-		var gene = cell.genes[i]
-		var detail_ui = gene_container.get_child(i)
-		detail_ui.show_gene(gene)
+	var cell_type:CellType = state.get('cell_type')
+	if not cell_type:
+		hide_panel()
+		return
+		
+	cell_title.text = "%s:%s:%d" % [cell_type.genome.name, cell_type.name, state['cell_number']]
+	energy_edit.text = str(state['energy'])
+	new_energy_edit.text = str(state['new_energy'])
+	energy_wanted_edit.text = str(state['energy_wanted'])
+	life_edit.text = str(state['life'])
+	new_life_edit.text = str(state['new_life'])
+	max_life_edit.text = str(state['max_life'])
 	
-	if cell != _cell:
-		if _cell: _cell.state_changed.disconnect(_on_cell_state_changed)
-		cell.state_changed.connect(_on_cell_state_changed)
-		_cell = cell
+	#var history:Dictionary = cell.last_history
+	#_show_history_prop(history, 'energy', energy_history_label)
+	#_show_history_prop(history, 'new_energy', new_energy_history_label)
+	#_show_history_prop(history, 'energy_wanted', energy_wanted_history_label)
+	#_show_history_prop(history, 'life', life_history_label)
+	#_show_history_prop(history, 'new_life', new_life_history_label)
+#
+	#if _cell != cell:
+		#for child in gene_container.get_children():
+			#gene_container.remove_child(child)
+		#for gene in cell.genes:
+			#gene_container.add_child(gene.get_detail_ui())
+			#
+	#for i in range(cell.genes.size()):
+		#var gene = cell.genes[i]
+		#var detail_ui = gene_container.get_child(i)
+		#detail_ui.show_gene(gene)
+	#
+	#if cell != _cell:
+		#if _cell: _cell.state_changed.disconnect(_on_cell_state_changed)
+		#cell.state_changed.connect(_on_cell_state_changed)
+		#_cell = cell
 
 	visible = true
 
-func _on_cell_state_changed(_index:HexIndex, cell:Cell) -> void:
-	show_cell(cell)
-	
 func _show_history_prop(history:Dictionary, prop_name:String, history_label:Label) -> void:
 	var value = history.get(prop_name)
 	if value == null:

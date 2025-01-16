@@ -76,11 +76,9 @@ func _on_world_cell_changed(index:HexIndex, cell:Cell) -> void:
 	elif index == _selected_index:
 		_show_cell(_selected_index)
 
-func _show_cell(_index:HexIndex) -> void:
-	pass
-	# FIX
-	#var cell:Cell = _world.get_cell(index)
-	#_cell_details_panel.show_cell(cell)
+func _show_cell(index:HexIndex) -> void:
+	var state:Dictionary = _world_history.get_history_entry(index, _current_step)
+	_cell_details_panel.show_cell_state(state)
 
 func _show_selected_cell() -> void:
 	_grid.clear_selected_index()

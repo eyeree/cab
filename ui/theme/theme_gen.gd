@@ -54,6 +54,13 @@ func define_theme():
 			content_margin_ = content_margins(default_spacing * 2)
 		})
 	})
+	
+	define_variant_style("Border", "PanelContainer", {
+		panel = inherit(panel_style, {
+			border_color = detail_border_color,
+			border_ = border_width(2)
+		})
+	})
 
 	define_variant_style("SubDetailPanel", "PanelContainer", {
 		panel = inherit(panel_style, {

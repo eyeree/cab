@@ -1,6 +1,18 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://vswv5lu4ne81"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://vswv5lu4ne81"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjoxx"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.176, 0.176, 0.176, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.223, 0.223, 0.223, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ix8h1"]
 content_margin_left = 8.0
 content_margin_top = 8.0
 content_margin_right = 8.0
@@ -12,28 +24,28 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.223, 0.223, 0.223, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ix8h1"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5v2md"]
 content_margin_left = 16.0
 content_margin_top = 16.0
 content_margin_right = 16.0
 content_margin_bottom = 16.0
 bg_color = Color(0.176, 0.176, 0.176, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5v2md"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_36u6t"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(0.176, 0.176, 0.176, 0.65)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_36u6t"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4lrps"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(0.176, 0.176, 0.176, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4lrps"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_55tkg"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -45,7 +57,7 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.202, 0.202, 0.202, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_55tkg"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fxjs"]
 content_margin_left = 10.0
 content_margin_top = 0.0
 content_margin_right = 10.0
@@ -59,8 +71,10 @@ border_color = Color(0.223, 0.223, 0.223, 1)
 
 [resource]
 default_font_size = 12
+Border/base_type = &"PanelContainer"
+Border/styles/panel = SubResource("StyleBoxFlat_bjoxx")
 DetailPanel/base_type = &"PanelContainer"
-DetailPanel/styles/panel = SubResource("StyleBoxFlat_bjoxx")
+DetailPanel/styles/panel = SubResource("StyleBoxFlat_ix8h1")
 DetailTitleLabel/base_type = &"Label"
 DetailTitleLabel/font_sizes/font_size = 16
 FormGridContainer/base_type = &"GridContainer"
@@ -75,12 +89,12 @@ HBoxContainer/constants/separation = 4
 OverlayLabel/base_type = &"Label"
 OverlayLabel/font_sizes/font_size = 72
 OverlayPanelInner/base_type = &"PanelContainer"
-OverlayPanelInner/styles/panel = SubResource("StyleBoxFlat_ix8h1")
+OverlayPanelInner/styles/panel = SubResource("StyleBoxFlat_5v2md")
 OverlayPanelOuter/base_type = &"Panel"
-OverlayPanelOuter/styles/panel = SubResource("StyleBoxFlat_5v2md")
-PanelContainer/styles/panel = SubResource("StyleBoxFlat_36u6t")
+OverlayPanelOuter/styles/panel = SubResource("StyleBoxFlat_36u6t")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_4lrps")
 SubDetailPanel/base_type = &"PanelContainer"
-SubDetailPanel/styles/panel = SubResource("StyleBoxFlat_4lrps")
+SubDetailPanel/styles/panel = SubResource("StyleBoxFlat_55tkg")
 SubDetailTitleLabel/base_type = &"Label"
 SubDetailTitleLabel/font_sizes/font_size = 14
 TitleLabel/base_type = &"Label"
@@ -89,5 +103,5 @@ TitleLabel/colors/font_outline_color = Color(114, 0, 114, 1)
 TitleLabel/constants/outline_size = 3
 TitleLabel/font_sizes/font_size = 32
 TitlePanel/base_type = &"PanelContainer"
-TitlePanel/styles/panel = SubResource("StyleBoxFlat_55tkg")
+TitlePanel/styles/panel = SubResource("StyleBoxFlat_0fxjs")
 VBoxContainer/constants/separation = 4

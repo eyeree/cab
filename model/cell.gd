@@ -16,12 +16,11 @@ var new_energy:int = 0
 var energy_wanted:int = 0
 var life:int = 0
 var new_life:int = 0
+var max_life:int = 0
 
 var genes:Array[Gene] = []
 var immortal:bool = false
 
-var max_life:int:
-	get: return cell_type.energy_cost
 
 var life_percent:float:
 	get: return float(life) / max_life
@@ -35,7 +34,8 @@ var is_dead:bool:
 func _init(progenitor:Cell, cell_type_:CellType) -> void:
 	cell_type = cell_type_
 	genome = cell_type.genome
-	life = cell_type.energy_cost
+	max_life = cell_type.energy_cost
+	life = max_life
 	
 	genes.assign(
 		cell_type.gene_configs.map(
@@ -60,11 +60,13 @@ func update_state(index:HexIndex, world:World, cell_history:Dictionary) -> void:
 		energy_wanted += gene.energy_wanted
 
 	cell_history['cell_type'] = cell_type
+	cell_history['cell_number'] = cell_number
 	cell_history['energy'] = energy
 	cell_history['life'] = life
 	cell_history['energy_wanted'] = energy_wanted
 	cell_history['new_energy'] = new_energy
 	cell_history['new_life'] = new_life
+	cell_history['max_life'] = max_life
 	
 	new_energy = 0
 	new_life = 0
