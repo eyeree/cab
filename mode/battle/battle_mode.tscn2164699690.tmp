@@ -12,8 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://bjgdddepwt02c" path="res://mode/battle/LastStepIcon.png" id="9_wrnxh"]
 
 [sub_resource type="Curve" id="Curve_0beij"]
-_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(0.620347, 0.867523), 0.160084, 0.160084, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.4, 0.0, 0, 0]
+point_count = 2
 
 [node name="BattleMode" type="Node"]
 script = ExtResource("1_0beij")

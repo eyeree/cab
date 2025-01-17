@@ -19,7 +19,7 @@ func _ready() -> void:
 	_2_of_3.visible = false
 	_3_of_3.visible = false
 	
-func set_state(state:Dictionary) -> void:
+func set_state(cell_state:CellState) -> void:
 	
 	for claim_cell_appearance in _claim_cell_appearances:
 		var parent = claim_cell_appearance.get_parent()
@@ -27,12 +27,12 @@ func set_state(state:Dictionary) -> void:
 		claim_cell_appearance.queue_free()
 	_claim_cell_appearances.clear()
 	
-	var claims:Array = state.get('claims', [])
-	if not claims or claims.size() == 0:
+	var claim_action:ClaimableCellGene.ClaimAction = cell_state.get_action(ClaimableCellGene.ClaimAction)
+	if claim_action == null or claim_action.claims.size() == 0:
 		return
 		
 	_claim_cell_appearances.assign(
-		claims.map(func (claim): 
+		claim_action.claims.map(func (claim): 
 			return claim.cell_type.cell_appearance.instantiate()))
 		
 	match _claim_cell_appearances.size():

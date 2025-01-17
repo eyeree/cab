@@ -7,7 +7,7 @@ var _claimable_cell_gene:ClaimableCellGene = null
 func _init(config:ProduceCellGeneConfig):
 	_cell_type = config.cell_type
 
-func perform_actions(_index:HexIndex, _world:World, cell:Cell, cell_history:Dictionary) -> void:
+func perform_actions(_index:HexIndex, _world:World, cell:Cell, _cell_history:CellState) -> void:
 	
 	if _claimed_index == null:
 		return
@@ -21,12 +21,12 @@ func perform_actions(_index:HexIndex, _world:World, cell:Cell, cell_history:Dict
 	_claimed_index = null
 	_claimable_cell_gene = null
 	
-	cell_history['claim_cell'] = { 
-		claimed_index = _claimed_index,
-		cell_type = _cell_type
-	}
+	#cell_state['claim_cell'] = { 
+		#claimed_index = _claimed_index,
+		#cell_type = _cell_type
+	#}
 			
-func update_state(index:HexIndex, world:World, _cell:Cell, cell_history:Dictionary) -> void:
+func update_state(index:HexIndex, world:World, _cell:Cell, _cell_history:CellState) -> void:
 	energy_wanted = 0
 	for direction in HexIndex.ALL_DIRECTIONS:
 		var target_index:HexIndex = index.neighbor(direction)
@@ -38,10 +38,10 @@ func update_state(index:HexIndex, world:World, _cell:Cell, cell_history:Dictiona
 		if claimable_cell_gene and claimable_cell_gene.is_claimable:
 			_claimed_index = target_index
 			_claimable_cell_gene = claimable_cell_gene
-			cell_history['target_cell'] = {
-				target_index = target_index,
-				cell_type = _cell_type
-			}
+			#cell_state['target_cell'] = {
+				#target_index = target_index,
+				#cell_type = _cell_type
+			#}
 			energy_wanted = _cell_type.energy_cost
 			break
 		

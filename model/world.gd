@@ -6,7 +6,7 @@ static func debug(msg:String, args:Array = empty_args) -> void:
 
 var _rings:int
 var _cells:HexStore
-var _world_history:WorldHistory
+var _world_state:WorldState
 
 var _cell_number:int = 0
 func allocate_cell_number() -> int:
@@ -20,12 +20,12 @@ signal cell_changed(index:HexIndex, new_cell:Cell)
 class WorldOptions:
 	var rings:int = 10
 	var initial_content:HexStore
-	var world_history:WorldHistory
+	var world_state:WorldState
 		
 func _init(options:WorldOptions):	
 	
 	_rings = options.rings
-	_world_history = options.world_history
+	_world_state = options.world_state
 	
 	_cell_number = 0
 	
@@ -38,25 +38,22 @@ func _init(options:WorldOptions):
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var cell:Cell = get_cell(index)
 		if cell:
-			var cell_history:Dictionary = _world_history.get_history_entry(index, 0)
-			cell.update_state(index, self, cell_history)	
+			var cell_state:CellState = _world_state.get_history_entry(index, 0)
+			cell.update_state(index, self, cell_state)	
 			
 func step(step_number:int) -> void:
 	_cells.visit_all(_cell_perform_actions.bind(step_number))
 	_cells.visit_all(_cell_update_state.bind(step_number))
 
 func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int):
-	var cell_history:Dictionary = _world_history.get_history_entry(index, step_number)
+	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
 	if cell:
-		cell.perform_actions(index, self, cell_history)
-		if cell.is_dead:
-			cell_history['died'] = true
-			set_cell(index, null)
+		cell.perform_actions(index, self, cell_state)
 	
 func _cell_update_state(index:HexIndex, cell:Cell, step_number:int):
-	var cell_history:Dictionary = _world_history.get_history_entry(index, step_number)
+	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
 	if cell:
-		cell.update_state(index, self, cell_history)
+		cell.update_state(index, self, cell_state)
 
 func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
 	for index in center.ring(radius):

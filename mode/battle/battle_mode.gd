@@ -25,7 +25,7 @@ var _run_timer:SceneTreeTimer = null
 var _run_waiting:bool = false
 
 var _world:World = null
-var _world_history:WorldHistory = null
+var _world_state:WorldState = null
 
 var _selected_index:HexIndex = HexIndex.INVALID
 var _mouse_index:HexIndex = HexIndex.INVALID
@@ -77,8 +77,8 @@ func _on_world_cell_changed(index:HexIndex, cell:Cell) -> void:
 		_show_cell(_selected_index)
 
 func _show_cell(index:HexIndex) -> void:
-	var state:Dictionary = _world_history.get_history_entry(index, _current_step)
-	_cell_details_panel.show_cell_state(state)
+	var cell_state:CellState = _world_state.get_history_entry(index, _current_step)
+	_cell_details_panel.show_cell_state(cell_state)
 
 func _show_selected_cell() -> void:
 	_grid.clear_selected_index()
@@ -148,12 +148,12 @@ func _load(battle_options:BattleOptions) -> void:
 	battle_options.rings = _grid.rings # FIX
 	battle_options.initial_content = _get_initial_content() # FIX
 	
-	_world_history = WorldHistory.new(battle_options.rings, battle_options.steps)
+	_world_state = WorldState.new(battle_options.rings, battle_options.steps)
 	
 	var world_options = World.WorldOptions.new()
 	world_options.rings = battle_options.rings
 	world_options.initial_content = battle_options.initial_content
-	world_options.world_history = _world_history
+	world_options.world_state = _world_state
 	_world = World.new(world_options)
 	
 	if OS.has_feature('nothreads'):
@@ -193,7 +193,7 @@ func _process(_delta: float) -> void:
 func _load_started() -> void:
 	_update_grid()
 
-func _load_progress(steps_done:int, ms_per_step:float) -> void:
+func _load_progress(steps_done:int, _ms_per_step:float) -> void:
 	var was_waiting = _current_step > _loaded_steps and _current_step <= steps_done
 	_loaded_steps = steps_done
 	_load_progress_bar.value = _loaded_steps
@@ -345,11 +345,13 @@ func _wait_for_load() -> void:
 func _update_grid() -> void:
 	_overlay_panel.visible = _displayed_step == -1
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
-		var history:Array[Dictionary] = _world_history.get_history(index)
-		var current_history:Dictionary = history[_current_step]
-		var cell_type = current_history.get('cell_type')
-		if _displayed_step == -1 or history[_displayed_step].get('cell_type') != cell_type:
-			_set_cell_appearance(index, cell_type)
+		var history:Array[CellState] = _world_state.get_history(index)
+		var current_history:CellState = history[_current_step]
+		var current_cell_type:CellType = current_history.cell_type if current_history else null
+		var displayed_history:CellState = history[_displayed_step] if _displayed_step != -1 else null
+		var displayed_cell_type:CellType = displayed_history.cell_type if displayed_history else null
+		if displayed_cell_type != current_cell_type:
+			_set_cell_appearance(index, current_cell_type)
 		_set_cell_state(index, current_history)
 	_displayed_step = _current_step
 
@@ -359,10 +361,10 @@ func _set_cell_appearance(index:HexIndex, cell_type:CellType):
 	var current_cell_appearance:CellAppearance = _grid.set_hex_content(index, cell_appearance)
 	if current_cell_appearance: current_cell_appearance.queue_free()
 	
-func _set_cell_state(index:HexIndex, state:Dictionary):
+func _set_cell_state(index:HexIndex, cell_state:CellState):
 	var cell_appearance:CellAppearance = _grid.get_hex_content(index)
 	if cell_appearance:
-		cell_appearance.set_state(state)
+		cell_appearance.set_state(cell_state)
 	
 #func _notification(what):
 	#if what == NOTIFICATION_WM_CLOSE_REQUEST:

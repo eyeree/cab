@@ -14,10 +14,10 @@ var gene_type:GeneType:
 
 var energy_wanted:int = 0
 
-func perform_actions(_index:HexIndex, _world:World, _cell:Cell, _cell_history:Dictionary) -> void:
+func perform_actions(_index:HexIndex, _world:World, _cell:Cell, _cell_history:CellState) -> void:
 	pass
 				
-func update_state(_index:HexIndex, _world:World, _cell:Cell, _cell_history:Dictionary) -> void:
+func update_state(_index:HexIndex, _world:World, _cell:Cell, _cell_history:CellState) -> void:
 	pass
 
 func apply_damage_resistance(_damage_amount:int, _damage_type:Cell.DamageType) -> int:

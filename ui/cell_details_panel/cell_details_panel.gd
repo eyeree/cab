@@ -15,26 +15,26 @@ class_name CellDetailsPanel extends PanelContainer
 @onready var max_life_history_label: Label = %MaxLifeHistoryLabel
 @onready var gene_container: VBoxContainer = %GeneContainer
 
-var _cell:Cell = null
+#var _cell:Cell = null
 
 func _ready() -> void:
 	#hide_panel()
 	pass
 	
-func show_cell_state(state:Dictionary) -> void:
+func show_cell_state(cell_state:CellState) -> void:
 	
-	var cell_type:CellType = state.get('cell_type')
+	var cell_type:CellType = cell_state.cell_type
 	if not cell_type:
 		hide_panel()
 		return
 		
-	cell_title.text = "%s:%s:%d" % [cell_type.genome.name, cell_type.name, state['cell_number']]
-	energy_edit.text = str(state['energy'])
-	new_energy_edit.text = str(state['new_energy'])
-	energy_wanted_edit.text = str(state['energy_wanted'])
-	life_edit.text = str(state['life'])
-	new_life_edit.text = str(state['new_life'])
-	max_life_edit.text = str(state['max_life'])
+	cell_title.text = "%s:%s:%d" % [cell_type.genome.name, cell_type.name, cell_state.cell_number]
+	energy_edit.text = str(cell_state.energy)
+	new_energy_edit.text = str(cell_state.new_energy)
+	energy_wanted_edit.text = str(cell_state.energy_wanted)
+	life_edit.text = str(cell_state.life)
+	new_life_edit.text = str(cell_state.new_life)
+	max_life_edit.text = str(cell_state.max_life)
 	
 	#var history:Dictionary = cell.last_history
 	#_show_history_prop(history, 'energy', energy_history_label)

@@ -14,6 +14,7 @@ var cell_number:int
 var energy:int = 0
 var new_energy:int = 0
 var energy_wanted:int = 0
+var max_energy:int = 0
 var life:int = 0
 var new_life:int = 0
 var max_life:int = 0
@@ -44,11 +45,14 @@ func _init(progenitor:Cell, cell_type_:CellType) -> void:
 					
 	immortal = has_gene(ImmortalityGene)
 
-func perform_actions(index:HexIndex, world:World, cell_history:Dictionary) -> void:
+func perform_actions(index:HexIndex, world:World, cell_state:CellState) -> void:
 	for gene in genes:
-		gene.perform_actions(index, world, self, cell_history)
-	
-func update_state(index:HexIndex, world:World, cell_history:Dictionary) -> void:
+		gene.perform_actions(index, world, self, cell_state)
+	if is_dead:
+		cell_state.actions.append(DiedAction.new())
+		world.set_cell(index, null)
+				
+func update_state(index:HexIndex, world:World, cell_state:CellState) -> void:
 
 	energy += new_energy
 	
@@ -56,17 +60,20 @@ func update_state(index:HexIndex, world:World, cell_history:Dictionary) -> void:
 	
 	energy_wanted = 0
 	for gene in genes:
-		gene.update_state(index, world, self, cell_history)
+		gene.update_state(index, world, self, cell_state)
 		energy_wanted += gene.energy_wanted
 
-	cell_history['cell_type'] = cell_type
-	cell_history['cell_number'] = cell_number
-	cell_history['energy'] = energy
-	cell_history['life'] = life
-	cell_history['energy_wanted'] = energy_wanted
-	cell_history['new_energy'] = new_energy
-	cell_history['new_life'] = new_life
-	cell_history['max_life'] = max_life
+	cell_state.cell_type = cell_type
+	cell_state.cell_number = cell_number
+	
+	cell_state.energy = energy
+	cell_state.energy_wanted = energy_wanted
+	cell_state.new_energy = new_energy
+	cell_state.max_energy = max_energy
+	
+	cell_state.life = life
+	cell_state.new_life = new_life
+	cell_state.max_life = max_life
 	
 	new_energy = 0
 	new_life = 0
@@ -96,3 +103,11 @@ func has_gene(type:Script) -> bool:
 func _to_string() -> String:
 	return "Cell:%s:%s:%d{ energy: %0.0f, new_energy: %0.0f, life: %0.0f, new_life: %0.0f }" \
 		% [genome.name, cell_type.name, cell_number, energy, new_energy, life, new_life]
+
+class DiedAction extends CellState.Action:
+	pass
+
+class DealDamageAction extends CellState.Action:
+	var damage_delt:Dictionary[HexIndex, int]
+	func _init(damage_delt_:Dictionary[HexIndex, int]):
+		damage_delt = damage_delt_

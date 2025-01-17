@@ -22,7 +22,6 @@ text = "(cell title)"
 text_overrun_behavior = 3
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
-visible = false
 layout_mode = 2
 columns = 3
 
@@ -152,7 +151,6 @@ theme_type_variation = &"FormValueLabel"
 horizontal_alignment = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -162,11 +160,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("2_rhete")
 metadata/_custom_type_script = ExtResource("2_rhete")
 
 [node name="EnergyPanel" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(76, 73)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Border"
@@ -223,6 +223,7 @@ mouse_filter = 0
 text = "-99"
 
 [node name="LifePanel" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(76, 73)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Border"
