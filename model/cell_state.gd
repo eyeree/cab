@@ -16,6 +16,9 @@ var max_life:int
 
 var actions:Array[Action] = []
 
+var is_dead:bool:
+	get: return end_life + new_life <= 0
+
 func add_action(action:Action) -> void:
 	actions.append(action)
 	

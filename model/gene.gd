@@ -22,3 +22,6 @@ func update_state(_index:HexIndex, _world:World, _cell:Cell, _cell_history:CellS
 
 func apply_damage_resistance(_damage_amount:int, _damage_type:Cell.DamageType) -> int:
 	return 0
+	
+func init_cell(cell:Cell) -> void:
+	pass

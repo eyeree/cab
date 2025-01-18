@@ -25,13 +25,14 @@ func show_cell_state(cell_state:CellState) -> void:
 	var cell_type:CellType = cell_state.cell_type
 	if not cell_type:
 		hide_panel()
+		displayed_cell_type = null
 		return
 		
 	cell_title.text = "%s:%s:%d" % [cell_type.genome.name, cell_type.name, cell_state.cell_number]
 	
 	start_energy.text = str(cell_state.start_energy)
 	max_energy.text = str(cell_state.max_energy)
-	new_energy.text = str(cell_state.energy)
+	new_energy.text = str(cell_state.new_energy)
 	energy_wanted.text = "(%d)" % cell_state.energy_wanted
 	energy_used.text = str(cell_state.end_energy - cell_state.start_energy)
 	
@@ -48,6 +49,8 @@ func show_cell_state(cell_state:CellState) -> void:
 		for gene_config:GeneConfig in cell_type.gene_configs:
 			var gene_type:GeneType = gene_config.gene_type
 			gene_container.add_child(gene_type.get_detail_ui())
+			
+		displayed_cell_type = cell_type
 
 	#for i in range(cell.genes.size()):
 		#var gene = cell.genes[i]

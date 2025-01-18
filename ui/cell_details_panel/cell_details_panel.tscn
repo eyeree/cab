@@ -27,13 +27,13 @@ script = ExtResource("2_rhete")
 metadata/_custom_type_script = ExtResource("2_rhete")
 
 [node name="EnergyPanel" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(76, 73)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Border"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/EnergyPanel"]
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/EnergyPanel/VBoxContainer"]
 layout_mode = 2
@@ -52,7 +52,7 @@ theme_override_constants/margin_bottom = -8
 [node name="StartEnergy" type="Label" parent="VBoxContainer/HBoxContainer/EnergyPanel/VBoxContainer/HBoxContainer1/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Cell energy"
+tooltip_text = "Cell at current step energy"
 mouse_filter = 0
 theme_override_font_sizes/font_size = 32
 text = "88"
@@ -68,6 +68,8 @@ text = "/"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
+tooltip_text = "Maximum cell energy"
+mouse_filter = 0
 theme_override_font_sizes/font_size = 10
 text = "99"
 
@@ -77,15 +79,18 @@ layout_mode = 2
 [node name="NewEnergy" type="Label" parent="VBoxContainer/HBoxContainer/EnergyPanel/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Energy gained"
+tooltip_text = "Energy gained in current step"
 mouse_filter = 0
 theme_override_font_sizes/font_size = 10
 text = "+99"
 horizontal_alignment = 1
 
 [node name="EnergyWanted" type="Label" parent="VBoxContainer/HBoxContainer/EnergyPanel/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Energy wanted to trigger all actions"
+mouse_filter = 0
 theme_override_font_sizes/font_size = 10
 text = "(99)"
 horizontal_alignment = 1
@@ -93,7 +98,7 @@ horizontal_alignment = 1
 [node name="EnergyUsed" type="Label" parent="VBoxContainer/HBoxContainer/EnergyPanel/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Energy wanted"
+tooltip_text = "Energy used in current step"
 mouse_filter = 0
 theme_override_font_sizes/font_size = 10
 text = "-99"
@@ -101,8 +106,10 @@ horizontal_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/EnergyPanel"]
 layout_mode = 2
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/EnergyPanel/MarginContainer"]
 custom_minimum_size = Vector2(20, 20)
@@ -113,13 +120,13 @@ texture = ExtResource("2_o5trr")
 expand_mode = 1
 
 [node name="LifePanel" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(76, 73)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Border"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/LifePanel"]
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/LifePanel/VBoxContainer"]
 layout_mode = 2
@@ -138,7 +145,7 @@ theme_override_constants/margin_bottom = -8
 [node name="StartLife" type="Label" parent="VBoxContainer/HBoxContainer/LifePanel/VBoxContainer/HBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Current life"
+tooltip_text = "Cell life at current step"
 mouse_filter = 0
 theme_override_font_sizes/font_size = 32
 text = "99"
@@ -154,6 +161,8 @@ text = "/"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
+tooltip_text = "Maximum cell life"
+mouse_filter = 0
 theme_override_font_sizes/font_size = 10
 text = "99"
 
@@ -163,7 +172,7 @@ layout_mode = 2
 [node name="NewLife" type="Label" parent="VBoxContainer/HBoxContainer/LifePanel/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Life gained"
+tooltip_text = "Life gained in current step"
 mouse_filter = 0
 theme_override_font_sizes/font_size = 10
 text = "+99"
@@ -176,15 +185,16 @@ size_flags_horizontal = 3
 [node name="LifeLost" type="Label" parent="VBoxContainer/HBoxContainer/LifePanel/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Life lost in current step"
+mouse_filter = 0
 theme_override_font_sizes/font_size = 10
 text = "-99"
 horizontal_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/LifePanel"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
+size_flags_horizontal = 10
+size_flags_vertical = 0
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/LifePanel/MarginContainer"]
 custom_minimum_size = Vector2(20, 20)

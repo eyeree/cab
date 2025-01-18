@@ -1,4 +1,3 @@
-@tool
 class_name EqualHBoxContainer extends HBoxContainer
 
 func _ready() -> void:

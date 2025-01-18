@@ -29,6 +29,7 @@ var _world_state:WorldState = null
 
 var _selected_index:HexIndex = HexIndex.INVALID
 var _mouse_index:HexIndex = HexIndex.INVALID
+var _index_shown:HexIndex = HexIndex.INVALID
 
 var _num_steps:int
 var _current_step:int
@@ -69,15 +70,12 @@ func _on_hex_selected(index:HexIndex):
 	_grid.set_highlighted_indexes([_selected_index])
 	_show_selected_cell()
 
-func _on_world_cell_changed(index:HexIndex, cell:Cell) -> void:
-	_grid.set_hex_content(index, cell.cell_appearance)
-	if index == _mouse_index:
-		_show_cell(_mouse_index)
-	elif index == _selected_index:
-		_show_cell(_selected_index)
-
 func _show_cell(index:HexIndex) -> void:
-	var cell_state:CellState = _world_state.get_history_entry(index, _current_step)
+	_index_shown = index
+	_update_shown_cell()
+	
+func _update_shown_cell() -> void:
+	var cell_state:CellState = _world_state.get_history_entry(_index_shown, _current_step)
 	_cell_details_panel.show_cell_state(cell_state)
 
 func _show_selected_cell() -> void:
@@ -365,6 +363,8 @@ func _set_cell_state(index:HexIndex, cell_state:CellState):
 	var cell_appearance:CellAppearance = _grid.get_hex_content(index)
 	if cell_appearance:
 		cell_appearance.set_state(cell_state)
+	if index == _index_shown:
+		_update_shown_cell()
 	
 #func _notification(what):
 	#if what == NOTIFICATION_WM_CLOSE_REQUEST:

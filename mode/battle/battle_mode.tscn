@@ -38,12 +38,12 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/PanelContainer1/SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(842, 640)
+size = Vector2i(2, 2)
 render_target_update_mode = 4
 
 [node name="Grid" parent="HBoxContainer/PanelContainer1/SubViewportContainer/SubViewport" instance=ExtResource("2_oquoe")]
 unique_name_in_owner = true
-grid_size = 2
+grid_size = 0
 
 [node name="CameraControl" parent="HBoxContainer/PanelContainer1/SubViewportContainer/SubViewport/Grid/GridPlane" index="1"]
 CfgRotateSpeed = 0.8

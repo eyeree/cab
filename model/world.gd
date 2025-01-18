@@ -30,7 +30,7 @@ func _init(options:WorldOptions):
 	_cell_number = 0
 	
 	_cells = HexStore.new()
-	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
+	for index:HexIndex in options.initial_content.get_all_indexes():
 		var content:Cell = options.initial_content.get_content(index)
 		if content != null:
 			set_cell(index, content)
@@ -54,6 +54,8 @@ func _cell_update_state(index:HexIndex, cell:Cell, step_number:int):
 	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
 	if cell:
 		cell.update_state(index, self, cell_state)
+		if cell.is_dead:
+			set_cell(index, null)
 
 func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
 	for index in center.ring(radius):
@@ -73,7 +75,9 @@ func set_cell(index:HexIndex, cell:Cell) -> void:
 		push_error("cell %s distance at %s greater than allowed max distance." % [cell, index])
 		return
 		
-	cell.cell_number = allocate_cell_number()
+	if cell != null:
+		cell.cell_number = allocate_cell_number()
+		
 	_cells.set_content(index, cell)
 	
 	cell_changed.emit(index, cell)

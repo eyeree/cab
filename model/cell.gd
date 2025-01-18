@@ -35,6 +35,10 @@ var is_dead:bool:
 func _init(progenitor:Cell, cell_type_:CellType) -> void:
 	cell_type = cell_type_
 	genome = cell_type.genome
+	
+	max_energy = cell_type.energy_cost * 2
+	energy = 0
+	
 	max_life = cell_type.energy_cost
 	life = max_life
 	
@@ -44,11 +48,11 @@ func _init(progenitor:Cell, cell_type_:CellType) -> void:
 				return gene_config.create_gene(progenitor)))
 					
 	immortal = has_gene(ImmortalityGene)
+	
+	for gene:Gene in genes:
+		gene.init_cell(self)
 
 func perform_actions(index:HexIndex, world:World, cell_state:CellState) -> void:
-	
-	cell_state.cell_type = cell_type
-	cell_state.cell_number = cell_number
 	
 	cell_state.start_energy = energy
 	cell_state.start_life = life
@@ -58,27 +62,30 @@ func perform_actions(index:HexIndex, world:World, cell_state:CellState) -> void:
 
 	for gene in genes:
 		gene.perform_actions(index, world, self, cell_state)
+	
+func update_state(index:HexIndex, world:World, cell_state:CellState) -> void:
 
+	cell_state.cell_type = cell_type
+	cell_state.cell_number = cell_number
+
+	# energy
+		
 	cell_state.end_energy = energy
 	cell_state.new_energy = new_energy
 	cell_state.max_energy = max_energy
-		
+	
+	energy = min(max_energy, energy + new_energy)
+	new_energy = 0
+
+	# life
+	
 	cell_state.end_life = life
 	cell_state.new_life = new_life
 	cell_state.max_life = max_life
 	
-	if is_dead:
-		cell_state.actions.append(DiedAction.new())
-		world.set_cell(index, null)
-				
-func update_state(index:HexIndex, world:World, cell_state:CellState) -> void:
-
-	energy = min(max_energy, energy + new_energy)
-	new_energy = 0
-	
 	life = min(life + new_life, max_life)
 	new_life = 0
-	
+
 	energy_wanted = 0
 	for gene in genes:
 		gene.update_state(index, world, self, cell_state)
