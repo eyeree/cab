@@ -22,18 +22,3 @@ func update_state(_index:HexIndex, _world:World, _cell:Cell, _cell_history:CellS
 
 func apply_damage_resistance(_damage_amount:int, _damage_type:Cell.DamageType) -> int:
 	return 0
-
-var _detail_ui:PackedScene = null
-
-const default_detail_ui_resource_path = "res://gene/default/default_detail_ui.tscn"
-
-func get_detail_ui() -> Control:
-	if _detail_ui == null:
-		var gene_resource_path:String = get_script().resource_path
-		var detail_ui_resource_path:String = gene_resource_path.replace('_gene.gd', '_detail_ui.tscn')
-		if ResourceLoader.exists(detail_ui_resource_path):
-			_detail_ui = load(detail_ui_resource_path)
-		else:
-			_detail_ui = load(default_detail_ui_resource_path)
-	var scene = _detail_ui.instantiate()
-	return scene

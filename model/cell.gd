@@ -46,40 +46,44 @@ func _init(progenitor:Cell, cell_type_:CellType) -> void:
 	immortal = has_gene(ImmortalityGene)
 
 func perform_actions(index:HexIndex, world:World, cell_state:CellState) -> void:
+	
+	cell_state.cell_type = cell_type
+	cell_state.cell_number = cell_number
+	
+	cell_state.start_energy = energy
+	cell_state.start_life = life
+	
+	if not immortal:
+		life -= 1
+
 	for gene in genes:
 		gene.perform_actions(index, world, self, cell_state)
+
+	cell_state.end_energy = energy
+	cell_state.new_energy = new_energy
+	cell_state.max_energy = max_energy
+		
+	cell_state.end_life = life
+	cell_state.new_life = new_life
+	cell_state.max_life = max_life
+	
 	if is_dead:
 		cell_state.actions.append(DiedAction.new())
 		world.set_cell(index, null)
 				
 func update_state(index:HexIndex, world:World, cell_state:CellState) -> void:
 
-	energy += new_energy
+	energy = min(max_energy, energy + new_energy)
+	new_energy = 0
 	
 	life = min(life + new_life, max_life)
+	new_life = 0
 	
 	energy_wanted = 0
 	for gene in genes:
 		gene.update_state(index, world, self, cell_state)
 		energy_wanted += gene.energy_wanted
-
-	cell_state.cell_type = cell_type
-	cell_state.cell_number = cell_number
-	
-	cell_state.energy = energy
 	cell_state.energy_wanted = energy_wanted
-	cell_state.new_energy = new_energy
-	cell_state.max_energy = max_energy
-	
-	cell_state.life = life
-	cell_state.new_life = new_life
-	cell_state.max_life = max_life
-	
-	new_energy = 0
-	new_life = 0
-
-	if not immortal:
-		life -= 1
 
 func take_damage(damage_amount:int, damage_type:DamageType) -> int:
 	for gene in genes:

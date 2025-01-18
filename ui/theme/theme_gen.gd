@@ -128,3 +128,10 @@ func define_theme():
 			bg_color = overlay_background_color
 		})
 	})
+
+	define_variant_style("NomarginPanelContainer", "PanelContainer", {
+		panel = stylebox_flat({
+			bg_color = default_background_color,
+			content_margin_ = content_margins(0)
+		})
+	})

@@ -33,3 +33,18 @@ static func _load_gene_types_from_directory(dir_path:String) -> void:
 				push_error("Gene %s did not define gene_type_" % [file_path])
 			else:
 				_gene_types.append(gene_type)
+
+var _detail_ui:PackedScene = null
+
+const default_detail_ui_resource_path = "res://gene/default/default_detail_ui.tscn"
+
+func get_detail_ui() -> Control:
+	if _detail_ui == null:
+		var gene_resource_path:String = get_script().resource_path
+		var detail_ui_resource_path:String = gene_resource_path.replace('_gene.gd', '_detail_ui.tscn')
+		if ResourceLoader.exists(detail_ui_resource_path):
+			_detail_ui = load(detail_ui_resource_path)
+		else:
+			_detail_ui = load(default_detail_ui_resource_path)
+	var scene = _detail_ui.instantiate()
+	return scene

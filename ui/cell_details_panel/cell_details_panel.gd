@@ -1,25 +1,24 @@
 class_name CellDetailsPanel extends PanelContainer
 
 @onready var cell_title: Label = %CellTitle
-@onready var energy_edit: LineEdit = %EnergyEdit
-@onready var new_energy_edit: LineEdit = %NewEnergyEdit
-@onready var energy_wanted_edit: LineEdit = %EnergyWantedEdit
-@onready var life_edit: LineEdit = %LifeEdit
-@onready var new_life_edit: LineEdit = %NewLifeEdit
-@onready var max_life_edit: LineEdit = %MaxLifeEdit
-@onready var energy_history_label: Label = %EnergyHistoryLabel
-@onready var new_energy_history_label: Label = %NewEnergyHistoryLabel
-@onready var energy_wanted_history_label: Label = %EnergyWantedHistoryLabel
-@onready var life_history_label: Label = %LifeHistoryLabel
-@onready var new_life_history_label: Label = %NewLifeHistoryLabel
-@onready var max_life_history_label: Label = %MaxLifeHistoryLabel
+
+@onready var start_energy: Label = %StartEnergy
+@onready var new_energy: Label = %NewEnergy
+@onready var energy_wanted: Label = %EnergyWanted
+@onready var max_energy: Label = %MaxEnergy
+@onready var energy_used: Label = %EnergyUsed
+
+@onready var start_life: Label = %StartLife
+@onready var new_life: Label = %NewLife
+@onready var life_lost: Label = %LifeLost
+@onready var max_life: Label = %MaxLife
+
 @onready var gene_container: VBoxContainer = %GeneContainer
 
-#var _cell:Cell = null
+var displayed_cell_type:CellType = null
 
 func _ready() -> void:
-	#hide_panel()
-	pass
+	hide_panel()
 	
 func show_cell_state(cell_state:CellState) -> void:
 	
@@ -29,26 +28,27 @@ func show_cell_state(cell_state:CellState) -> void:
 		return
 		
 	cell_title.text = "%s:%s:%d" % [cell_type.genome.name, cell_type.name, cell_state.cell_number]
-	energy_edit.text = str(cell_state.energy)
-	new_energy_edit.text = str(cell_state.new_energy)
-	energy_wanted_edit.text = str(cell_state.energy_wanted)
-	life_edit.text = str(cell_state.life)
-	new_life_edit.text = str(cell_state.new_life)
-	max_life_edit.text = str(cell_state.max_life)
 	
-	#var history:Dictionary = cell.last_history
-	#_show_history_prop(history, 'energy', energy_history_label)
-	#_show_history_prop(history, 'new_energy', new_energy_history_label)
-	#_show_history_prop(history, 'energy_wanted', energy_wanted_history_label)
-	#_show_history_prop(history, 'life', life_history_label)
-	#_show_history_prop(history, 'new_life', new_life_history_label)
-#
-	#if _cell != cell:
-		#for child in gene_container.get_children():
-			#gene_container.remove_child(child)
-		#for gene in cell.genes:
-			#gene_container.add_child(gene.get_detail_ui())
-			#
+	start_energy.text = str(cell_state.start_energy)
+	max_energy.text = str(cell_state.max_energy)
+	new_energy.text = str(cell_state.energy)
+	energy_wanted.text = "(%d)" % cell_state.energy_wanted
+	energy_used.text = str(cell_state.end_energy - cell_state.start_energy)
+	
+	start_life.text = str(cell_state.start_life)
+	new_life.text = str(cell_state.new_life)
+	max_life.text = str(cell_state.max_life)
+	life_lost.text = str(cell_state.end_life - cell_state.start_life)
+
+	if displayed_cell_type != cell_type:
+		
+		for child in gene_container.get_children():
+			gene_container.remove_child(child)
+		
+		for gene_config:GeneConfig in cell_type.gene_configs:
+			var gene_type:GeneType = gene_config.gene_type
+			gene_container.add_child(gene_type.get_detail_ui())
+
 	#for i in range(cell.genes.size()):
 		#var gene = cell.genes[i]
 		#var detail_ui = gene_container.get_child(i)
