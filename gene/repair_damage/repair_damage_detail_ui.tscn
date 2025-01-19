@@ -1,0 +1,69 @@
+[gd_scene load_steps=4 format=3 uid="uid://bitsp78uop1ky"]
+
+[ext_resource type="Script" uid="uid://bakijue8q2tsq" path="res://gene/repair_damage/repair_damage_detail_ui.gd" id="2_ikbai"]
+[ext_resource type="Texture2D" uid="uid://bfu1wwfe0eytf" path="res://ui/cell_details_panel/Heart_Health_HP(Icon).png" id="3_ikbai"]
+[ext_resource type="Texture2D" uid="uid://drrup7wbb1mue" path="res://ui/cell_details_panel/Fire_Flame_Burn(Icon).png" id="3_jqv8b"]
+
+[node name="RepairDamageDetailUI" type="PanelContainer"]
+offset_right = 137.0
+offset_bottom = 67.0
+theme_type_variation = &"SubDetailPanel"
+script = ExtResource("2_ikbai")
+metadata/_custom_type_script = ExtResource("2_ikbai")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SubDetailTitleLabel"
+text = "Repair Damage"
+
+[node name="Status" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Enabled"
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="EnergyCostLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Energy Cost:"
+
+[node name="EnergyCost" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "9"
+horizontal_alignment = 1
+
+[node name="EnergyCostTextureRect" type="TextureRect" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_jqv8b")
+expand_mode = 1
+
+[node name="LifeGainedLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Life Gained:"
+
+[node name="LifeGained" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "9"
+horizontal_alignment = 1
+
+[node name="LifeGainedTextureRect" type="TextureRect" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_ikbai")
+expand_mode = 1

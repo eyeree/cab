@@ -13,7 +13,7 @@ func perform_actions() -> void:
 	#prints('  repair - added_life: %d' % added_life)
 	cell.new_life += added_life
 	cell.energy -= added_life
-	add_state(RepairDamageAction.new(added_life))
+	add_state(State.new(added_life))
 
 func update_state() -> void:
 	energy_wanted = max_repair_amount
@@ -21,7 +21,7 @@ func update_state() -> void:
 var max_repair_amount:int:
 	get: return repaired_amount + roundi(float(cell.max_life) * repaired_percent)
 	
-class RepairDamageAction extends GeneState:
+class State extends GeneState:
 	var added_life:int
 	func _init(added_life_:int) -> void:
 		added_life = added_life_

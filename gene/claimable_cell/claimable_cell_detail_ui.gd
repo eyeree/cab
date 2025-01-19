@@ -29,11 +29,11 @@ func show_gene_state(cell_state:CellState) -> void:
 			]
 			
 			cell_type.text = claim.cell_type.name
-			energy_cost.text = str(claim.cell_type.energy_cost)
+			energy_cost.text = "-%d" % [claim.cell_type.energy_cost]
 
 func _on_mouse_entered_row(row_index:int) -> void:
 	var claim:ClaimableCellGene.Claim = current_claims[row_index]
 	highlight_cell(claim.progenitor.index)
 
-func _on_mouse_exited_row(row_index:int) -> void:
+func _on_mouse_exited_row(_row_index:int) -> void:
 	highlight_cell(HexIndex.INVALID)

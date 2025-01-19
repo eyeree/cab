@@ -36,18 +36,12 @@ func show_cell_state(cell_state:CellState) -> void:
 		
 	if cell_type.genome.hidden:
 		
-		if cell_type == EnvironmentGenome.empty_cell_type:
-			cell_title.visible = false
-		else:
-			cell_title.visible = true
-			cell_title.text = cell_type.name
-			
+		cell_title.text = cell_type.name		
 		cell_state_panel.visible = false
 		
 	else:
 		
 		cell_title.text = cell.title
-		cell_title.visible = true
 		
 		start_energy.text = str(cell_state.start_energy)
 		max_energy.text = str(cell_state.max_energy)

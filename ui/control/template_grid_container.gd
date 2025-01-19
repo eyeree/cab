@@ -55,7 +55,7 @@ func _on_mouse_exited() -> void:
 		current_mouse_row = -1	
 	
 func _input(event: InputEvent) -> void:
-	var v_separation_half:int = get_theme_constant("v_separation") / 2
+	var v_separation_half:float = get_theme_constant("v_separation") / 2.0
 	if event is InputEventMouseMotion and mouse_over:
 		var mouse_position:Vector2 = event.global_position - global_position
 		#prints("mouse over", mouse_position)
