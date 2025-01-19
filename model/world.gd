@@ -1,8 +1,14 @@
 class_name World extends RefCounted
 
 static var empty_args:Array = []
+
 static func debug(msg:String, args:Array = empty_args) -> void:
 	if false: prints("World", msg % args)
+
+static var debug_cell_numbers:Array[int] = []
+static func debug_cell(cell:Cell, msg:String, args:Array = empty_args) -> void:
+	if debug_cell_numbers.has(cell.cell_number): 
+		prints("Cell %s" % cell, msg % args)
 
 var _rings:int
 var _cells:HexStore
@@ -35,25 +41,28 @@ func _init(options:WorldOptions):
 		if content != null:
 			set_cell(index, content)
 		
+	#prints("----- STEP %d -----" % 0)
+	
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var cell:Cell = get_cell(index)
 		if cell:
 			var cell_state:CellState = _world_state.get_history_entry(index, 0)
-			cell.update_state(index, self, cell_state)	
+			cell.update_state(cell_state)	
 			
 func step(step_number:int) -> void:
+	#prints("----- STEP %d -----" % step_number)
 	_cells.visit_all(_cell_perform_actions.bind(step_number))
 	_cells.visit_all(_cell_update_state.bind(step_number))
 
 func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int):
-	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
 	if cell:
-		cell.perform_actions(index, self, cell_state)
+		var cell_state:CellState = _world_state.get_history_entry(index, step_number)
+		cell.perform_actions(cell_state)
 	
 func _cell_update_state(index:HexIndex, cell:Cell, step_number:int):
-	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
 	if cell:
-		cell.update_state(index, self, cell_state)
+		var cell_state:CellState = _world_state.get_history_entry(index, step_number)
+		cell.update_state(cell_state)
 		if cell.is_dead:
 			set_cell(index, null)
 
@@ -79,6 +88,8 @@ func set_cell(index:HexIndex, cell:Cell) -> void:
 		cell.cell_number = allocate_cell_number()
 		
 	_cells.set_content(index, cell)
+	cell.index = index
+	cell.world_ref = weakref(self)
 	
 	cell_changed.emit(index, cell)
 	

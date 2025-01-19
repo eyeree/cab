@@ -2,30 +2,32 @@ class_name ProduceToxinGene extends Gene
 
 var damage:int
 
-func _init(config:ProduceToxinGeneConfig) -> void:
+func _init(cell_:Cell, config:ProduceToxinGeneConfig) -> void:
+	super._init(cell_)
 	damage = config.damage
 
-func perform_actions(index:HexIndex, world:World, _cell:Cell, cell_state:CellState) -> void:
+func perform_actions() -> void:
 	var damage_delt:Dictionary[HexIndex, int] = {}
-	world.visit_ring(index, 1, 
+	cell.world.visit_ring(cell.index, 1, 
 		func (target_index:HexIndex, target:Cell):
-			var actual_damage = target.take_damage(damage, Cell.DamageType.Chemical)
+			var actual_damage = target.take_damage(cell.index, damage, Cell.DamageType.Chemical)
 			damage_delt[target_index] = actual_damage
 	)
-	cell_state.actions.append(ProduceToxinAction.new(damage))
-	cell_state.actions.append(Cell.DealDamageAction.new(damage_delt))
+	cell.state.set_gene_state(ProduceToxinGeneState.new(damage, damage_delt))
 	
-class ProduceToxinAction extends CellState.Action:
+class ProduceToxinGeneState extends GeneState:
 	var damage:int
-	func _init(damage_:int):
+	var damage_delt:Dictionary[HexIndex, int]
+	func _init(damage_:int, damage_delt_:Dictionary[HexIndex, int]):
 		damage = damage_
+		damage_delt = damage_delt_
 	
 class ProduceToxinGeneConfig extends GeneConfig:
 	
 	var damage:int = 1
 	
-	func create_gene(_progenitor:Cell) -> ProduceToxinGene:
-		return ProduceToxinGene.new(self)
+	func create_gene(cell:Cell, _progenitor:Cell) -> ProduceToxinGene:
+		return ProduceToxinGene.new(cell, self)
 		
 class ProduceToxinGeneType extends GeneType:
 

@@ -16,6 +16,9 @@ class_name BattleMode extends Node
 @onready var _num_steps_value: Label = %NumStepsValue
 @onready var _overlay_label: Label = %OverlayLabel
 
+@onready var _debug_panel: PanelContainer = %DebugPanel
+@onready var _debug_hex_index: Label = %DebugHexIndex
+
 const _min_run_speed_delta:float = 0.01
 const _max_run_speed_delta:float = 2.0
 @export var _run_speed_curve:Curve
@@ -61,6 +64,7 @@ func _on_mouse_entered_hex(index:HexIndex):
 	_grid.set_selected_index(index)
 	_show_cell(index)
 	_mouse_index = index
+	_debug_hex_index.text = str(_mouse_index)
 
 func _on_mouse_exited_hex(_index:HexIndex):
 	_show_selected_cell()
@@ -88,7 +92,7 @@ func _show_selected_cell() -> void:
 
 class BattleOptions extends RefCounted:
 	var rings:int = 10
-	var steps:int = 500
+	var steps:int = 10
 	var initial_content:HexStore
 	
 func battle(options:BattleOptions = BattleOptions.new()) -> void:
@@ -98,7 +102,7 @@ func battle(options:BattleOptions = BattleOptions.new()) -> void:
 	_num_steps = options.steps
 	_current_step = 0
 	_displayed_step = -1
-	_loaded_steps = 0
+	_loaded_steps = -1
 
 	_num_steps_value.text = str(_num_steps)
 	_current_step_value.text = str(_current_step)
@@ -134,8 +138,9 @@ func battle(options:BattleOptions = BattleOptions.new()) -> void:
 		_load_thread = Thread.new()
 		_load_thread.start(_load.bind(options))
 		
-	_countdown()
-	
+	#_countdown()
+	_current_step_slider.editable = true
+		
 func _exit_tree() -> void:
 	if _load_thread and _load_thread.is_alive():
 		_stop_loading = true
@@ -189,7 +194,8 @@ func _process(_delta: float) -> void:
 			break
 
 func _load_started() -> void:
-	_update_grid()
+	_loaded_steps = 0
+	_set_step(0)
 
 func _load_progress(steps_done:int, _ms_per_step:float) -> void:
 	var was_waiting = _current_step > _loaded_steps and _current_step <= steps_done
@@ -214,7 +220,6 @@ func _countdown() -> void:
 	await get_tree().create_timer(1).timeout
 	_overlay_panel.visible = false
 	_current_step_slider.editable = true
-	_set_step(0)
 	_run()
 	
 func _get_initial_content() -> HexStore:
@@ -322,8 +327,10 @@ func _set_step(step_number:int) -> void:
 	_current_step = step_number
 	_update_ui()
 	if _current_step > _loaded_steps:
-		_wait_for_load()
+		_overlay_label.text = "Loading..."
+		_overlay_panel.visible = true
 	else:
+		_overlay_panel.visible = false
 		_update_grid()
 
 func _update_ui() -> void:
@@ -336,12 +343,7 @@ func _update_ui() -> void:
 	_current_step_slider.set_value_no_signal(_current_step)
 	_current_step_value.text = str(_current_step)
 		
-func _wait_for_load() -> void:
-	_overlay_label.text = "Loading..."
-	_overlay_panel.visible = true
-	
 func _update_grid() -> void:
-	_overlay_panel.visible = _displayed_step == -1
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
 		var history:Array[CellState] = _world_state.get_history(index)
 		var current_history:CellState = history[_current_step]
@@ -365,9 +367,7 @@ func _set_cell_state(index:HexIndex, cell_state:CellState):
 		cell_appearance.set_state(cell_state)
 	if index == _index_shown:
 		_update_shown_cell()
-	
-#func _notification(what):
-	#if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		#if _load_thread and _load_thread.is_alive():
-			#_load_thread.
-		#get_tree().quit() 
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("ToggleDebugPanel"):
+		_debug_panel.visible = not _debug_panel.visible

@@ -1,15 +1,12 @@
 class_name ImmortalityGene extends Gene
 
-func _init(_config:ImmortalityGeneConfig) -> void:
-	pass
-	
-func apply_damage_resistance(damage_amount:int, _damage_type:Cell.DamageType) -> int:
+func apply_damage_resistance(_source_index:HexIndex, damage_amount:int, _damage_type:Cell.DamageType) -> int:
 	return damage_amount
 
 class ImmortalityGeneConfig extends GeneConfig:
 	
-	func create_gene(_progenitor:Cell) -> ImmortalityGene:
-		return ImmortalityGene.new(self)
+	func create_gene(cell:Cell, _progenitor:Cell) -> ImmortalityGene:
+		return ImmortalityGene.new(cell)
 	
 class ImmortalityGeneType extends GeneType:
 	

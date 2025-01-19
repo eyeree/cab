@@ -2,17 +2,15 @@ class_name AbsorbNutrientsGene extends Gene
 	
 var _energy_per_step:int = 0
 
-func _init(config:AbsorbNutrientsGeneConfig) -> void:
+func _init(cell_:Cell, config:AbsorbNutrientsGeneConfig) -> void:
+	super._init(cell_)
 	_energy_per_step = config.energy_per_step
 
-func perform_actions(_index:HexIndex, _world:World, cell:Cell, cell_state:CellState) -> void:
+func perform_actions() -> void:
 	cell.new_energy += _energy_per_step
-	cell_state.add_action(AbsorbEnergyAction.new(_energy_per_step))
+	add_state(AbsorbEnergyGeneState.new(_energy_per_step))
 				
-func update_state(_index:HexIndex, _world:World, _cell:Cell, _cell_history:CellState) -> void:
-	pass
-
-class AbsorbEnergyAction extends CellState.Action:
+class AbsorbEnergyGeneState extends GeneState:
 	var energy_absorbed:int
 	func _init(energy_absorbed_:int):
 		energy_absorbed = energy_absorbed_
@@ -20,8 +18,8 @@ class AbsorbEnergyAction extends CellState.Action:
 class AbsorbNutrientsGeneConfig extends GeneConfig:
 	var energy_per_step:int = 2
 	
-	func create_gene(_progenitor:Cell) -> AbsorbNutrientsGene:
-		return AbsorbNutrientsGene.new(self)
+	func create_gene(cell:Cell, _progenitor:Cell) -> AbsorbNutrientsGene:
+		return AbsorbNutrientsGene.new(cell, self)
 
 class AbsorbNutrientsGeneType extends GeneType:
 	

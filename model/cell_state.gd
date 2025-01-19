@@ -14,20 +14,22 @@ var end_life:int
 var new_life:int
 var max_life:int
 
-var actions:Array[Action] = []
+class Substate extends RefCounted:
+	pass
+	
+var substates:Array[Substate] = []
+
+func get_substate(type:Variant) -> Substate:
+	for substate:Substate in substates:
+		if is_instance_of(Substate, type):
+			return substate
+	return null
+
+func get_substates(type:Variant, dest:Array = []) -> Array:
+	for substate:Substate in substates:
+		if is_instance_of(substate, type):
+			dest.append(substate)
+	return dest
 
 var is_dead:bool:
 	get: return end_life + new_life <= 0
-
-func add_action(action:Action) -> void:
-	actions.append(action)
-	
-func get_action(type:Variant) -> Action:
-	for action in actions:
-		if is_instance_of(action, type):
-			return action
-	return null
-	
-class Action extends RefCounted:
-	pass
-	

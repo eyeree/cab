@@ -32,12 +32,12 @@ func show_cell_state(cell_state:CellState) -> void:
 	
 	start_energy.text = str(cell_state.start_energy)
 	max_energy.text = str(cell_state.max_energy)
-	new_energy.text = str(cell_state.new_energy)
+	new_energy.text = "+%d" % cell_state.new_energy
 	energy_wanted.text = "(%d)" % cell_state.energy_wanted
 	energy_used.text = str(cell_state.end_energy - cell_state.start_energy)
 	
 	start_life.text = str(cell_state.start_life)
-	new_life.text = str(cell_state.new_life)
+	new_life.text = "+%d" % cell_state.new_life
 	max_life.text = str(cell_state.max_life)
 	life_lost.text = str(cell_state.end_life - cell_state.start_life)
 

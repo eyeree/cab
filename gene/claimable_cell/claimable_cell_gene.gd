@@ -3,36 +3,44 @@ class_name ClaimableCellGene extends Gene
 var _claims:Array[Claim] = []
 var is_claimable:bool = true
 	
-func perform_actions(index:HexIndex, world:World, _cell:Cell, cell_state:CellState) -> void:
+func perform_actions() -> void:
 	if not is_claimable:
-		resolve_claims(index, world, cell_state)
+		resolve_claims()
 	
-func update_state(_index:HexIndex, _world:World, _cell:Cell, cell_state:CellState) -> void:
+func update_state() -> void:
 	if _claims.size() > 0:
 		is_claimable = false
-		cell_state.actions.append(ClaimAction.new(_claims))
+		add_state(ClaimableCellClaimedGeneState.new(_claims))
 
 static var num_claims:int = 0
 
+func is_claimed_by_cell(cell_:Cell) -> bool:
+	for claim:Claim in _claims:
+		if claim.progenitor == cell_:
+			return true
+	return false
+	
 func add_claim(progenitor:Cell, cell_type:CellType) -> void:
 	num_claims += 1
 	var claim = Claim.new(progenitor, cell_type)
 	_claims.append(claim)
 	
-func resolve_claims(index:HexIndex, world:World, cell_state:CellState):
+func resolve_claims():
 	# TODO
 	var claim:Claim = _claims[0]
 	var new_cell = claim.cell_type.create_cell(claim.progenitor)
-	world.set_cell(index, new_cell)
-	cell_state.actions.append(ResolvedClaimAction.new())
+	cell.world.set_cell(cell.index, new_cell)
+	add_state(ClaimableCellResolvedGeneState.new(claim.cell_type))
 
-class ClaimAction extends CellState.Action:
+class ClaimableCellClaimedGeneState extends GeneState:
 	var claims:Array[Claim]
 	func _init(claims_:Array[Claim]):
 		claims = claims_
-	
-class ResolvedClaimAction extends CellState.Action:
-	pass
+
+class ClaimableCellResolvedGeneState extends GeneState:
+	var cell_type:CellType
+	func _init(cell_type_:CellType)-> void:
+		cell_type = cell_type_
 	
 class Claim:
 	
@@ -45,8 +53,8 @@ class Claim:
 
 class ClaimableCellGeneConfig extends GeneConfig:
 		
-	func create_gene(_progenitor:Cell) -> ClaimableCellGene:
-		return ClaimableCellGene.new()
+	func create_gene(cell:Cell, _progenitor:Cell) -> ClaimableCellGene:
+		return ClaimableCellGene.new(cell)
 		
 class ClaimableCellGeneType extends GeneType:
 	
