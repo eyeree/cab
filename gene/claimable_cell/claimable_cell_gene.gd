@@ -5,12 +5,16 @@ var is_claimable:bool = true
 	
 func perform_actions() -> void:
 	if not is_claimable:
-		resolve_claims()
+		# TODO
+		var claim:Claim = _claims[0]
+		var new_cell = claim.cell_type.create_cell(claim.progenitor)
+		cell.world.set_cell(cell.index, new_cell)
+		add_state(State.new(_claims, claim))
 	
 func update_state() -> void:
 	if _claims.size() > 0:
 		is_claimable = false
-		add_state(ClaimableCellClaimedGeneState.new(_claims))
+		add_state(State.new(_claims))
 
 static var num_claims:int = 0
 
@@ -25,23 +29,13 @@ func add_claim(progenitor:Cell, cell_type:CellType) -> void:
 	var claim = Claim.new(progenitor, cell_type)
 	_claims.append(claim)
 	
-func resolve_claims():
-	# TODO
-	var claim:Claim = _claims[0]
-	var new_cell = claim.cell_type.create_cell(claim.progenitor)
-	cell.world.set_cell(cell.index, new_cell)
-	add_state(ClaimableCellResolvedGeneState.new(claim.cell_type))
-
-class ClaimableCellClaimedGeneState extends GeneState:
+class State extends GeneState:
 	var claims:Array[Claim]
-	func _init(claims_:Array[Claim]):
+	var resolved_claim:Claim
+	func _init(claims_:Array[Claim], resolved_claim_:Claim = null):
 		claims = claims_
+		resolved_claim = resolved_claim_
 
-class ClaimableCellResolvedGeneState extends GeneState:
-	var cell_type:CellType
-	func _init(cell_type_:CellType)-> void:
-		cell_type = cell_type_
-	
 class Claim:
 	
 	var progenitor:Cell

@@ -10,6 +10,7 @@ var genome:Genome
 var cell_type:CellType
 
 var cell_number:int
+var title:String
 
 var energy:int = 0
 var new_energy:int = 0
@@ -85,8 +86,7 @@ func update_state(state_:CellState) -> void:
 	
 	#prints('cell %s - update_state - life: %d - new_life: %d' % [self, life, new_life])
 
-	state.cell_type = cell_type
-	state.cell_number = cell_number
+	state.cell = self
 
 	# energy
 		

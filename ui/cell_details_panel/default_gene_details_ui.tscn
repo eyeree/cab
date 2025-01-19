@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cceaeb0mosa3k"]
+
+[ext_resource type="Script" path="res://ui/cell_details_panel/default_gene_details_ui.gd" id="1_306s5"]
+
+[node name="DefaultDetailUI" type="PanelContainer"]
+visible = false
+offset_right = 8.0
+offset_bottom = 8.0
+theme_type_variation = &"DetailPanel"
+script = ExtResource("1_306s5")

@@ -9,6 +9,8 @@ func setup():
 var default_spacing = 4
 var default_font_size = 12
 
+var bold_font = load("res://ui/theme/fonts/system/bold_system_font_variation.tres")
+
 var default_background_color = Color(0.176, 0.176, 0.176)
 var default_border_color = Color(0.223, 0.223, 0.223)
 var default_font_color = Color(1, 1, 1)
@@ -30,13 +32,23 @@ func define_theme():
 	
 	define_default_font_size(default_font_size)
 	
-	var panel_style = stylebox_flat({
+	var default_panel_style = stylebox_flat({
 		bg_color = default_background_color,
 		content_margin_ = content_margins(default_spacing)
 	})
 	
+	var thin_border_panel_style = stylebox_flat({
+		border_color = sub_detail_border_color,
+		border_ = border_width(1)
+	})
+
+	var thick_border_panel_style = stylebox_flat({
+		border_color = sub_detail_border_color,
+		border_ = border_width(2)
+	})
+	
 	define_style('PanelContainer', {
-		panel = panel_style
+		panel = default_panel_style
 	})
 	
 	define_variant_style("DetailTitleLabel", "Label", {
@@ -48,25 +60,17 @@ func define_theme():
 	})
 	
 	define_variant_style("DetailPanel", "PanelContainer", {
-		panel = inherit(panel_style, {
-			border_color = detail_border_color,
-			border_ = border_width(2),
+		panel = merge(default_panel_style, thick_border_panel_style, {
 			content_margin_ = content_margins(default_spacing * 2)
 		})
 	})
 	
-	define_variant_style("Border", "PanelContainer", {
-		panel = inherit(panel_style, {
-			border_color = detail_border_color,
-			border_ = border_width(2)
-		})
-	})
-
 	define_variant_style("SubDetailPanel", "PanelContainer", {
-		panel = inherit(panel_style, {
-			border_color = sub_detail_border_color,
-			border_ = border_width(1)
-		})
+		panel = merge(default_panel_style, thin_border_panel_style)
+	})
+	
+	define_variant_style("Border", "PanelContainer", {
+		panel = merge(default_panel_style, thick_border_panel_style)
 	})
 
 	define_variant_style("TitlePanel", "PanelContainer", {
@@ -117,13 +121,13 @@ func define_theme():
 	})
 	
 	define_variant_style("OverlayPanelInner", "PanelContainer", {
-		panel = inherit(panel_style, {
+		panel = inherit(default_panel_style, {
 			content_margin_ = content_margins(default_spacing * 4)
 		})
 	})
 	
 	define_variant_style("OverlayPanelOuter", "Panel", {
-		panel = inherit(panel_style, {
+		panel = inherit(default_panel_style, {
 			content_margin_ = content_margins(0),
 			bg_color = overlay_background_color
 		})
@@ -134,4 +138,10 @@ func define_theme():
 			bg_color = default_background_color,
 			content_margin_ = content_margins(0)
 		})
+	})
+	
+	define_variant_style("GridHeaderLabel", "Label", {
+		font_size = default_font_size - 2,
+		font_color = form_label_font_color,
+		font = bold_font
 	})

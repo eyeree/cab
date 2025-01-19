@@ -60,6 +60,9 @@ func _ready() -> void:
 
 	battle()
 	
+func highlight_cell(index:HexIndex) -> void:
+	_grid.set_selected_index(index)
+	
 func _on_mouse_entered_hex(index:HexIndex):
 	_grid.set_selected_index(index)
 	_show_cell(index)
@@ -92,7 +95,7 @@ func _show_selected_cell() -> void:
 
 class BattleOptions extends RefCounted:
 	var rings:int = 10
-	var steps:int = 10
+	var steps:int = 20
 	var initial_content:HexStore
 	
 func battle(options:BattleOptions = BattleOptions.new()) -> void:
@@ -347,9 +350,12 @@ func _update_grid() -> void:
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
 		var history:Array[CellState] = _world_state.get_history(index)
 		var current_history:CellState = history[_current_step]
-		var current_cell_type:CellType = current_history.cell_type if current_history else null
-		var displayed_history:CellState = history[_displayed_step] if _displayed_step != -1 else null
-		var displayed_cell_type:CellType = displayed_history.cell_type if displayed_history else null
+		var current_cell_type:CellType = current_history.cell.cell_type \
+			if current_history and current_history.cell else null
+		var displayed_history:CellState = history[_displayed_step] \
+			if _displayed_step != -1 else null
+		var displayed_cell_type:CellType = displayed_history.cell.cell_type \
+			if displayed_history and displayed_history.cell else null
 		if displayed_cell_type != current_cell_type:
 			_set_cell_appearance(index, current_cell_type)
 		_set_cell_state(index, current_history)

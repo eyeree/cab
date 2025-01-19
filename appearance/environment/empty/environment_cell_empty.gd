@@ -27,7 +27,7 @@ func set_state(cell_state:CellState) -> void:
 		claim_cell_appearance.queue_free()
 	_claim_cell_appearances.clear()
 	
-	var claim_state:ClaimableCellGene.ClaimableCellClaimedGeneState = cell_state.get_substate(ClaimableCellGene.ClaimableCellClaimedGeneState)
+	var claim_state:ClaimableCellGene.State = cell_state.get_substate(ClaimableCellGene.State)
 	if claim_state == null or claim_state.claims.size() == 0:
 		return
 		

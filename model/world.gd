@@ -86,6 +86,7 @@ func set_cell(index:HexIndex, cell:Cell) -> void:
 		
 	if cell != null:
 		cell.cell_number = allocate_cell_number()
+		cell.title = "%s:%s:%d" % [cell.genome.name, cell.cell_type.name, cell.cell_number]
 		
 	_cells.set_content(index, cell)
 	cell.index = index

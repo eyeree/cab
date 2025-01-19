@@ -4,6 +4,7 @@ var genome:Genome
 var name:String = '(new cell type)'
 var gene_configs:Array[GeneConfig] = []
 var cell_appearance:PackedScene
+
 var energy_cost:int:
 	get:
 		var total = 0
@@ -45,3 +46,6 @@ func has_gene(gene_class:Script) -> bool:
 	
 func create_cell(progenitor:Cell = null) -> Cell:
 	return Cell.new(progenitor, self)
+
+func _to_string() -> String:
+	return "CellType:%s:%s" % [genome.name, name]

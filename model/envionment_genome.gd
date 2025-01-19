@@ -9,6 +9,8 @@ static var toxin_cell_type:CellType
 
 static func _static_init() -> void:
 	
+	GeneType.get_all_gene_types() # force load
+	
 	genome = Genome.new()
 	genome.name = 'Environment'
 	genome.hidden = true

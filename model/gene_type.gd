@@ -3,6 +3,7 @@ class_name GeneType extends RefCounted
 var name:String = '(new gene type)'
 var energy_cost:int = 0
 var hidden:bool = false
+var base_resource_path:String = ''
 	
 func create_config(_cell_type:CellType) -> GeneConfig:
 	push_error('Gene type %s did not noverride create_config' % [name])
@@ -32,19 +33,23 @@ static func _load_gene_types_from_directory(dir_path:String) -> void:
 			if gene_type == null:
 				push_error("Gene %s did not define gene_type_" % [file_path])
 			else:
+				gene_type.base_resource_path = file_path.replace('_gene.gd', '')
 				_gene_types.append(gene_type)
 
-var _detail_ui:PackedScene = null
+var _detail_ui_loaded:bool = false
+var _detail_ui_scene:PackedScene = null
 
-const default_detail_ui_resource_path = "res://gene/default/default_detail_ui.tscn"
-
-func get_detail_ui() -> Control:
-	if _detail_ui == null:
-		var gene_resource_path:String = get_script().resource_path
-		var detail_ui_resource_path:String = gene_resource_path.replace('_gene.gd', '_detail_ui.tscn')
+func get_details_ui() -> GeneDetailUI:
+	if not _detail_ui_loaded:
+		var detail_ui_resource_path:String = base_resource_path + '_detail_ui.tscn'
+		detail_ui_resource_path = detail_ui_resource_path.replace('.remap', '')
 		if ResourceLoader.exists(detail_ui_resource_path):
-			_detail_ui = load(detail_ui_resource_path)
-		else:
-			_detail_ui = load(default_detail_ui_resource_path)
-	var scene = _detail_ui.instantiate()
-	return scene
+			_detail_ui_scene = load(detail_ui_resource_path)
+		_detail_ui_loaded = true
+	if _detail_ui_scene != null:
+		return _detail_ui_scene.instantiate()
+	else:
+		return null
+
+func _to_string() -> String:
+	return "GeneType:%s" % [name]

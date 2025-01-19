@@ -11,15 +11,6 @@ static var ALL_DIRECTIONS:Array[HexDirection] = [
 	HexDirection.SW, HexDirection.W, HexDirection.NW
 ]
 	
-static var DIRECTION_VECTORS:Array[HexIndex] = [
-	HexIndex.from(+1, -1, 0), # NE
-	HexIndex.from(+1, 0, -1), # E
-	HexIndex.from(0, +1, -1), # SE
-	HexIndex.from(-1, +1, 0), # SW
-	HexIndex.from(-1, 0, +1), # W
-	HexIndex.from(0, -1, +1), # NW
-]
-
 static func rotate_direction_right(direction:HexDirection, steps:int = 1) -> HexDirection:
 	return ((direction + steps) % 6) as HexDirection
 
@@ -228,6 +219,14 @@ func center_point(hex_outer_radius:float) -> Vector2:
 func equals(other:HexIndex) -> bool:
 	if not other: return false
 	return _key == other._key
+	
+func direction_to(index:HexIndex) -> HexDirection:
+	var delta = index.subtract(self)
+	if delta.distance_to_center() != 1:
+		push_error('direction_to target %s too far from %s' % [index, self])
+		return HexDirection.E
+	else:
+		return HexIndex.INDEX_TO_DIRECTION[delta]
 
 func _to_string() -> String:
 	return "{q: %d, r: %d, s: %d}" % [q, r, s]
@@ -240,3 +239,30 @@ static func deserialize(data:Variant) -> HexIndex:
 
 static var INVALID:HexIndex = HexIndex.from(10000, 10000, 10000)
 static var CENTER:HexIndex = HexIndex.from(0, 0, 0)
+
+static var DIRECTION_VECTORS:Array[HexIndex] = [
+	HexIndex.from(+1, -1, 0), # NE
+	HexIndex.from(+1, 0, -1), # E
+	HexIndex.from(0, +1, -1), # SE
+	HexIndex.from(-1, +1, 0), # SW
+	HexIndex.from(-1, 0, +1), # W
+	HexIndex.from(0, -1, +1), # NW
+]
+
+static var INDEX_TO_DIRECTION:Dictionary[HexIndex, HexDirection] = {
+	HexIndex.from(+1, -1, 0): HexDirection.NE,
+	HexIndex.from(+1, 0, -1): HexDirection.E,
+	HexIndex.from(0, +1, -1): HexDirection.SE,
+	HexIndex.from(-1, +1, 0): HexDirection.SW,
+	HexIndex.from(-1, 0, +1): HexDirection.W,
+	HexIndex.from(0, -1, +1): HexDirection.NW
+}
+
+static var DIRECTION_LABEL:Array[String] = [
+	"NE",
+	"E",
+	"SE",
+	"SW",
+	"W",
+	"NW"
+]

@@ -8,12 +8,12 @@ func _init(cell_:Cell, config:AbsorbNutrientsGeneConfig) -> void:
 
 func perform_actions() -> void:
 	cell.new_energy += _energy_per_step
-	add_state(AbsorbEnergyGeneState.new(_energy_per_step))
+	add_state(State.new(_energy_per_step))
 				
-class AbsorbEnergyGeneState extends GeneState:
-	var energy_absorbed:int
-	func _init(energy_absorbed_:int):
-		energy_absorbed = energy_absorbed_
+class State extends GeneState:
+	var energy_produced:int
+	func _init(energy_produced_:int):
+		energy_produced = energy_produced_
 		
 class AbsorbNutrientsGeneConfig extends GeneConfig:
 	var energy_per_step:int = 2

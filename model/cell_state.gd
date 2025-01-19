@@ -1,7 +1,6 @@
 class_name CellState extends Node
 
-var cell_type:CellType
-var cell_number:int
+var cell:Cell
 
 var start_energy:int
 var end_energy:int
@@ -21,7 +20,7 @@ var substates:Array[Substate] = []
 
 func get_substate(type:Variant) -> Substate:
 	for substate:Substate in substates:
-		if is_instance_of(Substate, type):
+		if is_instance_of(substate, type):
 			return substate
 	return null
 
