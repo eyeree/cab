@@ -230,28 +230,28 @@ func _get_initial_content() -> HexStore:
 	var genome1 = Genome.new()
 	genome1.name = "Genome1"
 	genome1.appearance_set = preload("res://appearance/simple_a/simple_a_appearance_set.tres")
-	genome1.add_gene(AbsorbNutrientsGene)
+	genome1.add_gene(GenerateEnergyGene)
 	genome1.add_gene(RepairDamageGene)
 	genome1.add_gene(ProduceCellGene)
 	
 	var cell_type_1a = genome1.add_cell_type()
 	cell_type_1a.name = '1A'
 	cell_type_1a.cell_appearance = genome1.appearance_set.get_cell_appearance_by_name('simple_a_cell_a')
-	cell_type_1a.add_gene(AbsorbNutrientsGene)
+	cell_type_1a.add_gene(GenerateEnergyGene)
 	cell_type_1a.add_gene(RepairDamageGene)
 	cell_type_1a.add_gene(ProduceCellGene)
 
 	var genome2 = Genome.new()
 	genome2.name = "Genome2"
 	genome2.appearance_set = preload("res://appearance/simple_b/simple_b_appearance_set.tres")
-	genome2.add_gene(AbsorbNutrientsGene)
+	genome2.add_gene(GenerateEnergyGene)
 	genome2.add_gene(RepairDamageGene)
 	genome2.add_gene(ProduceCellGene)
 
 	var cell_type_2a = genome2.add_cell_type()
 	cell_type_2a.name = '2A'
 	cell_type_2a.cell_appearance = genome2.appearance_set.get_cell_appearance_by_name('simple_b_cell_b')
-	cell_type_2a.add_gene(AbsorbNutrientsGene)
+	cell_type_2a.add_gene(GenerateEnergyGene)
 	cell_type_2a.add_gene(RepairDamageGene)
 	cell_type_2a.add_gene(ProduceCellGene)
 

@@ -1,49 +1,56 @@
 class_name ClaimableCellGene extends Gene
 
-var _claims:Array[Claim] = []
-var is_claimable:bool = true
+var claims:Array[Claim] = []
+var winning_claim:Claim = null
+
+var is_claimable:bool:
+	get: return winning_claim == null
 	
 func perform_actions() -> void:
-	if not is_claimable:
-		# TODO
-		var claim:Claim = _claims[0]
-		var new_cell = claim.cell_type.create_cell(claim.progenitor)
+	if winning_claim != null:
+		var new_cell = winning_claim.cell_type.create_cell(winning_claim.progenitor, cell.state)
 		cell.world.set_cell(cell.index, new_cell)
-		add_state(State.new(_claims, claim))
 	
 func update_state() -> void:
-	if _claims.size() > 0:
-		is_claimable = false
-		add_state(State.new(_claims))
+	var completed_claims:Array[Claim] = []
+	completed_claims.assign(
+		claims.filter(
+			func (claim): 
+				return claim.is_complete))
+	if completed_claims.size() > 0:
+		completed_claims.sort_custom(
+			func (a:Claim, b:Claim): 
+				return a.energy_provided > b.energy_provided)
+		var maybe_winner:Claim = completed_claims[0]
+		if completed_claims.size() == 1 or completed_claims[1].energy_provided < maybe_winner.energy_provided:
+			winning_claim = maybe_winner
+	add_state(State.new(claims, winning_claim))
+	claims = []
 
-static var num_claims:int = 0
-
-func is_claimed_by_cell(cell_:Cell) -> bool:
-	for claim:Claim in _claims:
-		if claim.progenitor == cell_:
-			return true
-	return false
-	
-func add_claim(progenitor:Cell, cell_type:CellType) -> void:
-	num_claims += 1
-	var claim = Claim.new(progenitor, cell_type)
-	_claims.append(claim)
+func add_claim(progenitor:Cell, cell_type:CellType, energy_provided:int) -> void:
+	var claim:Claim = Claim.new(progenitor, cell_type, energy_provided)
+	claims.append(claim)
 	
 class State extends GeneState:
 	var claims:Array[Claim]
-	var resolved_claim:Claim
-	func _init(claims_:Array[Claim], resolved_claim_:Claim = null):
+	var winning_claim:Claim
+	func _init(claims_:Array[Claim], winning_claim_:Claim = null):
 		claims = claims_
-		resolved_claim = resolved_claim_
+		winning_claim = winning_claim_
 
 class Claim:
 	
 	var progenitor:Cell
 	var cell_type:CellType
+	var energy_provided:int
 	
-	func _init(progenitor_:Cell, cell_type_:CellType):
+	func _init(progenitor_:Cell, cell_type_:CellType, energy_provided_:int):
 		progenitor = progenitor_
 		cell_type = cell_type_
+		energy_provided = energy_provided_
+		
+	var is_complete:bool:
+		get: return energy_provided >= cell_type.energy_cost
 
 class ClaimableCellGeneConfig extends GeneConfig:
 		

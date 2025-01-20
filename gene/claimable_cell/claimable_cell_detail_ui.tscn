@@ -5,9 +5,9 @@
 [ext_resource type="Script" uid="uid://dkqa4fl5ot5jf" path="res://ui/control/template_grid_container.gd" id="2_iqo5w"]
 
 [node name="PanelContainer" type="PanelContainer"]
-offset_top = 63.0
-offset_right = 170.0
-offset_bottom = 79.0
+offset_right = 206.0
+offset_bottom = 67.0
+size_flags_horizontal = 3
 theme_type_variation = &"SubDetailPanel"
 script = ExtResource("1_i6tlq")
 
@@ -26,26 +26,48 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/h_separation = 5
-columns = 3
+columns = 5
 script = ExtResource("2_iqo5w")
 metadata/_custom_type_script = ExtResource("2_iqo5w")
 
 [node name="Direction Heading" type="Label" parent="VBoxContainer/ClaimGridContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"GridHeaderLabel"
-text = "From Direction"
+text = "From
+Direction"
 horizontal_alignment = 1
 
 [node name="CellTypeHeading" type="Label" parent="VBoxContainer/ClaimGridContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"GridHeaderLabel"
-text = "Cell Type"
+text = "Cell
+Type"
 horizontal_alignment = 1
 
 [node name="EnergyCostHeading" type="Label" parent="VBoxContainer/ClaimGridContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"GridHeaderLabel"
-text = "Energy Cost"
+text = "Energy
+Cost"
+horizontal_alignment = 1
+
+[node name="EnergyProvidedHeading" type="Label" parent="VBoxContainer/ClaimGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"GridHeaderLabel"
+text = "Energy
+Provided"
+horizontal_alignment = 1
+
+[node name="StatusHeading" type="Label" parent="VBoxContainer/ClaimGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_type_variation = &"GridHeaderLabel"
+text = "Status"
 horizontal_alignment = 1
 
 [node name="Direction" type="Label" parent="VBoxContainer/ClaimGridContainer"]
@@ -58,20 +80,42 @@ layout_mode = 2
 text = "(cell type)"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ClaimGridContainer"]
+[node name="EnergyCostContainer" type="HBoxContainer" parent="VBoxContainer/ClaimGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="EnergyCost" type="Label" parent="VBoxContainer/ClaimGridContainer/HBoxContainer"]
+[node name="EnergyCost" type="Label" parent="VBoxContainer/ClaimGridContainer/EnergyCostContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "9"
 horizontal_alignment = 1
 
-[node name="EnergyIcon" type="TextureRect" parent="VBoxContainer/ClaimGridContainer/HBoxContainer"]
+[node name="EnergyIcon" type="TextureRect" parent="VBoxContainer/ClaimGridContainer/EnergyCostContainer"]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("2_i6tlq")
 expand_mode = 1
+
+[node name="EnergyProvidedContainer" type="HBoxContainer" parent="VBoxContainer/ClaimGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="EnergyProvided" type="Label" parent="VBoxContainer/ClaimGridContainer/EnergyProvidedContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "9"
+horizontal_alignment = 1
+
+[node name="EnergyIcon" type="TextureRect" parent="VBoxContainer/ClaimGridContainer/EnergyProvidedContainer"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_i6tlq")
+expand_mode = 1
+
+[node name="Status" type="Label" parent="VBoxContainer/ClaimGridContainer"]
+layout_mode = 2
+text = "(status)"

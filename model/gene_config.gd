@@ -8,3 +8,6 @@ func _init(gene_type_:GeneType) -> void:
 func create_gene(_cell:Cell, _progenitor:Cell) -> Gene:
 	push_error('GeneConfig for GeneType %s did not override create_gene' % [gene_type.name])
 	return null
+
+func get_energy_cost() -> int:
+	return gene_type.energy_cost

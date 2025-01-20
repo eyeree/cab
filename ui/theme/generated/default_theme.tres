@@ -96,6 +96,7 @@ FormValueLineEdit/base_type = &"LineEdit"
 FormValueLineEdit/colors/font_color = Color(1, 1, 1, 1)
 GridHeaderLabel/base_type = &"Label"
 GridHeaderLabel/colors/font_color = Color(0.545, 0.545, 0.545, 1)
+GridHeaderLabel/constants/line_spacing = 0
 GridHeaderLabel/font_sizes/font_size = 10
 GridHeaderLabel/fonts/font = ExtResource("1_ix8h1")
 HBoxContainer/constants/separation = 4

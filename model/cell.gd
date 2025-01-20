@@ -40,13 +40,13 @@ var is_alive:bool:
 var is_dead:bool:
 	get: return life <= 0
 
-func _init(progenitor:Cell, cell_type_:CellType) -> void:
+func _init(progenitor:Cell, cell_type_:CellType, state_:CellState = null) -> void:
 	
 	cell_type = cell_type_
 	genome = cell_type.genome
 	
 	max_energy = cell_type.energy_cost * 2
-	new_energy = 1
+	new_energy = 0
 	energy = 0
 	
 	max_life = cell_type.energy_cost
@@ -62,6 +62,10 @@ func _init(progenitor:Cell, cell_type_:CellType) -> void:
 	
 	for gene:Gene in genes:
 		gene.init_cell(self)
+		
+	if state_:
+		state_.start_energy = energy
+		state_.start_life = life
 
 func perform_actions(state_:CellState) -> void:
 	
@@ -71,10 +75,6 @@ func perform_actions(state_:CellState) -> void:
 	state.start_life = life
 	#prints('cell %s - perform_actions - life: %d - new_life: %d' % [self, life, new_life])
 	
-	if not immortal:
-		life -= 1
-		#prints('  life -= 1: %d' % [life])
-
 	for gene in genes:
 		gene.perform_actions()
 

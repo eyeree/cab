@@ -22,14 +22,27 @@ func show_gene_state(cell_state:CellState) -> void:
 			var direction:Label = row[0]
 			var cell_type:Label = row[1]
 			var energy_cost_container:HBoxContainer = row[2]
+			var energy_provided_container:HBoxContainer = row[3]
+			var status:Label = row[4]
+
 			var energy_cost:Label = energy_cost_container.get_child(0)
+			var energy_provided:Label = energy_provided_container.get_child(0)
 			
 			direction.text = HexIndex.DIRECTION_LABEL[
 				cell_state.cell.index.direction_to(claim.progenitor.index)
 			]
 			
 			cell_type.text = claim.cell_type.name
+			
 			energy_cost.text = "-%d" % [claim.cell_type.energy_cost]
+			energy_provided.text = "%d" % [claim.energy_provided]
+			
+			if gene_state.winning_claim == claim:
+				status.text = "Winner"
+			elif claim.is_complete:
+				status.text = "Ready"
+			else:
+				status.text = ""
 
 func _on_mouse_entered_row(row_index:int) -> void:
 	var claim:ClaimableCellGene.Claim = current_claims[row_index]

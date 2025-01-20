@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://bfvyhv3qifrod"]
 
-[ext_resource type="Script" uid="uid://dp3m3nit7ktb8" path="res://gene/absorb_energy/absorb_nutrients_detail_ui.gd" id="1_clcdt"]
-[ext_resource type="Script" uid="uid://daf07buglduh1" path="res://ui/cell_details_panel/gene_detail_ui.gd" id="2_1t8rt"]
-[ext_resource type="Texture2D" uid="uid://drrup7wbb1mue" path="res://ui/cell_details_panel/Fire_Flame_Burn(Icon).png" id="3_clcdt"]
+[ext_resource type="Script" uid="uid://dp3m3nit7ktb8" path="res://gene/generate_energy/generate_energy_detail_ui.gd" id="1_uhjjf"]
+[ext_resource type="Script" uid="uid://daf07buglduh1" path="res://ui/cell_details_panel/gene_detail_ui.gd" id="2_lxlnx"]
+[ext_resource type="Texture2D" uid="uid://drrup7wbb1mue" path="res://ui/cell_details_panel/Fire_Flame_Burn(Icon).png" id="3_mslhg"]
 
-[node name="AbsorbNutrientsDetailUI" type="PanelContainer"]
+[node name="GenerateEnergyDetailUI" type="PanelContainer"]
 theme_type_variation = &"SubDetailPanel"
-script = ExtResource("1_clcdt")
-metadata/_custom_type_script = ExtResource("2_1t8rt")
+script = ExtResource("1_uhjjf")
+metadata/_custom_type_script = ExtResource("2_lxlnx")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -16,7 +16,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SubDetailTitleLabel"
-text = "Absorb Nutrients"
+text = "Generate Energy"
 
 [node name="Status" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -44,5 +44,5 @@ custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource("3_clcdt")
+texture = ExtResource("3_mslhg")
 expand_mode = 1

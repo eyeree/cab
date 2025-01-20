@@ -143,5 +143,6 @@ func define_theme():
 	define_variant_style("GridHeaderLabel", "Label", {
 		font_size = default_font_size - 2,
 		font_color = form_label_font_color,
-		font = bold_font
+		font = bold_font,
+		line_spacing = 0
 	})

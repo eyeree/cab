@@ -9,7 +9,7 @@ var energy_cost:int:
 	get:
 		var total = 0
 		for gene_config in gene_configs:
-			total += gene_config.gene_type.energy_cost
+			total += gene_config.get_energy_cost()
 		return total
 
 func _init(genome_:Genome, cell_appearance_:PackedScene = genome_.appearance_set.get_default_cell_appearance()):
@@ -44,8 +44,8 @@ func add_gene(gene_class:Script) -> GeneConfig:
 func has_gene(gene_class:Script) -> bool:
 	return has_gene_type(gene_class.gene_type_)
 	
-func create_cell(progenitor:Cell = null) -> Cell:
-	return Cell.new(progenitor, self)
+func create_cell(progenitor:Cell = null, cell_state:CellState = null) -> Cell:
+	return Cell.new(progenitor, self, cell_state)
 
 func _to_string() -> String:
 	return "CellType:%s:%s" % [genome.name, name]
