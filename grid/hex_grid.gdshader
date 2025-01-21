@@ -58,12 +58,12 @@ float hexDist(vec2 p) {
 // (q, r) -> 6 neighbors
 // ------------------------------------------------------
 const ivec2 AXIAL_NEIGHBORS[6] = ivec2[](
+    ivec2( 0,  1),
     ivec2( 1,  0),
     ivec2( 1, -1),
     ivec2( 0, -1),
     ivec2(-1,  0),
-    ivec2(-1,  1),
-    ivec2( 0,  1)
+    ivec2(-1,  1)
 );
 
 // ------------------------------------------------------
@@ -71,12 +71,12 @@ const ivec2 AXIAL_NEIGHBORS[6] = ivec2[](
 // Each edge i is the line dot(p, EDGES[i]) = 1.0
 // ------------------------------------------------------
 const vec2 EDGE_NORMALS[6] = vec2[](
-    vec2( 0.0,       1.0),  // Edge 0
-    vec2( sqrt(3.0)/2.0,  0.5),  // Edge 1
-    vec2( sqrt(3.0)/2.0, -0.5),  // Edge 2
-    vec2( 0.0,      -1.0),  // Edge 3
-    vec2(-sqrt(3.0)/2.0, -0.5),  // Edge 4
-    vec2(-sqrt(3.0)/2.0,  0.5)   // Edge 5
+    vec2(  1.0 / sqrt(3.0),  1.0 ), // NE - Edge through corners (0,1) and (√3/2, 0.5)
+    vec2(  2.0 / sqrt(3.0),  0.0 ), // E  - Edge through corners (√3/2, 0.5) and (√3/2, -0.5)
+    vec2(  1.0 / sqrt(3.0), -1.0 ), // SE - Edge through corners (√3/2, -0.5) and (0, -1)
+    vec2( -1.0 / sqrt(3.0), -1.0 ), // SW - Edge through corners (0, -1) and (-√3/2, -0.5)
+    vec2( -2.0 / sqrt(3.0),  0.0 ), // W  - Edge through corners (-√3/2, -0.5) and (-√3/2, 0.5)
+    vec2( -1.0 / sqrt(3.0),  1.0 )  // NW - Edge through corners (-√3/2, 0.5) and (0, 1)
 );
 
 // Distance to edge i in local hex coords:
@@ -94,50 +94,84 @@ void fragment( )
     ivec2 current_axial = uv_to_axial(uv);
 	int hex_distance = axial_distance_from_origin(current_axial);
 
-    if (hex_distance > max_hex_distance) {
-        ALBEDO = outside_color.rgb;
+    // Decide the "fill" color:
+    //  - If inside max distance, use background_color
+    //  - else use outside_color
+    bool is_inside = (hex_distance <= max_hex_distance);
+    bool is_outer_ring = (hex_distance == (max_hex_distance + 1));
+    bool is_too_far = (hex_distance > (max_hex_distance + 1));
+	
+	vec4 line_color = normal_line_color;
+	vec4 background_color = normal_background_color;
+	
+	if (hex_distance > (max_hex_distance + 1)) {
+		// outside
+		ALBEDO = outside_color.rgb;
 		ALPHA = outside_color.a;
-    } else {
+	} else {
 
-		vec4 line_color = normal_line_color;
-		vec4 background_color = normal_background_color;
-
-		for (int i = 0; i < highlighted_index_count; i++) {
-			if(current_axial == highlighted_indexes[i]) {
-				line_color = highlight_line_color;
-				background_color = highlight_background_color;
-				break;
+		bool current_hex_is_in = true;
+		
+	    if (hex_distance <= max_hex_distance) {
+			
+			// inside
+			
+			for (int i = 0; i < highlighted_index_count; i++) {
+				if(current_axial == highlighted_indexes[i]) {
+					line_color = highlight_line_color;
+					background_color = highlight_background_color;
+					break;
+				}
 			}
+
+			if (current_axial == selected_index) {
+				line_color = selected_line_color;
+				background_color = selected_background_color;
+			}
+			
+	    } else {
+			
+			// outer ring
+	        background_color = outside_color;
+	        line_color       = outside_color;
+			
+			current_hex_is_in = false;
+			
 		}
-
-		if (current_axial == selected_index) {
-			line_color = selected_line_color;
-			background_color = selected_background_color;
-		}
 		
-		if (hex_distance > max_hex_distance) {
-			line_color = vec4(1.0, 0.0, 0.0, 1.0);
-		}
-		
-		vec2 current_center = axial_to_uv(current_axial);
-		vec2 offset_uv = (uv - current_center) / hex_outer_radius;
-		float d = hexDist(offset_uv);
+	    vec2 current_center = axial_to_uv(current_axial);
+	    vec2 offset_uv = (uv - current_center) / hex_outer_radius;		
+				
+	    float px_size          = length(fwidth(UV));
+	    float scaled_line_size = line_size + (line_size * px_size);
+	    float half_line        = 0.5 * scaled_line_size;
+	    float fade_start       = half_line;
+	    float fade_end         = half_line + px_size;
+					
+	    float line_alpha = 0.0;
+	    for (int i = 0; i < 6; i++) {
+			
+	        bool neighbor_hex_is_in = false;
+			if (!current_hex_is_in) {
+	            ivec2 neighbor_axial = current_axial + AXIAL_NEIGHBORS[i];
+	            int neighbor_dist = axial_distance_from_origin(neighbor_axial);
+				if (neighbor_dist == max_hex_distance) {
+					line_color = normal_line_color;
+					neighbor_hex_is_in = true;
+				}
+			}
 
-		// Convert line size from pixels to UV space distance
-		float pixel_size = length(fwidth(UV));
-		float scaled_line_size = line_size + (line_size * pixel_size);	
+	        if (current_hex_is_in || neighbor_hex_is_in) {
+	            float d_edge = edge_dist(offset_uv, i);
+	            float edge_fade = 1.0 - smoothstep(fade_start, fade_end, abs(d_edge));
+	            line_alpha = max(line_alpha, edge_fade);
+	        }
+	    }
 
-	    float half_line = 0.5 * scaled_line_size;
-	    float fade_start = half_line;
-	    float fade_end = half_line + pixel_size;
-	    float edge_alpha = 1.0 - smoothstep(fade_start, fade_end, abs(d));
-		
-	    vec4 c = background_color;
-		c = mix(c, line_color, edge_alpha);
+	    vec4 final_color = mix(background_color, line_color, line_alpha);
 
-		ALBEDO = c.rgb;
-		ALPHA = c.a;
-		
+	    ALBEDO = final_color.rgb;
+	    ALPHA  = final_color.a;		
 	}
-
+		
 }

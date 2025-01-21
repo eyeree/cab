@@ -34,7 +34,7 @@ class GridSizeInfo:
 	):
 		line_size = line_size_
 		hex_max_distance = hex_max_distance_
-		hex_outer_radius = (1.0 / ((hex_max_distance*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
+		hex_outer_radius = (0.9 / ((hex_max_distance*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
 		hex_inner_radius = (hex_outer_radius * sqrt(3.0) / 2.0)
 		content_scale = Vector3(hex_inner_radius, hex_inner_radius, hex_inner_radius) * 2
 
