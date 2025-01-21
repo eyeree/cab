@@ -14,9 +14,9 @@ shader_parameter/selected_background_color = Color(0.311767, 0.0128437, 0.335206
 shader_parameter/highlight_line_color = Color(1, 0, 0, 1)
 shader_parameter/highlight_background_color = Color(0.3, 0, 0, 1)
 shader_parameter/outside_color = Color(0, 0, 0, 1)
-shader_parameter/line_size = 0.3
-shader_parameter/max_hex_distance = 5
-shader_parameter/hex_outer_radius = 0.05
+shader_parameter/line_size = 0.35
+shader_parameter/max_hex_distance = 2
+shader_parameter/hex_outer_radius = 0.09
 shader_parameter/selected_index = Vector2i(1000, 1000)
 shader_parameter/highlighted_index_count = 0
 shader_parameter/highlighted_indexes = null
@@ -37,11 +37,11 @@ ambient_light_energy = 0.65
 
 [node name="Grid" type="Node3D"]
 script = ExtResource("1_ppiwg")
-grid_size = 3
+grid_size = 1
 
 [node name="GridPlane" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.00446105, -0.00884798, 0.000191718)
 mesh = SubResource("PlaneMesh_sle3t")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="GridPlane"]

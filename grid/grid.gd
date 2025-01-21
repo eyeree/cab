@@ -41,7 +41,7 @@ class GridSizeInfo:
 	func apply_grid_material_settings(grid_material:ShaderMaterial) -> void:
 		grid_material.set_shader_parameter('max_hex_distance', hex_max_distance)
 		grid_material.set_shader_parameter('hex_outer_radius', hex_outer_radius)
-		grid_material.set_shader_parameter('line_size', line_size)
+		#grid_material.set_shader_parameter('line_size', line_size)
 			
 static var _grid_size_info_map: Dictionary[GridSize, GridSizeInfo] = {
 	GridSize.SMALL: GridSizeInfo.new(5, 0.13),
