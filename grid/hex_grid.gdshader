@@ -141,8 +141,8 @@ void fragment( )
 		
 	    vec2 current_center = axial_to_uv(current_axial);
 	    vec2 offset_uv = (uv - current_center) / hex_outer_radius;		
-				
-	    float px_size          = length(fwidth(UV));
+
+	    float px_size          = length(fwidth(UV)) * 5.0;
 	    float scaled_line_size = line_size + (line_size * px_size);
 	    float half_line        = 0.5 * scaled_line_size;
 	    float fade_start       = half_line;
@@ -172,6 +172,5 @@ void fragment( )
 
 	    ALBEDO = final_color.rgb;
 	    ALPHA  = final_color.a;		
-	}
-		
+	}		
 }

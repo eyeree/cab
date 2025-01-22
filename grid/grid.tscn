@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://b1umt3mgf2ylg"]
+[gd_scene load_steps=11 format=3 uid="uid://b1umt3mgf2ylg"]
 
 [ext_resource type="Script" uid="uid://bls54okmys6ga" path="res://grid/grid.gd" id="1_ppiwg"]
 [ext_resource type="PackedScene" uid="uid://d00w00qk2iuka" path="res://addons/LH_CameraControl/CameraControl/camera_control.tscn" id="2_p060q"]
 [ext_resource type="Shader" uid="uid://clwnldpyc8any" path="res://grid/hex_grid.gdshader" id="2_y3jnv"]
+[ext_resource type="Shader" uid="uid://pidfj7u3thra" path="res://grid/grid.gdshader" id="4_p060q"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_65i6o"]
 render_priority = 0
@@ -14,9 +15,9 @@ shader_parameter/selected_background_color = Color(0.311767, 0.0128437, 0.335206
 shader_parameter/highlight_line_color = Color(1, 0, 0, 1)
 shader_parameter/highlight_background_color = Color(0.3, 0, 0, 1)
 shader_parameter/outside_color = Color(0, 0, 0, 1)
-shader_parameter/line_size = 0.08
+shader_parameter/line_size = 0.05
 shader_parameter/max_hex_distance = 3
-shader_parameter/hex_outer_radius = 0.07
+shader_parameter/hex_outer_radius = 0.075
 shader_parameter/selected_index = Vector2i(0, 0)
 shader_parameter/highlighted_index_count = 0
 shader_parameter/highlighted_indexes = null
@@ -35,13 +36,26 @@ ambient_light_source = 1
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.65
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jqrfh"]
+render_priority = 0
+shader = ExtResource("4_p060q")
+shader_parameter/scale_0 = 41
+shader_parameter/scale_1 = 31
+shader_parameter/line_scale_0 = 0.108
+shader_parameter/line_scale_1 = 0.001
+shader_parameter/color_0 = Color(0.544974, 0.544974, 0.544974, 1)
+shader_parameter/color_1 = Color(0.733333, 0, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_yo7jq"]
+material = SubResource("ShaderMaterial_jqrfh")
+
 [node name="Grid" type="Node3D"]
 script = ExtResource("1_ppiwg")
 grid_size = 3
 
 [node name="GridPlane" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.00446105, -0.00884798, 0.000191718)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.0577907, -0.0116483, -0.0106827)
 mesh = SubResource("PlaneMesh_sle3t")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="GridPlane"]
@@ -91,5 +105,9 @@ transform = Transform3D(0.962956, -0.0971468, -0.251553, 0.269659, 0.346912, 0.8
 transform = Transform3D(0.823027, 0.1866, 0.536476, 0, 0.944497, -0.328521, -0.568002, 0.270381, 0.777347, 5.34054, -4.07409, 5.11542)
 light_energy = 1.571
 spot_range = 45.878
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.67219, 0, 0)
+mesh = SubResource("PlaneMesh_yo7jq")
 
 [editable path="GridPlane/CameraControl"]

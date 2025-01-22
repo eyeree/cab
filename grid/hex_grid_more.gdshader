@@ -91,7 +91,7 @@ void fragment( )
 			line_color = selected_line_color;
 			background_color = selected_background_color;
 		}
-		
+
 		float hex_outer_diameter = hex_outer_radius * 2.0;
 		vec2 scaled_uv = (mod(uv + hex_outer_radius, hex_outer_diameter) / hex_outer_diameter);
 
@@ -102,19 +102,19 @@ void fragment( )
 		float d = hexDist(offset_uv);
 
 		float line_size_2 = line_size;
-		
+
 		// Calculate the screen-space derivatives of the distance field
 		float dist_dx = length(dFdx(d));
 		float dist_dy = length(dFdy(d));
 		float screen_px_distance = sqrt(dist_dx * dist_dx + dist_dy * dist_dy);
 
 		vec2 fw = fwidth(offset_uv);
-		
+
 		//screen_px_distance = 1.0;
-		
+
 		// Convert line size from pixels to UV space distance
 		float scaled_line_size = line_size_2 * screen_px_distance;
-		
+
 		//scaled_line_size = 0.3;
 	    float half_line = 0.5 * scaled_line_size;
 
@@ -122,7 +122,7 @@ void fragment( )
 	    float fade_start = half_line;        // where line begins
 	    float fade_end   = half_line;
 	    float edge_alpha = 1.0 - smoothstep(fade_start, fade_end, abs(d));
-		
+
 	    vec4 c = background_color;
 		//c = mix(c, vec4(d2, 0.0, 0.0, 1.0), 0.2);
 	    //c = mix(c, line_color, smoothstep(hex_outer_radius, 0.0, (d - line_size)));
@@ -130,7 +130,7 @@ void fragment( )
 
 		ALBEDO = c.rgb;
 		ALPHA = c.a;
-		
+
 		float d2 = length(fw);
 		ALBEDO = mix(ALBEDO, vec3(d2, 0.0, 0.0), 0.2);
 		//ALBEDO = vec3(scaled_uv, 0.0);
@@ -142,8 +142,8 @@ void fragment( )
 		//} else if (d2 < 0.0) {
 			//ALBEDO = vec3(0.0, 1.0, 0.0);
 		//} else if (d2 > 0.0) {
-			//ALBEDO = vec3(0.0, 0.0, 1.0);			
-		//}		
+			//ALBEDO = vec3(0.0, 0.0, 1.0);
+		//}
 	}
 
 }
