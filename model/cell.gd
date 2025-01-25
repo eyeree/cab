@@ -78,6 +78,8 @@ func perform_actions(state_:CellState) -> void:
 	for gene in genes:
 		gene.perform_actions()
 
+	_connected_life = -1
+	
 	#prints('  life after: %d - new_life: %d' % [life, new_life])
 	
 func update_state(state_:CellState) -> void:
@@ -138,6 +140,38 @@ func _to_string() -> String:
 	return "Cell:%s:%s:%d{ energy: %0.0f, new_energy: %0.0f, life: %0.0f, new_life: %0.0f }" \
 		% [genome.name, cell_type.name, cell_number, energy, new_energy, life, new_life]
 
+var _connected_life:int = -1
+var connected_life:int:
+	get():
+		if _connected_life == -1:
+			ConnectedLifeVisitor.visit(self)
+		return _connected_life
+		
+class ConnectedLifeVisitor extends HexIndex.VisitQueue:
+	
+	static func visit(cell:Cell):
+		ConnectedLifeVisitor.new(cell)
+	
+	var world:World
+	var target_genome:Genome
+	var total_life:int = 0
+	
+	func _init(cell:Cell) -> void:
+		world = cell.world
+		target_genome = cell.genome
+		_do_visiting(cell.index)
+		for index:HexIndex in visited:
+			var visited_cell:Cell = world.get_cell(index)
+			visited_cell._connected_life = total_life
+			
+	func _visit(index:HexIndex) -> void:
+		var cell:Cell = world.get_cell(index)
+		total_life += cell.life
+		for neighbor_index:HexIndex in index.ring(1):
+			var neighbor_cell:Cell = world.get_cell(neighbor_index)
+			if neighbor_cell != null && neighbor_cell.genome == target_genome:
+				_enqueue(neighbor_index)
+		
 class DamageTakenGeneState extends GeneState:
 	var source_index:HexIndex
 	var damage_amount:int

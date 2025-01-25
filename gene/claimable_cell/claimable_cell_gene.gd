@@ -18,14 +18,42 @@ func update_state() -> void:
 			func (claim): 
 				return claim.is_complete))
 	if completed_claims.size() > 0:
-		completed_claims.sort_custom(
-			func (a:Claim, b:Claim): 
-				return a.energy_provided > b.energy_provided)
-		var maybe_winner:Claim = completed_claims[0]
-		if completed_claims.size() == 1 or completed_claims[1].energy_provided < maybe_winner.energy_provided:
-			winning_claim = maybe_winner
+		if completed_claims.size() > 1:
+			completed_claims.sort_custom(_rank_claims)
+		winning_claim = completed_claims[0]
 	add_state(State.new(claims, winning_claim))
 	claims = []
+	
+func _rank_claims(a:Claim, b:Claim) -> bool:
+	if a.energy_provided > b.energy_provided:
+		return true
+	elif a.energy_provided == b.energy_provided:
+		a.ranking_data['progenitor_life'] = a.progenitor.life
+		b.ranking_data['progenitor_life'] = b.progenitor.life
+		if a.progenitor.life > b.progenitor.life:
+			return true
+		elif a.progenitor.life == b.progenitor.life:
+			a.ranking_data['connected_life'] = a.progenitor.connected_life
+			b.ranking_data['connected_life'] = b.progenitor.connected_life
+			if a.progenitor.connected_life > b.progenitor.connected_life:
+				return true
+			elif a.progenitor.connected_life == b.progenitor.connected_life:
+				if a.progenitor.genome == b.progenitor.genome:
+					a.ranking_data['cell_type_rank'] = a.progenitor.genome.get_cell_type_rank(a.progenitor.cell_type)
+					b.ranking_data['cell_type_rank'] = b.progenitor.genome.get_cell_type_rank(b.progenitor.cell_type)
+					if a.ranking_data['cell_type_rank'] < b.ranking_data['cell_type_rank']:
+						return true
+					elif a.ranking_data['cell_type_rank'] == b.ranking_data['cell_type_rank']:
+						a.ranking_data['cell_number'] = a.progenitor.cell_number
+						b.ranking_data['cell_number'] = b.progenitor.cell_number
+						if a.progenitor.cell_number < b.progenitor.cell_number:
+							return true
+				else:					
+					a.ranking_data['genome_rank'] = a.world.get_genome_rank(a.progenitor.genome)
+					b.ranking_data['genome_rank'] = b.world.get_genome_rank(b.progenitor.genome)
+					if a.ranking_data['genome_rank'] < b.ranking_data['genome_rank']:
+						return true
+	return false
 
 func add_claim(progenitor:Cell, cell_type:CellType, energy_provided:int) -> void:
 	var claim:Claim = Claim.new(progenitor, cell_type, energy_provided)
@@ -43,6 +71,7 @@ class Claim:
 	var progenitor:Cell
 	var cell_type:CellType
 	var energy_provided:int
+	var ranking_data:Dictionary[String, Variant] = {}
 	
 	func _init(progenitor_:Cell, cell_type_:CellType, energy_provided_:int):
 		progenitor = progenitor_

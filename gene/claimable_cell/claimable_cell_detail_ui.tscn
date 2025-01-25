@@ -13,6 +13,7 @@ script = ExtResource("1_i6tlq")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -119,3 +120,45 @@ expand_mode = 1
 [node name="Status" type="Label" parent="VBoxContainer/ClaimGridContainer"]
 layout_mode = 2
 text = "(status)"
+
+[node name="RankingDataPanel" type="VBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/RankingDataPanel"]
+layout_mode = 2
+theme_type_variation = &"SubDetailTitleLabel"
+text = "Claim Ranking Data"
+horizontal_alignment = 1
+
+[node name="RankingDataGrid" type="GridContainer" parent="VBoxContainer/RankingDataPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 2
+script = ExtResource("2_iqo5w")
+metadata/_custom_type_script = ExtResource("2_iqo5w")
+
+[node name="PropertyHeading" type="Label" parent="VBoxContainer/RankingDataPanel/RankingDataGrid"]
+layout_mode = 2
+theme_type_variation = &"GridHeaderLabel"
+text = "Property"
+horizontal_alignment = 1
+
+[node name="ValueHeading" type="Label" parent="VBoxContainer/RankingDataPanel/RankingDataGrid"]
+layout_mode = 2
+theme_type_variation = &"GridHeaderLabel"
+text = "Value"
+horizontal_alignment = 1
+
+[node name="Property" type="Label" parent="VBoxContainer/RankingDataPanel/RankingDataGrid"]
+layout_mode = 2
+text = "(property name)"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="VBoxContainer/RankingDataPanel/RankingDataGrid"]
+layout_mode = 2
+text = "(property_value)"
+horizontal_alignment = 1

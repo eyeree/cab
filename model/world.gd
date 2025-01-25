@@ -19,6 +19,9 @@ func allocate_cell_number() -> int:
 	_cell_number += 1
 	return _cell_number
 	
+var _genomes:Array[Genome] = []
+var _genome_rank_index:int = 0
+	
 static var bounds_cell:Cell = EnvironmentGenome.bounds_cell_type.create_cell()
 
 signal cell_changed(index:HexIndex, new_cell:Cell)
@@ -37,9 +40,11 @@ func _init(options:WorldOptions):
 	
 	_cells = HexStore.new()
 	for index:HexIndex in options.initial_content.get_all_indexes():
-		var content:Cell = options.initial_content.get_content(index)
-		if content != null:
-			set_cell(index, content)
+		var cell:Cell = options.initial_content.get_content(index)
+		if cell != null:
+			set_cell(index, cell)
+			if not _genomes.has(cell.genome):
+				_genomes.append(cell.genome)
 		
 	#prints("----- STEP %d -----" % 0)
 	
@@ -50,9 +55,10 @@ func _init(options:WorldOptions):
 			cell.update_state(cell_state)	
 			
 func step(step_number:int) -> void:
-	#prints("----- STEP %d -----" % step_number)
+	prints("----- STEP %d -----" % step_number)
 	_cells.visit_all(_cell_perform_actions.bind(step_number))
 	_cells.visit_all(_cell_update_state.bind(step_number))
+	_genome_rank_index = min(_genome_rank_index + 1, _genomes.size())
 
 func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int):
 	if cell:
@@ -99,3 +105,13 @@ func is_empty_cell(cell:Cell) -> bool:
 	
 func is_bounds_cell(cell:Cell) -> bool:
 	return cell == bounds_cell
+
+func get_genome_rank(genome:Genome) -> int:
+	var index:int = _genomes.find(genome)
+	if index == -1:
+		push_error("genome %s not found in world %s" % [genome, self])
+		return -1
+	index -= _genome_rank_index
+	if index < 0:
+		index = _genomes.size() - index
+	return index

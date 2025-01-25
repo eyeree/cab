@@ -266,3 +266,30 @@ static var DIRECTION_LABEL:Array[String] = [
 	"W",
 	"NW"
 ]
+
+class VisitQueue extends RefCounted:
+	var _visited:Dictionary[HexIndex, bool] = {}
+	var _queued:Dictionary[HexIndex, bool] = {}
+	
+	var visited:Array[HexIndex]:
+		get():
+			var result:Array[HexIndex] = []
+			result.assign(_visited.keys())
+			return result
+	
+	func _visit(_index:HexIndex) -> void:
+		pass
+	
+	func _do_visiting(start_index:HexIndex) -> void:
+		_queued.set(start_index, true)
+		var queue = _queued.keys()
+		while(queue.size() > 0):
+			var index = queue[0]
+			_queued.erase(index)
+			_visited.set(index, true)
+			_visit(index)
+			queue = _queued.keys()
+			
+	func _enqueue(index:HexIndex) -> void:
+		if not _visited.has(index):
+			_queued.set(index, true)

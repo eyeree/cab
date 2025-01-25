@@ -45,3 +45,8 @@ func validate():
 func has_gene_type(gene_type:GeneType) -> bool:
 	return gene_types.any(func (entry): return entry == gene_type)
 	
+func get_cell_type_rank(cell_type:CellType) -> int:
+	var index = cell_types.find(cell_type)
+	if index == -1:
+		push_error('cell type %s not part of genome %s' % [cell_type, self])
+	return index
