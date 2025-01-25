@@ -82,6 +82,7 @@ func _show_cell(index:HexIndex) -> void:
 	_update_shown_cell()
 	
 func _update_shown_cell() -> void:
+	if _world_state == null: return
 	var cell_state:CellState = _world_state.get_history_entry(_index_shown, _current_step)
 	_cell_details_panel.show_cell_state(cell_state)
 

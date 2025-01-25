@@ -21,6 +21,9 @@ func _ready() -> void:
 
 enum GridSize { SMALL, MEDIUM, LARGE, HUGE }
 
+# percent of plane used, to leave a margin so there is room for outer lines
+const plane_extent_percent:float = 0.9
+
 class GridSizeInfo:
 	var hex_max_distance:int
 	var hex_outer_radius:float
@@ -34,7 +37,7 @@ class GridSizeInfo:
 	):
 		line_size = line_size_
 		hex_max_distance = hex_max_distance_
-		hex_outer_radius = (0.9 / ((hex_max_distance*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
+		hex_outer_radius = (plane_extent_percent / ((hex_max_distance*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
 		hex_inner_radius = (hex_outer_radius * sqrt(3.0) / 2.0)
 		content_scale = Vector3(hex_inner_radius, hex_inner_radius, hex_inner_radius) * 2
 
@@ -128,23 +131,6 @@ func clear_all_hex_content() -> void:
 	
 var _mouse_hex_index:HexIndex = HexIndex.INVALID
 
-# range of -0.5 to 0.5 over the viewport, adjusted for camera positioning relative # 
-func _mouse_position_to_grid_position() -> Vector2:
-	var viewport = get_viewport()
-	var mouse_position = viewport.get_mouse_position()
-	var camera:Camera3D = viewport.get_camera_3d()
-	var origin:Vector3 = camera.project_ray_origin(mouse_position) 
-	var normal:Vector3 = camera.project_ray_normal(mouse_position)
-	var end = origin + normal * 100
-	var query = PhysicsRayQueryParameters3D.create(origin, end)
-	var space_state:PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var result = space_state.intersect_ray(query)
-	if not result.has('position'):
-		return Vector2.INF	
-	else:	
-		var hit_position:Vector3 = result['position']
-		return Vector2(hit_position.x, -hit_position.y)
-
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		
@@ -164,11 +150,29 @@ func _input(event: InputEvent) -> void:
 		hex_selected.emit(hex_index)
 		
 func _get_mouse_hex_index() -> HexIndex:
-	var grid_position:Vector2 = _mouse_position_to_grid_position()
+	var grid_position:Vector2 = _mouse_position_to_grid_plane_position()
 	if grid_position == Vector2.INF: return HexIndex.INVALID
 	var hex_index:HexIndex = HexIndex.from_point(grid_position, _grid_size_info.hex_outer_radius)
 	if hex_index.distance_to_center() > _grid_size_info.hex_max_distance: return HexIndex.INVALID
 	return hex_index
+
+# range of -0.5 to 0.5 over the grid plane adjusted for the plane_extent_percent
+func _mouse_position_to_grid_plane_position() -> Vector2:
+	var viewport = get_viewport()
+	var mouse_position = viewport.get_mouse_position()
+	var camera:Camera3D = viewport.get_camera_3d()
+	var origin:Vector3 = camera.project_ray_origin(mouse_position) 
+	var normal:Vector3 = camera.project_ray_normal(mouse_position)
+	var end = origin + normal * 100
+	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	var space_state:PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var result = space_state.intersect_ray(query)
+	if not result.has('position'):
+		return Vector2.INF	
+	else:	
+		var hit_position:Vector3 = result['position']
+		return Vector2(hit_position.x, -hit_position.y)
+
 		
 signal mouse_entered_hex(index:HexIndex)
 signal mouse_exited_hex(index:HexIndex)
