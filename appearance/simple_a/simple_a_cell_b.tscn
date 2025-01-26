@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b7w4l8gi8wh08"]
+[gd_scene load_steps=5 format=3 uid="uid://b7w4l8gi8wh08"]
 
 [ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="1_ohu1u"]
 
@@ -12,11 +12,7 @@ bottom_radius = 0.45
 height = 0.01
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_52ug6"]
-albedo_color = Color(0.109804, 0.847059, 0.109804, 1)
-
-[sub_resource type="PrismMesh" id="PrismMesh_xv0wo"]
-material = SubResource("StandardMaterial3D_52ug6")
-size = Vector3(0.4, 0.2, 0.4)
+albedo_color = Color(0, 1, 0, 1)
 
 [node name="SimpleACellB" type="Node3D"]
 script = ExtResource("1_ohu1u")
@@ -26,6 +22,18 @@ metadata/_custom_type_script = ExtResource("1_ohu1u")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, 0)
 mesh = SubResource("CylinderMesh_v5ctb")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-mesh = SubResource("PrismMesh_xv0wo")
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="MeshInstance3D"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0.05, 0)
+operation = 2
+radius = 0.35
+height = 0.1
+sides = 6
+material = SubResource("StandardMaterial3D_52ug6")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="MeshInstance3D/CSGCylinder3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00680179, 0.023792, 0.011781)
+operation = 2
+radius = 0.251
+height = 0.165723
+sides = 6
+material = SubResource("StandardMaterial3D_52ug6")

@@ -96,7 +96,7 @@ func _show_selected_cell() -> void:
 
 class BattleOptions extends RefCounted:
 	var rings:int = 10
-	var steps:int = 20
+	var steps:int = 50
 	var initial_content:HexStore
 	
 func battle(options:BattleOptions = BattleOptions.new()) -> void:
@@ -365,6 +365,8 @@ func _update_grid() -> void:
 func _set_cell_appearance(index:HexIndex, cell_type:CellType):
 	var cell_appearance:CellAppearance = cell_type.cell_appearance.instantiate() \
 		if cell_type else null
+	if cell_appearance != null:
+		cell_appearance.index = index
 	var current_cell_appearance:CellAppearance = _grid.set_hex_content(index, cell_appearance)
 	if current_cell_appearance: current_cell_appearance.queue_free()
 	

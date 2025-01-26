@@ -173,6 +173,18 @@ func _mouse_position_to_grid_plane_position() -> Vector2:
 		var hit_position:Vector3 = result['position']
 		return Vector2(hit_position.x, -hit_position.y)
 
+func get_center_point(index:HexIndex) -> Vector3:
+	var center_point:Vector2 = index.center_point(_grid_size_info.hex_outer_radius)
+	var local_point:Vector3 = Vector3(center_point.x, -center_point.y, 0)
+	return to_global(local_point)
+	
+func point_to_index(global_point:Vector3) -> HexIndex:
+	var local_point = to_local(global_point)
+	var hex_index:HexIndex = HexIndex.from_point(Vector2(local_point.x, local_point.y), _grid_size_info.hex_outer_radius)
+	if hex_index.distance_to_center() > _grid_size_info.hex_max_distance: 
+		return HexIndex.INVALID
+	else:
+		return hex_index
 		
 signal mouse_entered_hex(index:HexIndex)
 signal mouse_exited_hex(index:HexIndex)

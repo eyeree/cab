@@ -55,7 +55,7 @@ func _init(options:WorldOptions):
 			cell.update_state(cell_state)	
 			
 func step(step_number:int) -> void:
-	prints("----- STEP %d -----" % step_number)
+	#prints("----- STEP %d -----" % step_number)
 	_cells.visit_all(_cell_perform_actions.bind(step_number))
 	_cells.visit_all(_cell_update_state.bind(step_number))
 	_genome_rank_index = min(_genome_rank_index + 1, _genomes.size())

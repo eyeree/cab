@@ -19,12 +19,12 @@ func update_state() -> void:
 				return claim.is_complete))
 	if completed_claims.size() > 0:
 		if completed_claims.size() > 1:
-			completed_claims.sort_custom(_rank_claims)
+			completed_claims.sort_custom(rank_claims)
 		winning_claim = completed_claims[0]
 	add_state(State.new(claims, winning_claim))
 	claims = []
 	
-func _rank_claims(a:Claim, b:Claim) -> bool:
+static func rank_claims(a:Claim, b:Claim) -> bool:
 	if a.energy_provided > b.energy_provided:
 		return true
 	elif a.energy_provided == b.energy_provided:
