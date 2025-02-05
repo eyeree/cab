@@ -40,7 +40,7 @@ class Type extends GeneType:
 		name = 'RepairDamage'
 		energy_cost = 1
 	
-	func create_config(_cell_type:CellType) -> Config:
+	func create_config() -> Config:
 		return Config.new(self)
 
 static var gene_type_ = Type.new()

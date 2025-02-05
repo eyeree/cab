@@ -14,6 +14,8 @@ var _rings:int
 var _cells:HexStore
 var _world_state:WorldState
 
+var current_step:int = -1
+
 var _cell_number:int = 0
 func allocate_cell_number() -> int:
 	_cell_number += 1
@@ -56,6 +58,7 @@ func _init(options:WorldOptions):
 			
 func step(step_number:int) -> void:
 	#prints("----- STEP %d -----" % step_number)
+	current_step = step_number
 	_cells.visit_all(_cell_perform_actions.bind(step_number))
 	_cells.visit_all(_cell_update_state.bind(step_number))
 	_genome_rank_index = min(_genome_rank_index + 1, _genomes.size())
@@ -97,6 +100,7 @@ func set_cell(index:HexIndex, cell:Cell) -> void:
 	_cells.set_content(index, cell)
 	cell.index = index
 	cell.world_ref = weakref(self)
+	cell.step_created = current_step
 	
 	cell_changed.emit(index, cell)
 	

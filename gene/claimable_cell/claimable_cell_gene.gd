@@ -93,7 +93,7 @@ class ClaimableCellGeneType extends GeneType:
 		hidden = true
 		energy_cost = 1
 
-	func create_config(_cell_type:CellType) -> GeneConfig:
+	func create_config() -> GeneConfig:
 		return ClaimableCellGeneConfig.new(self)
 			
 static var gene_type_ = ClaimableCellGeneType.new()

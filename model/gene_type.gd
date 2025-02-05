@@ -5,7 +5,7 @@ var energy_cost:int = 0
 var hidden:bool = false
 var base_resource_path:String = ''
 	
-func create_config(_cell_type:CellType) -> GeneConfig:
+func create_config() -> GeneConfig:
 	push_error('Gene type %s did not noverride create_config' % [name])
 	return null
 
@@ -51,5 +51,11 @@ func get_details_ui() -> GeneDetailUI:
 	else:
 		return null
 
+func get_edge_attribute_names() -> Array[StringName]:
+	return []
+
+func get_cell_attribute_names() -> Array[StringName]:
+	return []
+	
 func _to_string() -> String:
 	return "GeneType:%s" % [name]

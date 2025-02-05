@@ -13,7 +13,7 @@ class ProvideFoodGeneType extends GeneType:
 		name = 'ProvideFood'
 		hidden = true
 
-	func create_config(_cell_type:CellType) -> ProvideFoodGeneConfig:
+	func create_config() -> ProvideFoodGeneConfig:
 		return ProvideFoodGeneConfig.new(self)
 
 static var gene_type_ = ProvideFoodGeneType.new()

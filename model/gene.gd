@@ -36,8 +36,14 @@ func init_cell(_cell:Cell) -> void:
 func add_state(gene_state:GeneState) -> void:
 	cell.state.substates.append(gene_state)
 	
-#static var debug_genes:Array[String] = []
-#
-#func debug_gene(msg:String, args:Array) -> void:
-	#if debug_genes.has(gene_type.name):
-		#prints("Cell %s - Gene %s - %s" % [cell, gene_type.name, msg % args])
+func provides_edge_attribute(attribute_:StringName) -> bool:
+	return false
+	
+func get_edge_attribute_value(direction_:HexIndex.HexDirection, attribute_:StringName) -> float:
+	return 0.0
+
+func provides_cell_attribute(attribute_:StringName) -> bool:
+	return false
+
+func get_cell_attribute_value(attribute_:StringName) -> float:
+	return 0.0	

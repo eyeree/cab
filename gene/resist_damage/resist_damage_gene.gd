@@ -42,7 +42,7 @@ class ResistDamageGeneType extends GeneType:
 		name = 'ResistDamage'
 		energy_cost = 1
 	
-	func create_config(_cell_type:CellType) -> ResistDamageGeneConfig:
+	func create_config() -> ResistDamageGeneConfig:
 		return ResistDamageGeneConfig.new(self)
 
 static var gene_type_ = ResistDamageGeneType.new()

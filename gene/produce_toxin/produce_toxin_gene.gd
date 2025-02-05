@@ -34,7 +34,7 @@ class ProduceToxinGeneType extends GeneType:
 	func _init():
 		name = 'ProduceToxin'
 	
-	func create_config(_cell_type:CellType) -> ProduceToxinGeneConfig:
+	func create_config() -> ProduceToxinGeneConfig:
 		return ProduceToxinGeneConfig.new(self)
 
 static var gene_type_ = ProduceToxinGeneType.new()

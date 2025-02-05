@@ -8,14 +8,25 @@ enum DamageType {
 
 var genome:Genome
 var cell_type:CellType
+var orientation:HexIndex.HexDirection = HexIndex.HexDirection.E
 
 var cell_number:int
 var title:String
+
+var step_created:int
+var age:int:
+	get: return world.current_step - step_created
+	
+var generation:int = 0
 
 var energy:int = 0
 var new_energy:int = 0
 var energy_wanted:int = 0
 var max_energy:int = 0
+
+var energy_percent:float:
+	get: return float(energy) / max_energy
+
 var life:int = 0
 var new_life:int = 0
 var max_life:int = 0
@@ -33,7 +44,7 @@ var state:CellState
 
 var life_percent:float:
 	get: return float(life) / max_life
-	
+
 var is_alive:bool:
 	get: return life > 0
 
@@ -135,7 +146,31 @@ func has_gene(type:Script) -> bool:
 		if is_instance_of(gene, type): 
 			return true
 	return false
+	
+func get_edge_attribute_value(direction:HexIndex.HexDirection, attribute:StringName) -> float:
+	for gene:Gene in genes:
+		if gene.provides_edge_attribute(attribute):
+			return gene.get_edge_attribute_value(direction, attribute)
+	return 0.0
 
+func get_cell_attribute_value(attribute:StringName) -> float:
+	
+	match attribute:
+		"life_percent":
+			return life_percent
+		"energy_percent":
+			return energy_percent
+		"age":
+			return float(age)
+		"generation":
+			return float(generation)
+			
+	for gene:Gene in genes:
+		if gene.provides_cell_attribute(attribute):
+			return gene.get_cell_attribute_value(attribute)
+			
+	return 0.0
+	
 func _to_string() -> String:
 	return "Cell:%s:%s:%d{ energy: %0.0f, new_energy: %0.0f, life: %0.0f, new_life: %0.0f }" \
 		% [genome.name, cell_type.name, cell_number, energy, new_energy, life, new_life]

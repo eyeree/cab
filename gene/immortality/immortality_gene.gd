@@ -15,7 +15,7 @@ class ImmortalityGeneType extends GeneType:
 		energy_cost = 1
 		hidden = true
 	
-	func create_config(_cell_type:CellType) -> ImmortalityGeneConfig:
+	func create_config() -> ImmortalityGeneConfig:
 		return ImmortalityGeneConfig.new(self)
 
 static var gene_type_ = ImmortalityGeneType.new()
