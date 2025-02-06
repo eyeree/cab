@@ -36,14 +36,14 @@ func init_cell(_cell:Cell) -> void:
 func add_state(gene_state:GeneState) -> void:
 	cell.state.substates.append(gene_state)
 	
-func provides_edge_attribute(attribute_:StringName) -> bool:
+func provides_edge_attribute(_attribute:StringName) -> bool:
 	return false
 	
-func get_edge_attribute_value(direction_:HexIndex.HexDirection, attribute_:StringName) -> float:
+func get_edge_attribute_value(_direction:HexIndex.HexDirection, _attribute:StringName) -> float:
 	return 0.0
 
-func provides_cell_attribute(attribute_:StringName) -> bool:
+func provides_cell_attribute(_attribute:StringName) -> bool:
 	return false
 
-func get_cell_attribute_value(attribute_:StringName) -> float:
+func get_cell_attribute_value(_attribute:StringName) -> float:
 	return 0.0	

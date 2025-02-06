@@ -43,18 +43,18 @@ func _init(options:WorldOptions):
 	_cells = HexStore.new()
 	for index:HexIndex in options.initial_content.get_all_indexes():
 		var cell:Cell = options.initial_content.get_content(index)
-		if cell != null:
-			set_cell(index, cell)
-			if not _genomes.has(cell.genome):
-				_genomes.append(cell.genome)
+		if cell == null:
+			cell = EnvironmentGenome.empty_cell_type.create_cell()
+		set_cell(index, cell)
+		if not _genomes.has(cell.genome):
+			_genomes.append(cell.genome)
 		
 	#prints("----- STEP %d -----" % 0)
 	
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var cell:Cell = get_cell(index)
-		if cell:
-			var cell_state:CellState = _world_state.get_history_entry(index, 0)
-			cell.update_state(cell_state)	
+		var cell_state:CellState = _world_state.get_history_entry(index, 0)
+		cell.update_state(cell_state)	
 			
 func step(step_number:int) -> void:
 	#prints("----- STEP %d -----" % step_number)
@@ -64,16 +64,14 @@ func step(step_number:int) -> void:
 	_genome_rank_index = min(_genome_rank_index + 1, _genomes.size())
 
 func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int):
-	if cell:
-		var cell_state:CellState = _world_state.get_history_entry(index, step_number)
-		cell.perform_actions(cell_state)
+	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
+	cell.perform_actions(cell_state)
 	
 func _cell_update_state(index:HexIndex, cell:Cell, step_number:int):
-	if cell:
-		var cell_state:CellState = _world_state.get_history_entry(index, step_number)
-		cell.update_state(cell_state)
-		if cell.is_dead:
-			set_cell(index, null)
+	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
+	cell.update_state(cell_state)
+	if cell.is_dead:
+		set_cell(index, EnvironmentGenome.empty_cell_type.create_cell())
 
 func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
 	for index in center.ring(radius):
@@ -84,8 +82,7 @@ func get_cell(index:HexIndex) -> Cell:
 	if index.distance_to_center() > _rings:
 		return bounds_cell
 	else:
-		var result = _cells.get_content(index)
-		return result
+		return _cells.get_content(index)
 	
 func set_cell(index:HexIndex, cell:Cell) -> void:
 	

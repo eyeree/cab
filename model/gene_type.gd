@@ -51,10 +51,10 @@ func get_details_ui() -> GeneDetailUI:
 	else:
 		return null
 
-func get_edge_attribute_names() -> Array[StringName]:
+func get_edge_attribute_list() -> Array[CellType.EdgeAttributeInfo]:
 	return []
 
-func get_cell_attribute_names() -> Array[StringName]:
+func get_cell_attribute_list() -> Array[CellType.CellAttributeInfo]:
 	return []
 	
 func _to_string() -> String:

@@ -50,16 +50,41 @@ func create_cell(progenitor:Cell = null, cell_state:CellState = null) -> Cell:
 		new_cell.generation = progenitor.generation + 1		
 	return new_cell
 	
-func get_edge_attribute_names() -> Array[StringName]:
-	var names:Array[StringName] = []
+class AttributeInfo:
+	var name:StringName
+	var description:String
+	var type:Variant.Type
+	
+	func _init(name_:StringName, type_:Variant.Type, description_:String) -> void:
+		name = name_
+		description = description_
+		type = type_
+	
+class EdgeAttributeInfo extends AttributeInfo:
+	pass
+	
+class CellAttributeInfo extends AttributeInfo:
+	pass
+	
+func get_edge_attribute_list() -> Array[EdgeAttributeInfo]:
+	var names:Array[EdgeAttributeInfo] = []
 	for gene_config:GeneConfig in gene_configs:
-		names.append_array(gene_config.get_edge_attribute_names())
+		names.append_array(gene_config.gene_type.get_edge_attribute_list())
 	return names
 		
-func get_cell_attribute_names() -> Array[StringName]:
-	var names:Array[StringName] = ["life_percent", "energy_percent", "age", "generation"]
+func get_cell_attribute_list() -> Array[CellAttributeInfo]:
+	var names:Array[CellAttributeInfo] = [
+		CellAttributeInfo.new("life_percent", TYPE_FLOAT,
+			"Cell's current life as a percentage of it's maximum life. Range: 0.0 to 1.0"), 
+		CellAttributeInfo.new("energy_percent", TYPE_FLOAT,
+			"Cell's current energy as a percentage of it's maximum energy. Range: 0.0 to 1.0"), 
+		CellAttributeInfo.new("age", TYPE_INT,
+			"Number of simulation steps completed since the cell was created."), 
+		CellAttributeInfo.new("generation", TYPE_INT,
+			"Number of cells of the same type produced before this cell.")
+	]
 	for gene_config:GeneConfig in gene_configs:
-		names.append_array(gene_config.get_cell_attribute_names())
+		names.append_array(gene_config.gene_type.get_cell_attribute_list())
 	return names
 
 func _to_string() -> String:
