@@ -50,3 +50,9 @@ func get_cell_type_rank(cell_type:CellType) -> int:
 	if index == -1:
 		push_error('cell type %s not part of genome %s' % [cell_type, self])
 	return index
+	
+func get_cell_type(cell_type_name:String) -> CellType:
+	for cell_type in cell_types:
+		if cell_type.name == cell_type_name:
+			return cell_type
+	return null

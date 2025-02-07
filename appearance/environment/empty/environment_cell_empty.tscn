@@ -36,36 +36,6 @@ height = 0.01
 sides = 6
 material = SubResource("StandardMaterial3D_gjv6y")
 
-[node name="1_of_1" type="Node3D" parent="Base"]
-unique_name_in_owner = true
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0.01, 0)
-visible = false
-
-[node name="1_of_2" type="Node3D" parent="Base"]
-unique_name_in_owner = true
-transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, -0.187606, 0.01, -0.108315)
-visible = false
-
-[node name="2_of_2" type="Node3D" parent="Base"]
-unique_name_in_owner = true
-transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0.228052, 0.01, 0.131666)
-visible = false
-
-[node name="1_of_3" type="Node3D" parent="Base"]
-unique_name_in_owner = true
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.12239, 0.01, -0.211986)
-visible = false
-
-[node name="2_of_3" type="Node3D" parent="Base"]
-unique_name_in_owner = true
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.133761, 0.01, 0.223356)
-visible = false
-
-[node name="3_of_3" type="Node3D" parent="Base"]
-unique_name_in_owner = true
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.252329, 0.01, 0.00220437)
-visible = false
-
 [node name="Start" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.2, 0)

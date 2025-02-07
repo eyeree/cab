@@ -1,6 +1,7 @@
 class_name ClaimableCellGene extends Gene
 
 var claims:Array[Claim] = []
+var old_claims:Array[Claim] = []
 var winning_claim:Claim = null
 
 var is_claimable:bool:
@@ -22,6 +23,7 @@ func update_state() -> void:
 			completed_claims.sort_custom(rank_claims)
 		winning_claim = completed_claims[0]
 	add_state(State.new(claims, winning_claim))
+	old_claims = claims
 	claims = []
 	
 static func rank_claims(a:Claim, b:Claim) -> bool:
@@ -49,15 +51,19 @@ static func rank_claims(a:Claim, b:Claim) -> bool:
 						if a.progenitor.cell_number < b.progenitor.cell_number:
 							return true
 				else:					
-					a.ranking_data['genome_rank'] = a.world.get_genome_rank(a.progenitor.genome)
-					b.ranking_data['genome_rank'] = b.world.get_genome_rank(b.progenitor.genome)
+					a.ranking_data['genome_rank'] = a.progenitor.world.get_genome_rank(a.progenitor.genome)
+					b.ranking_data['genome_rank'] = b.progenitor.world.get_genome_rank(b.progenitor.genome)
 					if a.ranking_data['genome_rank'] < b.ranking_data['genome_rank']:
 						return true
 	return false
 
-func add_claim(progenitor:Cell, cell_type:CellType, energy_provided:int) -> void:
-	var claim:Claim = Claim.new(progenitor, cell_type, energy_provided)
-	claims.append(claim)
+func add_claim(progenitor:Cell, cell_type:CellType, energy_provided:float) -> void:
+	for claim in old_claims:
+		if claim.progenitor == progenitor:
+			if claim.cell_type == cell_type:
+				energy_provided += claim.energy_provided
+			break		
+	claims.append(Claim.new(progenitor, cell_type, energy_provided))
 	
 class State extends GeneState:
 	var claims:Array[Claim]
@@ -70,10 +76,10 @@ class Claim:
 	
 	var progenitor:Cell
 	var cell_type:CellType
-	var energy_provided:int
+	var energy_provided:float
 	var ranking_data:Dictionary[String, Variant] = {}
 	
-	func _init(progenitor_:Cell, cell_type_:CellType, energy_provided_:int):
+	func _init(progenitor_:Cell, cell_type_:CellType, energy_provided_:float):
 		progenitor = progenitor_
 		cell_type = cell_type_
 		energy_provided = energy_provided_

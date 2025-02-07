@@ -8,7 +8,7 @@ enum DamageType {
 
 var genome:Genome
 var cell_type:CellType
-var orientation:HexIndex.HexDirection = HexIndex.HexDirection.E
+var orientation:HexIndex.HexDirection = HexIndex.HexDirection.NE
 
 var cell_number:int
 var title:String

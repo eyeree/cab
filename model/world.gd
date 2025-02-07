@@ -41,7 +41,7 @@ func _init(options:WorldOptions):
 	_cell_number = 0
 	
 	_cells = HexStore.new()
-	for index:HexIndex in options.initial_content.get_all_indexes():
+	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var cell:Cell = options.initial_content.get_content(index)
 		if cell == null:
 			cell = EnvironmentGenome.empty_cell_type.create_cell()

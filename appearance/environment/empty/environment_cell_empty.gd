@@ -1,25 +1,9 @@
 extends CellAppearance
 
-@onready var _base: CSGCylinder3D = %Base
-@onready var _1_of_1: Node3D = %"1_of_1"
-@onready var _1_of_2: Node3D = %"1_of_2"
-@onready var _2_of_2: Node3D = %"2_of_2"
-@onready var _1_of_3: Node3D = %"1_of_3"
-@onready var _2_of_3: Node3D = %"2_of_3"
-@onready var _3_of_3: Node3D = %"3_of_3"
 @onready var start_mesh: MeshInstance3D = %Start
 @onready var end_mesh: MeshInstance3D = %End
 
 var _claim_cell_appearances:Array[CellAppearance] = []
-
-func _ready() -> void:
-	_base.visible = false
-	_1_of_1.visible = false
-	_1_of_2.visible = false
-	_2_of_2.visible = false
-	_1_of_3.visible = false
-	_2_of_3.visible = false
-	_3_of_3.visible = false
 	
 func set_state(cell_state:CellState) -> void:
 	
@@ -50,15 +34,14 @@ func set_state(cell_state:CellState) -> void:
 		var claim:ClaimableCellGene.Claim = claim_state.claims[i]
 
 		var percent_complete:float = min(1.0, float(claim.energy_provided) / float(claim.cell_type.energy_cost))
-		percent_complete = max(0.0, percent_complete - (0.1 * i))
+		#percent_complete = max(0.0, percent_complete - (0.1 * i))
 		
 		var start:Vector3 = grid.get_center_point(claim.progenitor.index)
-		start_mesh.global_position = start
-		start_mesh.position += Vector3(0.0, 0.2, 0.0)
 		var end:Vector3 = grid.get_center_point(index)
-		end_mesh.global_position = end
-		end_mesh.position += Vector3(0.0, 0.2, 0.0)
 		start += (end - start) * 0.3
+		
+		start_mesh.global_position = start + Vector3(0.0, 0.2, 0.0)
+		end_mesh.global_position = end + Vector3(0.0, 0.2, 0.0)
 		
 		var appearance_position:Vector3 = start + ((end - start) * percent_complete)
 		cell_appearance.position = to_local(appearance_position)

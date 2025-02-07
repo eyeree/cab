@@ -32,6 +32,12 @@ static func rotate_directions_left(directions:Array[HexDirection], steps:int = 1
 static func orient_direction(orientation:HexDirection, direction:HexDirection) -> HexDirection:
 	return ((orientation + direction) % 6) as HexDirection
 
+
+static func _static_init():
+	for orientation in ALL_DIRECTIONS:
+		for direction in ALL_DIRECTIONS:
+			prints('orient_direction', DIRECTION_LABEL[orientation], DIRECTION_LABEL[direction], DIRECTION_LABEL[orient_direction(orientation, direction)])
+	
 static func orient_directions(orientation:HexDirection, directions:Array[HexDirection]) -> Array[HexDirection]:
 	var result:Array[HexDirection] = directions.duplicate()
 	for i in range(result.size()):
@@ -47,15 +53,6 @@ enum HexDiagonal { N = 0, NE = 1, SE = 2, S = 3, SW = 4, NW = 5 }
 static var ALL_DIAGONALS:Array[HexDiagonal] = [
 	HexDiagonal.N, HexDiagonal.NE, HexDiagonal.SE,
 	HexDiagonal.S, HexDiagonal.SW, HexDiagonal.NW
-]
-
-static var DIAGONAL_VECTORS:Array[HexIndex] = [
-	HexIndex.from(+1, -2, +1), # N
-	HexIndex.from(+2, -1, -1), # NE
-	HexIndex.from(+1, +1, -2), # SE
-	HexIndex.from(-1, +2, -1), # S
-	HexIndex.from(-2, +1, +1), # SW
-	HexIndex.from(-1, -1, +2), # NW
 ]
 
 static func rotate_diagnonal_right(diagnonal:HexDiagonal, steps:int = 1) -> HexDiagonal:
@@ -239,6 +236,15 @@ static func deserialize(data:Variant) -> HexIndex:
 
 static var INVALID:HexIndex = HexIndex.from(10000, 10000, 10000)
 static var CENTER:HexIndex = HexIndex.from(0, 0, 0)
+
+static var DIAGONAL_VECTORS:Array[HexIndex] = [
+	HexIndex.from(+1, -2, +1), # N
+	HexIndex.from(+2, -1, -1), # NE
+	HexIndex.from(+1, +1, -2), # SE
+	HexIndex.from(-1, +2, -1), # S
+	HexIndex.from(-2, +1, +1), # SW
+	HexIndex.from(-1, -1, +2), # NW
+]
 
 static var DIRECTION_VECTORS:Array[HexIndex] = [
 	HexIndex.from(+1, -1, 0), # NE

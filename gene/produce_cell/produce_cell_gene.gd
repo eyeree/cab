@@ -1,71 +1,51 @@
 class_name ProduceCellGene extends Gene
 	
 var energy_per_step:int
-
 var growth_plan:GrowthPlan
-
-var claimed_index:HexIndex = null
-var energy_provided:int = 0
+var pending_claims:Array[PendingClaim] = []
 
 func _init(cell_:Cell, config:Config):
 	super._init(cell_)
 	energy_per_step = config.energy_per_step
-	growth_plan = GrowthPlan.from_script(config.growth_plan_script, cell_)
+	growth_plan = GrowthPlan.from_script(config.growth_plan_script, self)
 
 func perform_actions() -> void:
 	
-	if claimed_index == null:
+	if pending_claims.size() == 0:
 		return
 		
 	var energy_used:int = min(cell.energy, energy_per_step)
 	if energy_used == 0:
 		return
-		
-	cell.energy -= energy_used
-	energy_provided += energy_used
-	
-	var target_cell:Cell = cell.world.get_cell(claimed_index)
-	if target_cell == null:
-		target_cell = EnvironmentGenome.empty_cell_type.create_cell()
-		cell.world.set_cell(claimed_index, target_cell)
 
-	#var claimable_cell_gene:ClaimableCellGene = target_cell.get_gene(ClaimableCellGene)
-	#claimable_cell_gene.add_claim(cell, cell_type, energy_provided)
-	#
-	#var state:State = State.new()
-	#state.cell_type = cell_type
-	#state.energy_used = energy_used
-	#state.claimed_index = claimed_index
-	#add_state(state)
+	cell.energy -= energy_used
+		
+	var energy_per_claim:float = float(energy_used) / pending_claims.size()
+	
+	for pending_claim in pending_claims:
+		pending_claim.claimable_cell_gene.add_claim(cell, pending_claim.cell_type, energy_per_claim)
+		
+	var state:State = State.new()
+	state.energy_used = energy_used
+	state.energy_per_claim = energy_per_claim
+	state.pending_claims = pending_claims.duplicate()
+	add_state(state)
 			
 func update_state() -> void:
+	pending_claims.clear()
 	growth_plan._update()
-	energy_wanted = energy_per_step if claimed_index else 0
+	energy_wanted = energy_per_step if pending_claims.size() > 0 else 0
+		
+class PendingClaim:
 	
-	#for direction in HexIndex.ALL_DIRECTIONS:
-		#var target_index:HexIndex = cell.index.neighbor(direction)
-		#var target_cell:Cell = cell.world.get_cell(target_index)
-		#if is_claimable(target_cell):
-			#if claimed_index != target_index:
-				#energy_provided = 0
-				#claimed_index = target_index
-			#energy_wanted = energy_per_step
-			#break
-	#if energy_wanted == 0:
-		#claimed_index = null
-			
-func is_claimable(target_cell:Cell) -> bool:
-	if target_cell != null: 
-		var claimable_cell_gene:ClaimableCellGene = target_cell.get_gene(ClaimableCellGene)
-		if claimable_cell_gene == null:
-			return false
-		if not claimable_cell_gene.is_claimable: 
-			return false
-	return true
+	var claimable_cell_gene:ClaimableCellGene
+	var cell_type:CellType
+	
+	func _init(claimable_cell_gene_:ClaimableCellGene, cell_type_:CellType) -> void:
+		claimable_cell_gene = claimable_cell_gene_
+		cell_type = cell_type_
 		
 class GrowthPlan:
-	
-	enum GrowthStatus { GROWING, FAILED, SUCCEEDED }
 	
 	enum Direction { 
 		NE = HexIndex.HexDirection.NE, 
@@ -108,14 +88,17 @@ class GrowthPlan:
 	func _update() -> void:
 		pass
 		
-	func grow(direction:Direction, cell_type:StringName = "") -> GrowthStatus:
-		var target_index:HexIndex = _cell.index.neighbor(_orient(direction))
-		var target_cell:Cell = _cell.world.get_cell(target_index)
-		#if is_claimable(target_cell):
-			#if claimed_index != target_index:
-				#energy_provided = 0
-				#claimed_index = target_index
-		return GrowthStatus.FAILED
+	func grow(direction:Direction, cell_type_name:StringName = "") -> bool:
+		var claimable_cell_gene := _get_claimable_cell_gene(direction)
+		if direction == W and claimable_cell_gene:
+			prints('>>>', _cell.orientation, _cell.index, claimable_cell_gene.cell.index)
+		if claimable_cell_gene:
+			var cell_type := _cell.genome.get_cell_type(cell_type_name) \
+				if cell_type_name != "" else _cell.cell_type
+			if cell_type:
+				_gene.pending_claims.append(PendingClaim.new(claimable_cell_gene, cell_type))
+				return true
+		return false
 		
 	func is_empty(direction:Direction) -> bool:
 		var claimable_cell_gene := _get_claimable_cell_gene(direction)
@@ -123,11 +106,11 @@ class GrowthPlan:
 
 	func is_growing(direction:Direction) -> bool:
 		var claimable_cell_gene := _get_claimable_cell_gene(direction)
-		return claimable_cell_gene and claimable_cell_gene.claims.size() > 0
+		return claimable_cell_gene and claimable_cell_gene.is_claimable and claimable_cell_gene.claims.size() > 0
 
 	func is_growing_self(direction:Direction) -> bool:
 		var claimable_cell_gene := _get_claimable_cell_gene(direction)
-		if claimable_cell_gene:
+		if claimable_cell_gene and claimable_cell_gene.is_claimable:
 			for claim in claimable_cell_gene.claims:
 				if claim.cell_type.genome == _cell.genome:
 					return true
@@ -135,7 +118,7 @@ class GrowthPlan:
 
 	func is_growing_other(direction:Direction) -> bool:
 		var claimable_cell_gene := _get_claimable_cell_gene(direction)
-		if claimable_cell_gene:
+		if claimable_cell_gene and claimable_cell_gene.is_claimable:
 			for claim in claimable_cell_gene.claims:
 				if claim.cell_type.genome != _cell.genome:
 					return true
@@ -143,7 +126,7 @@ class GrowthPlan:
 		
 	func is_growth(direction:Direction) -> bool:
 		var claimable_cell_gene := _get_claimable_cell_gene(direction)
-		if claimable_cell_gene:
+		if claimable_cell_gene and claimable_cell_gene.is_claimable:
 			for claim in claimable_cell_gene.claims:
 				if claim.progenitor == _cell:
 					return true
@@ -159,9 +142,9 @@ class GrowthPlan:
 	func is_bounds(direction:Direction) -> bool:
 		return _get_cell(direction).cell_type == EnvironmentGenome.bounds_cell_type
 		
-	static func from_script(script:String, cell:Cell) -> GrowthPlan:
+	static func from_script(script:String, gene:ProduceCellGene) -> GrowthPlan:
 		var cls := _get_growth_plan_class(script)
-		return cls.new(cell)
+		return cls.new(gene)
 		
 	static var _growth_plan_class_map:Dictionary[String, GDScript] = {}
 	
@@ -175,6 +158,9 @@ class GrowthPlan:
 	static func _create_growth_plan_class(script:String) -> GDScript:
 		var new_script := GDScript.new()
 		new_script.source_code = GROWTH_PLAN_SCRIPT_WRAPPER % _indent_growth_plan_script(script)
+		prints('--- source code ---')
+		prints(new_script.source_code)
+		prints('-------------------')
 		var err := new_script.reload()
 		if err != OK:
 			push_error("Failed to load growth plan script from string: %d" % [err])
@@ -186,6 +172,7 @@ class GrowthPlan:
 		for line in s.split('\n'):
 			result += '    '
 			result += line
+			result += '\n'
 		return result	
 
 const DEFAULT_GROWTH_PLAN_SCRIPT = '''
@@ -193,12 +180,12 @@ grow(E)
 grow(NE)
 grow(SE)
 grow(NW)
-grow(NW)
+grow(SW)
 grow(W)
 '''
 
 const GROWTH_PLAN_SCRIPT_WRAPPER = '''
-extends GrowthPlan
+extends ProduceCellGene.GrowthPlan
 
 func _update():
 %s
@@ -206,8 +193,8 @@ func _update():
 
 class State extends GeneState:
 	var energy_used:int
-	var claimed_index:HexIndex
-	var cell_type:CellType
+	var energy_per_claim:float
+	var pending_claims:Array[PendingClaim]
 	
 class Config extends GeneConfig:
 	var energy_per_step:int = 1
