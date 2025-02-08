@@ -1,11 +1,11 @@
 class_name GeneDetailUI extends PanelContainer
 
+class Signals:
+	@warning_ignore("unused_signal")
+	signal highlight_cell(index:HexIndex)
+
+static var gene_signals := Signals.new()
+
 func show_gene_state(_cell_state:CellState) -> void:
 	pass
 	
-func highlight_cell(index:HexIndex) -> void:
-	var parent = get_parent()
-	while parent != null && parent is not BattleMode:
-		parent = parent.get_parent()
-	if parent != null:
-		parent.highlight_cell(index)

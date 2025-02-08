@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dhfungrs048gu"]
+[gd_scene load_steps=12 format=3 uid="uid://dhfungrs048gu"]
 
 [ext_resource type="Script" uid="uid://kckkiu27lorn" path="res://appearance/environment/empty/environment_cell_empty.gd" id="1_x1tuy"]
 [ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="2_5d6q5"]
@@ -14,6 +14,27 @@ material = SubResource("StandardMaterial3D_x1tuy")
 top_radius = 0.0
 bottom_radius = 0.05
 height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5d6q5"]
+albedo_color = Color(0.956863, 0.992157, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_v066y"]
+material = SubResource("StandardMaterial3D_5d6q5")
+top_radius = 0.0
+bottom_radius = 0.05
+height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tu4ki"]
+albedo_color = Color(0.775437, 0.000825924, 0.835768, 1)
+emission_enabled = true
+emission = Color(0.81063, 0.177861, 0.698157, 1)
+emission_energy_multiplier = 2.48
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1ar17"]
+material = SubResource("StandardMaterial3D_tu4ki")
+top_radius = 0.01
+bottom_radius = 0.01
+height = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v066y"]
 albedo_color = Color(0.661341, 0.0524811, 0.425922, 1)
@@ -31,7 +52,6 @@ metadata/_custom_type_script = ExtResource("2_5d6q5")
 [node name="Base" type="CSGCylinder3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0.005, 0)
-visible = false
 height = 0.01
 sides = 6
 material = SubResource("StandardMaterial3D_gjv6y")
@@ -41,6 +61,18 @@ unique_name_in_owner = true
 transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.2, 0)
 visible = false
 mesh = SubResource("CylinderMesh_5d6q5")
+
+[node name="Current" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_v066y")
+
+[node name="Highlight" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.2, 0)
+visible = false
+mesh = SubResource("CylinderMesh_1ar17")
 
 [node name="End" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true

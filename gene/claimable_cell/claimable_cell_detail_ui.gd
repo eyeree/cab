@@ -1,5 +1,10 @@
 class_name ClaimableCellGeneDetailUI extends GeneDetailUI
 
+class Signals:
+	signal highlight_claim(claim:ClaimableCellGene.Claim)
+
+static var claimable_cell_gene_signals := Signals.new()
+	
 @onready var claim_grid_container: TemplateGridContaier = %ClaimGridContainer
 @onready var ranking_data_grid: TemplateGridContaier = %RankingDataGrid
 @onready var ranking_data_panel: VBoxContainer = %RankingDataPanel
@@ -50,7 +55,8 @@ func show_gene_state(cell_state:CellState) -> void:
 
 func _on_mouse_entered_row(row_index:int) -> void:
 	var claim:ClaimableCellGene.Claim = current_claims[row_index]
-	highlight_cell(claim.progenitor.index)
+	gene_signals.highlight_cell.emit(claim.progenitor.index)
+	claimable_cell_gene_signals.highlight_claim.emit(claim)
 	if claim.ranking_data.size() > 0:
 		ranking_data_grid.clear()
 		for key:String in claim.ranking_data.keys():
@@ -63,5 +69,6 @@ func _on_mouse_entered_row(row_index:int) -> void:
 		ranking_data_panel.visible = true
 
 func _on_mouse_exited_row(_row_index:int) -> void:
-	highlight_cell(HexIndex.INVALID)
+	gene_signals.highlight_cell.emit(HexIndex.INVALID)
+	claimable_cell_gene_signals.highlight_claim.emit(null)
 	ranking_data_panel.visible = false

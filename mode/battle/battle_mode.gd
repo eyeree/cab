@@ -57,10 +57,12 @@ func _ready() -> void:
 	_grid.mouse_entered_hex.connect(_on_mouse_entered_hex)
 	_grid.mouse_exited_hex.connect(_on_mouse_exited_hex)
 	_grid.hex_selected.connect(_on_hex_selected)
+	
+	GeneDetailUI.gene_signals.highlight_cell.connect(_highlight_cell)
 
 	battle()
 	
-func highlight_cell(index:HexIndex) -> void:
+func _highlight_cell(index:HexIndex) -> void:
 	_grid.set_selected_index(index)
 	
 func _on_mouse_entered_hex(index:HexIndex):
