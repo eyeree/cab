@@ -27,10 +27,13 @@ class Config extends GeneConfig:
 class Type extends GeneType:
 	
 	func _init() -> void:
-		name = 'Generate Energy'
+		name = 'GenerateEnergy'
 		energy_cost = 1
 
 	func create_config() -> Config:
 		return Config.new(self)
 
 static var gene_type_ = Type.new()
+
+static func _static_init() -> void:
+	prints('GenerateEnergyGene._static_init', gene_type_)

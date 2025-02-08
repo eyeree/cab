@@ -29,10 +29,13 @@ static func _load_gene_types_from_directory(dir_path:String) -> void:
 		if file.ends_with("_gene.gd"):
 			var file_path = dir_path.path_join(file)
 			var gene_script:Script = load(file_path)
-			prints('property_list', gene_script.get_script_property_list())
-			prints('constant_map', gene_script.get_script_constant_map())
+			#gene_script.reload()
+			#prints('property_list', gene_script.get_script_property_list())
+			#prints('constant_map', gene_script.get_script_constant_map())
+			prints('checking path', file_path, gene_script.get_script_constant_map().get('Type'))
 			var gene_type:GeneType = gene_script.get('gene_type_')
 			if gene_type == null:
+				prints("Gene %s did not define gene_type_" % [file_path])
 				push_error("Gene %s did not define gene_type_" % [file_path])
 			else:
 				gene_type.base_resource_path = file_path.replace('_gene.gd', '')

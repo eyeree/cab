@@ -17,10 +17,6 @@ boot_splash/bg_color=Color(0.177001, 0.162603, 0.191404, 1)
 boot_splash/show_image=false
 boot_splash/minimum_display_time=2000
 
-[display]
-
-window/size/always_on_top=true
-
 [gui]
 
 theme/custom="uid://vswv5lu4ne81"

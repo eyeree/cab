@@ -65,6 +65,8 @@ class GrowthPlan:
 	
 	var _gene:ProduceCellGene
 	var _cell:Cell
+	var _world:World:
+		get: return _cell.world
 	
 	func _init(gene_:ProduceCellGene) -> void:
 		_gene = gene_
@@ -74,7 +76,7 @@ class GrowthPlan:
 		return HexIndex.orient_direction(_cell.orientation, direction as HexIndex.HexDirection)
 		
 	func _get_cell(direction:Direction) -> Cell:
-		return _cell.world.get_cell(_cell.index.neighbor(_orient(direction)))
+		return _world.get_cell(_cell.index.neighbor(_orient(direction)))
 		
 	func _get_claimable_cell_gene(direction:Direction) -> ClaimableCellGene:
 		return _get_cell(direction).get_gene(ClaimableCellGene)
@@ -90,8 +92,6 @@ class GrowthPlan:
 		
 	func grow(direction:Direction, cell_type_name:StringName = "") -> bool:
 		var claimable_cell_gene := _get_claimable_cell_gene(direction)
-		if direction == W and claimable_cell_gene:
-			prints('>>>', _cell.orientation, _cell.index, claimable_cell_gene.cell.index)
 		if claimable_cell_gene:
 			var cell_type := _cell.genome.get_cell_type(cell_type_name) \
 				if cell_type_name != "" else _cell.cell_type
@@ -137,10 +137,10 @@ class GrowthPlan:
 		
 	func is_other(direction:Direction) -> bool:
 		var target_cell := _get_cell(direction)
-		return target_cell.genome is not EnvironmentGenome and target_cell.genome != _cell.genome
+		return target_cell.genome != _world.environment_genome and target_cell.genome != _cell.genome
 		
 	func is_bounds(direction:Direction) -> bool:
-		return _get_cell(direction).cell_type == EnvironmentGenome.bounds_cell_type
+		return _get_cell(direction).cell_type == _world.environment_genome.bounds_cell_type
 		
 	static func from_script(script:String, gene:ProduceCellGene) -> GrowthPlan:
 		var cls := _get_growth_plan_class(script)
@@ -158,9 +158,9 @@ class GrowthPlan:
 	static func _create_growth_plan_class(script:String) -> GDScript:
 		var new_script := GDScript.new()
 		new_script.source_code = GROWTH_PLAN_SCRIPT_WRAPPER % _indent_growth_plan_script(script)
-		prints('--- source code ---')
-		prints(new_script.source_code)
-		prints('-------------------')
+		#prints('--- source code ---')
+		#prints(new_script.source_code)
+		#prints('-------------------')
 		var err := new_script.reload()
 		if err != OK:
 			push_error("Failed to load growth plan script from string: %d" % [err])
@@ -200,16 +200,13 @@ class Config extends GeneConfig:
 	var energy_per_step:int = 1
 	var growth_plan_script:String = DEFAULT_GROWTH_PLAN_SCRIPT
 	
-	func _init(gene_type_:GeneType) -> void:
-		super._init(gene_type_)
-	
 	func create_gene(cell:Cell, _progenitor:Cell) -> ProduceCellGene:	
 		return ProduceCellGene.new(cell, self)
 
 	func get_energy_cost() -> int:
 		return gene_type.energy_cost * energy_per_step
 
-class  Type extends GeneType:
+class Type extends GeneType:
 	
 	func _init():
 		name = 'ProduceCell'

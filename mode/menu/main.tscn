@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://bs4xqfk5ujxms"]
+[gd_scene load_steps=2 format=3 uid="uid://bs4xqfk5ujxms"]
+
+[ext_resource type="Script" uid="uid://ctj50k4m0mrol" path="res://mode/menu/main.gd" id="1_sitqd"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -7,9 +9,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_sitqd")
 
-[node name="Label" type="Label" parent="."]
+[node name="BattleButton" type="Button" parent="."]
+unique_name_in_owner = true
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Hello!"
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Battle!"
+
+[connection signal="pressed" from="BattleButton" to="." method="_on_battle_button_pressed"]

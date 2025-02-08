@@ -24,7 +24,8 @@ func allocate_cell_number() -> int:
 var _genomes:Array[Genome] = []
 var _genome_rank_index:int = 0
 	
-static var bounds_cell:Cell = EnvironmentGenome.bounds_cell_type.create_cell()
+var environment_genome := EnvironmentGenome.new()
+var bounds_cell:Cell = environment_genome.bounds_cell_type.create_cell()
 
 signal cell_changed(index:HexIndex, new_cell:Cell)
 
@@ -44,7 +45,7 @@ func _init(options:WorldOptions):
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var cell:Cell = options.initial_content.get_content(index)
 		if cell == null:
-			cell = EnvironmentGenome.empty_cell_type.create_cell()
+			cell = environment_genome.empty_cell_type.create_cell()
 		set_cell(index, cell)
 		if not _genomes.has(cell.genome):
 			_genomes.append(cell.genome)
@@ -71,7 +72,7 @@ func _cell_update_state(index:HexIndex, cell:Cell, step_number:int):
 	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
 	cell.update_state(cell_state)
 	if cell.is_dead:
-		set_cell(index, EnvironmentGenome.empty_cell_type.create_cell())
+		set_cell(index, environment_genome.empty_cell_type.create_cell())
 
 func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
 	for index in center.ring(radius):
@@ -102,7 +103,7 @@ func set_cell(index:HexIndex, cell:Cell) -> void:
 	cell_changed.emit(index, cell)
 	
 func is_empty_cell(cell:Cell) -> bool:
-	return cell.cell_type == EnvironmentGenome.empty_cell_type
+	return cell.cell_type == environment_genome.empty_cell_type
 	
 func is_bounds_cell(cell:Cell) -> bool:
 	return cell == bounds_cell

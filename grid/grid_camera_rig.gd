@@ -79,7 +79,6 @@ func _rotate(_amount:Vector2):
 	
 func _on_move_start(mouse_position:Vector2) -> void:
 	_last_grid_position = _get_grid_position(mouse_position)
-	#if _drag_position.length() <= 0.5:
 	_mouse_movement_mode = MouseMovementMode.Move
 	
 func _on_move_end() -> void:
@@ -93,10 +92,6 @@ func _on_move(mouse_position:Vector2):
 		p.x += delta_grid_position.x
 		self.set_identity()
 		self.position = p
-		#self.position += delta_grid_position
-		#self.position.x += delta_grid_position.x
-		#self.position.y += delta_grid_position.y
-		#prints('_move_delta', mouse_position, _last_grid_position, '-', new_grid_position, '=', delta_grid_position, ':', self.position)
 	_last_grid_position = new_grid_position
 
 func _get_grid_position(mouse_position:Vector2) -> Vector3:
@@ -114,22 +109,3 @@ func _get_grid_position(mouse_position:Vector2) -> Vector3:
 	
 	return Vector3.INF  
 	
-	#var query = PhysicsRayQueryParameters3D.create(origin, end)
-	#var space_state:PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	#var result = space_state.intersect_ray(query)
-	#if not result.has('position'):
-		#return Vector2.INF	
-	#else:	
-		#var hit_position:Vector3 = result['position']
-		#return Vector2(hit_position.x, -hit_position.y)
-	
-#func _process(delta:float) -> void:
-	#
-	#_distance += _distance_delta * delta
-	#_distance = clampf(_distance, min_distance, max_distance)
-	#_distance_delta = 0
-	#camera.position = Vector3(0,0,_distance)
-	#
-	##self.position.x += _move_delta.x # * delta
-	###self.position.y += _move_delta.y # * delta
-	##_move_delta = Vector2.ZERO

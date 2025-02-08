@@ -87,12 +87,12 @@ class Claim:
 	var is_complete:bool:
 		get: return energy_provided >= cell_type.energy_cost
 
-class ClaimableCellGeneConfig extends GeneConfig:
+class Config extends GeneConfig:
 		
 	func create_gene(cell:Cell, _progenitor:Cell) -> ClaimableCellGene:
 		return ClaimableCellGene.new(cell)
 		
-class ClaimableCellGeneType extends GeneType:
+class Type extends GeneType:
 	
 	func _init():
 		name = 'ClaimableCell'
@@ -100,6 +100,6 @@ class ClaimableCellGeneType extends GeneType:
 		energy_cost = 1
 
 	func create_config() -> GeneConfig:
-		return ClaimableCellGeneConfig.new(self)
+		return Config.new(self)
 			
-static var gene_type_ = ClaimableCellGeneType.new()
+static var gene_type_ = Type.new()

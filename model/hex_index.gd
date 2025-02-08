@@ -31,12 +31,6 @@ static func rotate_directions_left(directions:Array[HexDirection], steps:int = 1
 		
 static func orient_direction(orientation:HexDirection, direction:HexDirection) -> HexDirection:
 	return ((orientation + direction) % 6) as HexDirection
-
-
-static func _static_init():
-	for orientation in ALL_DIRECTIONS:
-		for direction in ALL_DIRECTIONS:
-			prints('orient_direction', DIRECTION_LABEL[orientation], DIRECTION_LABEL[direction], DIRECTION_LABEL[orient_direction(orientation, direction)])
 	
 static func orient_directions(orientation:HexDirection, directions:Array[HexDirection]) -> Array[HexDirection]:
 	var result:Array[HexDirection] = directions.duplicate()

@@ -10,7 +10,6 @@ func _init(cell_:Cell, config:Config) -> void:
 func perform_actions() -> void:
 	if life_needed == 0: return
 	var added_life = min(life_needed, cell.energy)
-	#prints('  repair - added_life: %d' % added_life)
 	cell.new_life += added_life
 	cell.energy -= added_life
 	add_state(State.new(added_life))
