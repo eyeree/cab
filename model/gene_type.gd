@@ -34,21 +34,21 @@ static func _load_gene_types_from_directory(dir_path:String) -> void:
 				prints("Gene %s did not define gene_type_" % [file_path])
 				push_error("Gene %s did not define gene_type_" % [file_path])
 			else:
-				gene_type.base_resource_path = file_path.replace('_gene.gd', '')
+				gene_type.base_resource_path = file_path.replace('.gd', '')
 				_gene_types.append(gene_type)
 
-var _detail_ui_loaded:bool = false
-var _detail_ui_scene:PackedScene = null
+var _view_panel_loaded:bool = false
+var _view_panel_scene:PackedScene = null
 
-func get_details_ui() -> GeneDetailUI:
-	if not _detail_ui_loaded:
-		var detail_ui_resource_path:String = base_resource_path + '_detail_ui.tscn'
-		detail_ui_resource_path = detail_ui_resource_path.replace('.remap', '')
-		if ResourceLoader.exists(detail_ui_resource_path):
-			_detail_ui_scene = load(detail_ui_resource_path)
-		_detail_ui_loaded = true
-	if _detail_ui_scene != null:
-		return _detail_ui_scene.instantiate()
+func get_details_ui() -> GeneViewPanel:
+	if not _view_panel_loaded:
+		var view_panel_resource_path:String = base_resource_path + '_view_panel.tscn'
+		view_panel_resource_path = view_panel_resource_path.replace('.remap', '')
+		if ResourceLoader.exists(view_panel_resource_path):
+			_view_panel_scene = load(view_panel_resource_path)
+		_view_panel_loaded = true
+	if _view_panel_scene != null:
+		return _view_panel_scene.instantiate()
 	else:
 		return null
 

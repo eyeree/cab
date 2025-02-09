@@ -1,0 +1,123 @@
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://vswv5lu4ne81"]
+
+[ext_resource type="FontVariation" uid="uid://cts368t0w3ura" path="res://theme/fonts/system/bold_system_font_variation.tres" id="1_ix8h1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ix8h1"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.176, 0.176, 0.176, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.202, 0.202, 0.202, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5v2md"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.176, 0.176, 0.176, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.202, 0.202, 0.202, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_36u6t"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.176, 0.176, 0.176, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4lrps"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.176, 0.176, 0.176, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_55tkg"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.176, 0.176, 0.176, 0.65)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fxjs"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.176, 0.176, 0.176, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m0tvv"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.176, 0.176, 0.176, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.202, 0.202, 0.202, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3c1i"]
+content_margin_left = 10.0
+content_margin_top = 0.0
+content_margin_right = 10.0
+content_margin_bottom = 1.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.223, 0.223, 0.223, 1)
+
+[resource]
+default_font_size = 12
+Border/base_type = &"PanelContainer"
+Border/styles/panel = SubResource("StyleBoxFlat_ix8h1")
+DetailPanel/base_type = &"PanelContainer"
+DetailPanel/styles/panel = SubResource("StyleBoxFlat_5v2md")
+DetailTitleLabel/base_type = &"Label"
+DetailTitleLabel/font_sizes/font_size = 16
+FormGridContainer/base_type = &"GridContainer"
+FormGridContainer/constants/h_separation = 4
+FormLabel/base_type = &"Label"
+FormLabel/colors/font_color = Color(0.545, 0.545, 0.545, 1)
+FormValueLabel/base_type = &"Label"
+FormValueLabel/colors/font_color = Color(1, 1, 1, 1)
+FormValueLineEdit/base_type = &"LineEdit"
+FormValueLineEdit/colors/font_color = Color(1, 1, 1, 1)
+GridHeaderLabel/base_type = &"Label"
+GridHeaderLabel/colors/font_color = Color(0.545, 0.545, 0.545, 1)
+GridHeaderLabel/constants/line_spacing = 0
+GridHeaderLabel/font_sizes/font_size = 10
+GridHeaderLabel/fonts/font = ExtResource("1_ix8h1")
+HBoxContainer/constants/separation = 4
+NomarginPanelContainer/base_type = &"PanelContainer"
+NomarginPanelContainer/styles/panel = SubResource("StyleBoxFlat_36u6t")
+OverlayLabel/base_type = &"Label"
+OverlayLabel/font_sizes/font_size = 72
+OverlayPanelInner/base_type = &"PanelContainer"
+OverlayPanelInner/styles/panel = SubResource("StyleBoxFlat_4lrps")
+OverlayPanelOuter/base_type = &"Panel"
+OverlayPanelOuter/styles/panel = SubResource("StyleBoxFlat_55tkg")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_0fxjs")
+SubDetailPanel/base_type = &"PanelContainer"
+SubDetailPanel/styles/panel = SubResource("StyleBoxFlat_m0tvv")
+SubDetailTitleLabel/base_type = &"Label"
+SubDetailTitleLabel/font_sizes/font_size = 14
+TitleLabel/base_type = &"Label"
+TitleLabel/colors/font_color = Color(255, 204, 255, 1)
+TitleLabel/colors/font_outline_color = Color(114, 0, 114, 1)
+TitleLabel/constants/outline_size = 3
+TitleLabel/font_sizes/font_size = 32
+TitlePanel/base_type = &"PanelContainer"
+TitlePanel/styles/panel = SubResource("StyleBoxFlat_c3c1i")
+VBoxContainer/constants/separation = 4

@@ -1,0 +1,306 @@
+[gd_scene load_steps=12 format=3 uid="uid://dmaqlc81kw7f8"]
+
+[ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
+[ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
+[ext_resource type="PackedScene" uid="uid://pkpl54rmgns7" path="res://main/title.tscn" id="3_wteyq"]
+[ext_resource type="Texture2D" uid="uid://bk1rgby8bl2hr" path="res://icon/FirstStepIcon.png" id="4_di4gq"]
+[ext_resource type="Texture2D" uid="uid://ddywix2exwiqj" path="res://icon/PreviousStepIcon.png" id="5_gl8mm"]
+[ext_resource type="Texture2D" uid="uid://cq7wxo0lrln85" path="res://icon/RunIcon.png" id="6_uj00j"]
+[ext_resource type="Texture2D" uid="uid://clddh03pvcxm" path="res://icon/PauseIcon.png" id="7_1acvm"]
+[ext_resource type="Texture2D" uid="uid://bpyahsp2glp5p" path="res://icon/NextStepIcon.png" id="8_v52yf"]
+[ext_resource type="Texture2D" uid="uid://bjgdddepwt02c" path="res://icon/LastStepIcon.png" id="9_cupta"]
+[ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_view_panel/cell_view_panel.tscn" id="10_ys2ax"]
+
+[sub_resource type="Curve" id="Curve_0beij"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="MainScene" type="Node"]
+script = ExtResource("1_im0q4")
+_run_speed_curve = SubResource("Curve_0beij")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="ViewPanelContainer" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer"]
+layout_mode = 2
+
+[node name="GameTitle" parent="HBoxContainer/ViewPanelContainer/VBoxContainer" instance=ExtResource("3_wteyq")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PlayerControlPanel" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DetailPanel"
+
+[node name="HBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel"]
+layout_mode = 2
+
+[node name="VBoxContiner" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer"]
+layout_mode = 2
+
+[node name="FirstStepButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Go to first step"
+icon = ExtResource("4_di4gq")
+icon_alignment = 1
+expand_icon = true
+
+[node name="PreviousStepButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Go to previous step"
+icon = ExtResource("5_gl8mm")
+icon_alignment = 1
+expand_icon = true
+
+[node name="RunButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Play from current step"
+icon = ExtResource("6_uj00j")
+icon_alignment = 1
+expand_icon = true
+
+[node name="PauseButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 5
+tooltip_text = "Pause playing"
+disabled = true
+icon = ExtResource("7_1acvm")
+icon_alignment = 1
+expand_icon = true
+
+[node name="NextStepButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 5
+tooltip_text = "Go to next step"
+icon = ExtResource("8_v52yf")
+icon_alignment = 1
+expand_icon = true
+
+[node name="LastStepButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 5
+tooltip_text = "Go to last step"
+icon = ExtResource("9_cupta")
+icon_alignment = 1
+expand_icon = true
+
+[node name="CurrentStepSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Current step"
+value = 20.0
+rounded = true
+ticks_on_borders = true
+
+[node name="LoadProgressBar" type="ProgressBar" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Loading progress"
+show_percentage = false
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DetailPanel"
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 2
+
+[node name="CurrentStepLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Step"
+
+[node name="CurrentStepValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "9999"
+horizontal_alignment = 2
+
+[node name="NumStepsLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Of"
+
+[node name="NumStepsValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "9999"
+horizontal_alignment = 2
+
+[node name="SettingsPanel" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DetailPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel"]
+visible = false
+layout_mode = 2
+
+[node name="RunSpeedContainer" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel"]
+layout_mode = 2
+columns = 2
+
+[node name="RunSpeedLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
+layout_mode = 2
+text = "Speed:"
+
+[node name="RunSpeedSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Speed of playback"
+max_value = 1.0
+step = 0.01
+value = 0.8
+ticks_on_borders = true
+
+[node name="NumStepsLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
+layout_mode = 2
+text = "Steps:"
+
+[node name="NumStepsSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Speed of playback"
+max_value = 1.0
+step = 0.01
+value = 0.8
+ticks_on_borders = true
+
+[node name="GridSizeLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
+layout_mode = 2
+text = "Size:"
+
+[node name="GridSizeSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Speed of playback"
+max_value = 3.0
+value = 2.0
+rounded = true
+ticks_on_borders = true
+
+[node name="CellViewContainer" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"DetailPanel"
+
+[node name="CellViewPanel" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/CellViewContainer" instance=ExtResource("10_ys2ax")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="GridPanelContainer" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"NomarginPanelContainer"
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer/GridPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/GridPanelContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(757, 648)
+render_target_update_mode = 4
+
+[node name="HexGrid" parent="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
+unique_name_in_owner = true
+grid_size = 0
+
+[node name="CameraControl" parent="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
+CfgRotateSpeed = 0.8
+
+[node name="OverlayPanel" type="Panel" parent="HBoxContainer/GridPanelContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"OverlayPanelOuter"
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/GridPanelContainer/OverlayPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="OverlayLabel" type="Label" parent="HBoxContainer/GridPanelContainer/OverlayPanel/CenterContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"OverlayLabel"
+text = "(overlay)"
+
+[node name="DebugPanel" type="PanelContainer" parent="HBoxContainer/GridPanelContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="DebugHexIndex" type="Label" parent="HBoxContainer/GridPanelContainer/DebugPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EditPanelContainer" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/EditPanelContainer"]
+layout_mode = 2
+
+[node name="PlaceholderContainer" type="PanelContainer" parent="HBoxContainer/EditPanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DetailPanel"
+
+[node name="Label" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/PlaceholderContainer"]
+layout_mode = 2
+text = "Placeholder"
+
+[editable path="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid"]
+[editable path="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl"]

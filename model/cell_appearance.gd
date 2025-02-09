@@ -18,10 +18,10 @@ func set_state(cell_history:CellState) -> void:
 func clone() -> CellAppearance:
 	return duplicate(DuplicateFlags.DUPLICATE_USE_INSTANTIATION)
 
-func get_grid() -> Grid:
+func get_grid() -> HexGrid:
 	var parent:Node3D = get_parent_node_3d()
 	while parent != null:
-		if parent is Grid:
+		if parent is HexGrid:
 			return parent
 		parent = parent.get_parent_node_3d()
 	return null

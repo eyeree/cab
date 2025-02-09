@@ -1,8 +1,0 @@
-[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://bdm3n51h2tynd"]
-
-[ext_resource type="FontFile" uid="uid://c11mnagvahro" path="res://ui/theme/fonts/patrick_hand/PatrickHand-Regular.ttf" id="1_jnef8"]
-
-[resource]
-base_font = ExtResource("1_jnef8")
-spacing_top = -6
-spacing_bottom = -5

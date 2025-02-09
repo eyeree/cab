@@ -11,7 +11,7 @@ var _claim_states:Array[ClaimableCellGene.ClaimState] = []
 #var _highlighted_cell_appearance:CellAppearance = null
 #
 #func _ready() -> void:
-	#ClaimableCellGeneDetailUI.claimable_cell_gene_signals.highlight_claim.connect(_highlight_claim)
+	#ClaimableCellGeneViewPanel.claimable_cell_gene_signals.highlight_claim.connect(_highlight_claim)
 	#
 #func _highlight_claim(claim:ClaimableCellGene.Claim) -> void:
 	#
@@ -23,7 +23,7 @@ var _claim_states:Array[ClaimableCellGene.ClaimState] = []
 		#highlight.reparent(self, false)
 		#return
 	#
-	#var grid:Grid = get_grid()
+	#var grid:HexGrid = get_grid()
 	#if grid == null: 
 		#return
 		#
@@ -64,7 +64,7 @@ func set_state(cell_state:CellState) -> void:
 	if gene_state == null:
 		return
 
-	var grid:Grid = get_grid()
+	var grid:HexGrid = get_grid()
 	if grid == null: 
 		return
 		
