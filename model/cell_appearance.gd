@@ -1,7 +1,19 @@
 class_name CellAppearance extends Node3D
 
-func set_state(_cell_history:CellState) -> void:
-	pass
+var visible_connect_mesh:Node3D = null
+
+func set_state(cell_history:CellState) -> void:
+	var direction_label := HexIndex.DIRECTION_LABEL[HexIndex.opposite_direction(cell_history.cell.orientation)]
+	var connect_mesh_name := "Connect" + direction_label
+	if visible_connect_mesh != null and visible_connect_mesh.name == connect_mesh_name:
+		return
+	if visible_connect_mesh != null:
+		visible_connect_mesh.visible = false
+		visible_connect_mesh = null
+	var connect_mesh := find_child("Connect" + direction_label, true)
+	if connect_mesh is Node3D:
+		connect_mesh.visible = true
+		visible_connect_mesh = connect_mesh
 	
 func clone() -> CellAppearance:
 	return duplicate(DuplicateFlags.DUPLICATE_USE_INSTANTIATION)

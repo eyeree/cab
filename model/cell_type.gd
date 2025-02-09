@@ -44,12 +44,6 @@ func add_gene(gene_class:Script) -> GeneConfig:
 func has_gene(gene_class:Script) -> bool:
 	return has_gene_type(gene_class.gene_type_)
 	
-func create_cell(progenitor:Cell = null, cell_state:CellState = null) -> Cell:
-	var new_cell:Cell = Cell.new(progenitor, self, cell_state)
-	if progenitor != null and progenitor.cell_type == self:
-		new_cell.generation = progenitor.generation + 1		
-	return new_cell
-	
 class AttributeInfo:
 	var name:StringName
 	var description:String

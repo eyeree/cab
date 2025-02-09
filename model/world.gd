@@ -25,7 +25,7 @@ var _genomes:Array[Genome] = []
 var _genome_rank_index:int = 0
 	
 var environment_genome := EnvironmentGenome.new()
-var bounds_cell:Cell = environment_genome.bounds_cell_type.create_cell()
+var bounds_cell:Cell
 
 signal cell_changed(index:HexIndex, new_cell:Cell)
 
@@ -41,14 +41,16 @@ func _init(options:WorldOptions):
 	
 	_cell_number = 0
 	
+	bounds_cell = Cell.new(self, HexIndex.INVALID, environment_genome.bounds_cell_type)
+	
 	_cells = HexStore.new()
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
-		var cell:Cell = options.initial_content.get_content(index)
-		if cell == null:
-			cell = environment_genome.empty_cell_type.create_cell()
-		set_cell(index, cell)
-		if not _genomes.has(cell.genome):
-			_genomes.append(cell.genome)
+		var cell_type:CellType = options.initial_content.get_content(index)
+		if cell_type == null:
+			cell_type = environment_genome.empty_cell_type
+		if not _genomes.has(cell_type.genome):
+			_genomes.append(cell_type.genome)
+		set_cell(index, cell_type)
 		
 	#prints("----- STEP %d -----" % 0)
 	
@@ -60,19 +62,19 @@ func _init(options:WorldOptions):
 func step(step_number:int) -> void:
 	#prints("----- STEP %d -----" % step_number)
 	current_step = step_number
-	_cells.visit_all(_cell_perform_actions.bind(step_number))
-	_cells.visit_all(_cell_update_state.bind(step_number))
+	_cells.visit_all(_cell_perform_actions)
+	_cells.visit_all(_cell_update_state)
 	_genome_rank_index = min(_genome_rank_index + 1, _genomes.size())
 
-func _cell_perform_actions(index:HexIndex, cell:Cell, step_number:int):
-	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
+func _cell_perform_actions(index:HexIndex, cell:Cell):
+	var cell_state:CellState = _world_state.get_history_entry(index, current_step)
 	cell.perform_actions(cell_state)
 	
-func _cell_update_state(index:HexIndex, cell:Cell, step_number:int):
-	var cell_state:CellState = _world_state.get_history_entry(index, step_number)
+func _cell_update_state(index:HexIndex, cell:Cell):
+	var cell_state:CellState = _world_state.get_history_entry(index, current_step)
 	cell.update_state(cell_state)
 	if cell.is_dead:
-		set_cell(index, environment_genome.empty_cell_type.create_cell())
+		set_cell(index, environment_genome.empty_cell_type)
 
 func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
 	for index in center.ring(radius):
@@ -85,22 +87,22 @@ func get_cell(index:HexIndex) -> Cell:
 	else:
 		return _cells.get_content(index)
 	
-func set_cell(index:HexIndex, cell:Cell) -> void:
+func set_cell(index:HexIndex, cell_type:CellType, progenitor:Cell = null) -> Cell:
 	
 	if index.distance_to_center() > _rings:
-		push_error("cell %s distance at %s greater than allowed max distance." % [cell, index])
+		push_error("cell %s distance at %s greater than allowed max distance." % [cell_type, index])
 		return
 		
-	if cell != null:
-		cell.cell_number = allocate_cell_number()
-		cell.title = "%s:%s:%d" % [cell.genome.name, cell.cell_type.name, cell.cell_number]
-		
-	_cells.set_content(index, cell)
-	cell.index = index
-	cell.world_ref = weakref(self)
-	cell.step_created = current_step
+	var cell := Cell.new(self, index, cell_type, progenitor)
 	
+	var cell_state:CellState = _world_state.get_history_entry(index, current_step)
+	cell_state.start_energy = cell.energy
+	cell_state.start_life = cell.life
+				
+	_cells.set_content(index, cell)
 	cell_changed.emit(index, cell)
+	
+	return cell
 	
 func is_empty_cell(cell:Cell) -> bool:
 	return cell.cell_type == environment_genome.empty_cell_type

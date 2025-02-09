@@ -1,7 +1,6 @@
 class_name ClaimableCellGene extends Gene
 
 var claims:Array[Claim] = []
-var old_claims:Array[Claim] = []
 var winning_claim:Claim = null
 
 var is_claimable:bool:
@@ -9,8 +8,10 @@ var is_claimable:bool:
 	
 func perform_actions() -> void:
 	if winning_claim != null:
-		var new_cell = winning_claim.cell_type.create_cell(winning_claim.progenitor, cell.state)
-		cell.world.set_cell(cell.index, new_cell)
+		cell.world.set_cell(cell.index, winning_claim.cell_type, winning_claim.progenitor)
+		for claim in claims: 
+			if not claim.cancelled:
+				claim.completed.emit(claim == winning_claim)			
 	
 func update_state() -> void:
 	var completed_claims:Array[Claim] = []
@@ -22,11 +23,9 @@ func update_state() -> void:
 		if completed_claims.size() > 1:
 			completed_claims.sort_custom(rank_claims)
 		winning_claim = completed_claims[0]
-	add_state(State.new(claims, winning_claim))
-	old_claims = claims
-	claims = []
+	add_state(State.new(claims.duplicate(), winning_claim))
 	
-static func rank_claims(a:Claim, b:Claim) -> bool:
+static func rank_claims(a:ClaimState, b:ClaimState) -> bool:
 	if a.energy_provided > b.energy_provided:
 		return true
 	elif a.energy_provided == b.energy_provided:
@@ -57,36 +56,59 @@ static func rank_claims(a:Claim, b:Claim) -> bool:
 						return true
 	return false
 
-func add_claim(progenitor:Cell, cell_type:CellType, energy_provided:float) -> void:
-	for claim in old_claims:
-		if claim.progenitor == progenitor:
-			if claim.cell_type == cell_type:
-				energy_provided += claim.energy_provided
-			break		
-	claims.append(Claim.new(progenitor, cell_type, energy_provided))
+func add_claim(progenitor:Cell, cell_type:CellType) -> Claim:
+	var claim := Claim.new(progenitor, cell_type)		
+	var i := claims.find_custom(func (entry:Claim): return entry.progenitor == progenitor)
+	if i != -1:
+		claims[i] = claim
+	else:
+		claims.append(claim)
+	return claim	
 	
 class State extends GeneState:
-	var claims:Array[Claim]
-	var winning_claim:Claim
+	var claim_states:Array[ClaimState] = []
+	var winning_claim_state:ClaimState
 	func _init(claims_:Array[Claim], winning_claim_:Claim = null):
-		claims = claims_
-		winning_claim = winning_claim_
+		winning_claim_state = winning_claim_.get_claim_state() if winning_claim_ else null
+		claim_states.assign(
+			claims_.map(
+				func (claim:Claim): 
+					if claim == winning_claim_:
+						return winning_claim_state
+					else:
+						return claim.get_claim_state()))
 
-class Claim:
+class ClaimState:
 	
+	var cancelled:bool = false
 	var progenitor:Cell
 	var cell_type:CellType
-	var energy_provided:float
+	var energy_provided:float = 0.0
 	var ranking_data:Dictionary[String, Variant] = {}
 	
-	func _init(progenitor_:Cell, cell_type_:CellType, energy_provided_:float):
+	var is_complete:bool:
+		get: return energy_provided >= cell_type.energy_cost and not cancelled
+
+class Claim extends ClaimState:
+	
+	signal completed(successful:bool)
+	
+	func _init(progenitor_:Cell, cell_type_:CellType):
 		progenitor = progenitor_
 		cell_type = cell_type_
-		energy_provided = energy_provided_
 		
-	var is_complete:bool:
-		get: return energy_provided >= cell_type.energy_cost
-
+	func cancel() -> void:
+		cancelled = true
+		completed.emit(false)
+		
+	func get_claim_state() -> ClaimState:
+		var claim_state := ClaimState.new()
+		claim_state.progenitor = progenitor
+		claim_state.cell_type = cell_type
+		claim_state.energy_provided = energy_provided
+		claim_state.ranking_data = ranking_data.duplicate()
+		return claim_state
+		
 class Config extends GeneConfig:
 		
 	func create_gene(cell:Cell, _progenitor:Cell) -> ClaimableCellGene:

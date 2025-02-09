@@ -30,7 +30,7 @@ func update_state() -> void:
 func apply_damage_resistance(_source_index:HexIndex, _damage_amount:int, _damage_type:Cell.DamageType) -> int:
 	return 0
 	
-func init_cell(_cell:Cell) -> void:
+func init_cell() -> void:
 	pass
 	
 func add_state(gene_state:GeneState) -> void:

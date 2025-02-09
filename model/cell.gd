@@ -8,7 +8,7 @@ enum DamageType {
 
 var genome:Genome
 var cell_type:CellType
-var orientation:HexIndex.HexDirection = HexIndex.HexDirection.NE
+var orientation:HexIndex.HexDirection = HexIndex.HexDirection.E
 
 var cell_number:int
 var title:String
@@ -50,12 +50,19 @@ var is_alive:bool:
 
 var is_dead:bool:
 	get: return life <= 0
-
-func _init(progenitor:Cell, cell_type_:CellType, state_:CellState = null) -> void:
 	
+func _init(world_:World, index_:HexIndex, cell_type_:CellType, progenitor:Cell = null) -> void:
+	
+	world_ref = weakref(world_)
+	index = index_
 	cell_type = cell_type_
+
 	genome = cell_type.genome
+	cell_number = world.allocate_cell_number()
+	step_created = world.current_step
 	
+	title = "%s:%s:%d" % [genome.name, cell_type.name, cell_number]
+
 	max_energy = cell_type.energy_cost * 2
 	new_energy = 0
 	energy = 0
@@ -71,12 +78,18 @@ func _init(progenitor:Cell, cell_type_:CellType, state_:CellState = null) -> voi
 					
 	immortal = has_gene(ImmortalityGene)
 	
+	if progenitor:
+		var progenitor_direction := index.neighbor_direction(progenitor.index)
+		orientation = HexIndex.opposite_direction(progenitor_direction)
+		#prints("cell", self, index, orientation, progenitor, progenitor.index, progenitor.orientation, progenitor_direction)
+		if progenitor.cell_type == cell_type:
+			generation = progenitor.generation + 1	
+	elif genome != world.environment_genome:
+		#prints("cell", self, index, orientation)
+		pass
+			
 	for gene:Gene in genes:
-		gene.init_cell(self)
-		
-	if state_:
-		state_.start_energy = energy
-		state_.start_life = life
+		gene.init_cell()
 
 func perform_actions(state_:CellState) -> void:
 	
@@ -128,11 +141,18 @@ func update_state(state_:CellState) -> void:
 	state.energy_wanted = energy_wanted
 
 func take_damage(source_index:HexIndex, damage_amount:int, damage_type:DamageType) -> int:
+	
+	if immortal:
+		return 0
+		
 	for gene in genes:
 		damage_amount -= gene.apply_damage_resistance(source_index, damage_amount, damage_type)
-		if damage_amount <= 0: return 0
+		if damage_amount <= 0: 
+			return 0
+			
 	life -= damage_amount
 	state.gene_states.append(DamageTakenGeneState.new(source_index, damage_amount, damage_type))
+	
 	return damage_amount
 	
 func get_gene(type:Script) -> Gene:
@@ -172,8 +192,7 @@ func get_cell_attribute_value(attribute:StringName) -> float:
 	return 0.0
 	
 func _to_string() -> String:
-	return "Cell:%s:%s:%d{ energy: %0.0f, new_energy: %0.0f, life: %0.0f, new_life: %0.0f }" \
-		% [genome.name, cell_type.name, cell_number, energy, new_energy, life, new_life]
+	return title
 
 var _connected_life:int = -1
 var connected_life:int:

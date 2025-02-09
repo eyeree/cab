@@ -19,7 +19,7 @@ class_name BattleMode extends Node
 @onready var _debug_panel: PanelContainer = %DebugPanel
 @onready var _debug_hex_index: Label = %DebugHexIndex
 
-const _min_run_speed_delta:float = 0.01
+const _min_run_speed_delta:float = 0.0
 const _max_run_speed_delta:float = 2.0
 @export var _run_speed_curve:Curve
 
@@ -98,7 +98,7 @@ func _show_selected_cell() -> void:
 
 class BattleOptions extends RefCounted:
 	var rings:int = 10
-	var steps:int = 50
+	var steps:int = 500
 	var initial_content:HexStore
 	
 func battle(options:BattleOptions = BattleOptions.new()) -> void:
@@ -260,9 +260,10 @@ func _get_initial_content() -> HexStore:
 
 	var initial_content:HexStore = HexStore.new()	
 	
-	initial_content.set_content(HexIndex.CENTER.diagonal_neighbor(HexIndex.HexDiagonal.N), cell_type_1a.create_cell())
-	initial_content.set_content(HexIndex.CENTER.diagonal_neighbor(HexIndex.HexDiagonal.SE), cell_type_2a.create_cell())
-	initial_content.set_content(HexIndex.CENTER.diagonal_neighbor(HexIndex.HexDiagonal.SW), cell_type_2a.create_cell())
+	initial_content.set_content(HexIndex.CENTER, cell_type_1a)
+	#initial_content.set_content(HexIndex.from(-3, 0, 3), cell_type_1a)
+	#initial_content.set_content(HexIndex.from(2, 2, -4), cell_type_2a)
+	#initial_content.set_content(HexIndex.from(4, -2, -2), cell_type_2a)
 
 	return initial_content
 	
@@ -320,6 +321,7 @@ func _start_run_timer() -> void:
 		_run_speed_curve.sample(_run_speed_slider.value), 
 		0.0, 1.0,
 		_max_run_speed_delta, _min_run_speed_delta)
+	#prints('delta', delta, _run_speed_slider.value, _run_speed_curve.sample(_run_speed_slider.value))
 	_run_timer = get_tree().create_timer(delta)
 	_run_timer.timeout.connect(_on_run_timer)
 	

@@ -34,6 +34,3 @@ class Type extends GeneType:
 		return Config.new(self)
 
 static var gene_type_ = Type.new()
-
-static func _static_init() -> void:
-	prints('GenerateEnergyGene._static_init', gene_type_)

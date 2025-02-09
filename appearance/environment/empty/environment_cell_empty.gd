@@ -6,7 +6,7 @@ extends CellAppearance
 @onready var current_mesh: MeshInstance3D = %Current
 
 var _claim_cell_appearances:Array[CellAppearance] = []
-var _claims:Array[ClaimableCellGene.Claim] = []
+var _claim_states:Array[ClaimableCellGene.ClaimState] = []
 
 #var _highlighted_cell_appearance:CellAppearance = null
 #
@@ -15,7 +15,7 @@ var _claims:Array[ClaimableCellGene.Claim] = []
 	#
 #func _highlight_claim(claim:ClaimableCellGene.Claim) -> void:
 	#
-	#if claim == null or not _claims.has(claim):
+	#if claim == null or not _claim_states.has(claim):
 		#start_mesh.visible = false
 		#end_mesh.visible = false
 		#current_mesh.visible = false
@@ -46,7 +46,7 @@ var _claims:Array[ClaimableCellGene.Claim] = []
 	#current_mesh.position = to_local(appearance_position)
 	#current_mesh.visible = true
 #
-	#var i = _claims.find(claim)
+	#var i = _claim_states.find(claim)
 	#_highlighted_cell_appearance = _claim_cell_appearances[i]
 	#highlight.reparent(_highlighted_cell_appearance, false)
 	#highlight.visible = true
@@ -60,31 +60,34 @@ func set_state(cell_state:CellState) -> void:
 		claim_cell_appearance.queue_free()
 	_claim_cell_appearances.clear()
 	
-	var claim_state:ClaimableCellGene.State = cell_state.get_substate(ClaimableCellGene.State)
-	if claim_state == null or claim_state.claims.size() == 0:
+	var gene_state:ClaimableCellGene.State = cell_state.get_substate(ClaimableCellGene.State)
+	if gene_state == null:
 		return
 
 	var grid:Grid = get_grid()
 	if grid == null: 
 		return
 		
-	_claims.assign(claim_state.claims)
-	_claims.sort_custom(ClaimableCellGene.rank_claims)
+	_claim_states.assign(
+		gene_state.claim_states.filter(
+			func (claim_state): 
+				return claim_state.energy_provided > 0.0))
+	_claim_states.sort_custom(ClaimableCellGene.rank_claims)
 	_claim_cell_appearances.assign(
-		_claims.map(func (claim): 
+		_claim_states.map(func (claim): 
 			return claim.cell_type.cell_appearance.instantiate()))
 			
 	for i:int in range(_claim_cell_appearances.size()):
 		
 		var cell_appearance:CellAppearance = _claim_cell_appearances[i]
-		var claim:ClaimableCellGene.Claim = _claims[i]
+		var claim_state:ClaimableCellGene.ClaimState = _claim_states[i]
 
 		add_child(cell_appearance)
 		
-		var percent_complete:float = min(1.0, float(claim.energy_provided) / float(claim.cell_type.energy_cost))
+		var percent_complete:float = min(1.0, float(claim_state.energy_provided) / float(claim_state.cell_type.energy_cost))
 		percent_complete = max(0.0, percent_complete - (0.1 * i))
 		
-		var start:Vector3 = grid.get_center_point(claim.progenitor.index)
+		var start:Vector3 = grid.get_center_point(claim_state.progenitor.index)
 		var end:Vector3 = grid.get_center_point(index)
 		start += (end - start) * 0.3	
 	

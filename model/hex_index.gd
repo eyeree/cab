@@ -4,11 +4,11 @@ class_name HexIndex extends RefCounted
 
 #region Direction
 
-enum HexDirection { NE = 0, E = 1, SE = 2, SW = 3, W = 4, NW = 5 }
+enum HexDirection { E = 0, SE = 1, SW = 2, W = 3, NW = 4, NE = 5 }
 
 static var ALL_DIRECTIONS:Array[HexDirection] = [
-	HexDirection.NE, HexDirection.E, HexDirection.SE, 
-	HexDirection.SW, HexDirection.W, HexDirection.NW
+	HexDirection.E, HexDirection.SE, HexDirection.SW, 
+	HexDirection.W, HexDirection.NW, HexDirection.NE
 ]
 	
 static func rotate_direction_right(direction:HexDirection, steps:int = 1) -> HexDirection:
@@ -37,6 +37,9 @@ static func orient_directions(orientation:HexDirection, directions:Array[HexDire
 	for i in range(result.size()):
 		result[i] = orient_direction(orientation, result[i])
 	return result
+	
+static func opposite_direction(direction:HexDirection) -> HexDirection:
+	return ((direction + 3) % 6) as HexDirection
 
 #endregion
 
@@ -211,11 +214,11 @@ func equals(other:HexIndex) -> bool:
 	if not other: return false
 	return _key == other._key
 	
-func direction_to(index:HexIndex) -> HexDirection:
+func neighbor_direction(index:HexIndex) -> HexDirection:
 	var delta = index.subtract(self)
 	if delta.distance_to_center() != 1:
-		push_error('direction_to target %s too far from %s' % [index, self])
-		return HexDirection.E
+		push_error('neighbor_direction target %s too far from %s' % [index, self])
+		return HexDirection.NE
 	else:
 		return HexIndex.INDEX_TO_DIRECTION[delta]
 
@@ -241,30 +244,30 @@ static var DIAGONAL_VECTORS:Array[HexIndex] = [
 ]
 
 static var DIRECTION_VECTORS:Array[HexIndex] = [
-	HexIndex.from(+1, -1, 0), # NE
 	HexIndex.from(+1, 0, -1), # E
 	HexIndex.from(0, +1, -1), # SE
 	HexIndex.from(-1, +1, 0), # SW
 	HexIndex.from(-1, 0, +1), # W
 	HexIndex.from(0, -1, +1), # NW
+	HexIndex.from(+1, -1, 0), # NE
 ]
 
 static var INDEX_TO_DIRECTION:Dictionary[HexIndex, HexDirection] = {
-	HexIndex.from(+1, -1, 0): HexDirection.NE,
 	HexIndex.from(+1, 0, -1): HexDirection.E,
 	HexIndex.from(0, +1, -1): HexDirection.SE,
 	HexIndex.from(-1, +1, 0): HexDirection.SW,
 	HexIndex.from(-1, 0, +1): HexDirection.W,
-	HexIndex.from(0, -1, +1): HexDirection.NW
+	HexIndex.from(0, -1, +1): HexDirection.NW,
+	HexIndex.from(+1, -1, 0): HexDirection.NE,
 }
 
 static var DIRECTION_LABEL:Array[String] = [
-	"NE",
 	"E",
 	"SE",
 	"SW",
 	"W",
-	"NW"
+	"NW",
+	"NE",
 ]
 
 class VisitQueue extends RefCounted:
