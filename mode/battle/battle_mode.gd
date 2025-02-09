@@ -19,13 +19,15 @@ class_name BattleMode extends Node
 @onready var _debug_panel: PanelContainer = %DebugPanel
 @onready var _debug_hex_index: Label = %DebugHexIndex
 
-const _min_run_speed_delta:float = 0.0
-const _max_run_speed_delta:float = 2.0
+const _min_run_run_steps_per_second := 1.0
+const _max_run_run_steps_per_second := 500.0
+const _default_run_speed_percent := 0.5
 @export var _run_speed_curve:Curve
 
 var _is_running:bool = false
-var _run_timer:SceneTreeTimer = null
-var _run_waiting:bool = false
+var _run_steps_per_second:float
+
+var _is_loading:bool = false
 
 var _world:World = null
 var _world_state:WorldState = null
@@ -38,6 +40,8 @@ var _num_steps:int
 var _current_step:int
 var _displayed_step:int
 var _loaded_steps:int
+
+var _step_delta:float
 
 var _load_thread:Thread = null
 var _stop_loading:bool = false
@@ -53,6 +57,8 @@ func _ready() -> void:
 	_current_step_slider.value_changed.connect(_on_current_step_changed)
 	
 	_run_speed_slider.value_changed.connect(_on_run_speed_changed)
+	_run_speed_slider.value = _default_run_speed_percent
+	_on_run_speed_changed(_run_speed_slider.value)
 	
 	_grid.mouse_entered_hex.connect(_on_mouse_entered_hex)
 	_grid.mouse_exited_hex.connect(_on_mouse_exited_hex)
@@ -61,6 +67,10 @@ func _ready() -> void:
 	GeneDetailUI.gene_signals.highlight_cell.connect(_highlight_cell)
 
 	battle()
+	
+func _process(delta: float) -> void:
+	if _is_loading:	_load_process()
+	if _is_running: _run_process(delta)
 	
 func _highlight_cell(index:HexIndex) -> void:
 	_grid.set_selected_index(index)
@@ -98,7 +108,7 @@ func _show_selected_cell() -> void:
 
 class BattleOptions extends RefCounted:
 	var rings:int = 10
-	var steps:int = 500
+	var steps:int = 5000
 	var initial_content:HexStore
 	
 func battle(options:BattleOptions = BattleOptions.new()) -> void:
@@ -106,7 +116,7 @@ func battle(options:BattleOptions = BattleOptions.new()) -> void:
 	_grid.clear_all_hex_content()
 	
 	_num_steps = options.steps
-	_current_step = 0
+	_current_step = -1
 	_displayed_step = -1
 	_loaded_steps = -1
 
@@ -167,7 +177,7 @@ func _load(battle_options:BattleOptions) -> void:
 	
 	if OS.has_feature('nothreads'):
 		
-		_load_in_process = true
+		_is_loading = true
 	
 	else:
 		_load_started.call_deferred()
@@ -179,10 +189,7 @@ func _load(battle_options:BattleOptions) -> void:
 			if _stop_loading: break
 		_load_finished.call_deferred()
 		
-var _load_in_process:bool = false
-
-func _process(_delta: float) -> void:
-	if not _load_in_process: return
+func _load_process() -> void:
 	if _loaded_steps == 0:
 		_load_started()
 	var total_ms:int = 0
@@ -195,7 +202,7 @@ func _process(_delta: float) -> void:
 		total_ms += elapsed_ms
 		_load_progress(step_number, elapsed_ms)
 		if _loaded_steps == _num_steps:
-			_load_in_process = false
+			_is_loading = false
 			_load_finished()
 			break
 
@@ -204,13 +211,14 @@ func _load_started() -> void:
 	_set_step(0)
 
 func _load_progress(steps_done:int, _ms_per_step:float) -> void:
+	
+	#if steps_done > 100: return
+	
 	var was_waiting = _current_step > _loaded_steps and _current_step <= steps_done
 	_loaded_steps = steps_done
 	_load_progress_bar.value = _loaded_steps
-	if _is_running and _run_waiting and _current_step + 1 == _loaded_steps:
-		_run_waiting = false
-		_next_step()
-	elif was_waiting:
+	if was_waiting:
+		_overlay_panel.visible = false
 		_update_grid()
 	
 func _load_finished() -> void:
@@ -269,71 +277,54 @@ func _get_initial_content() -> HexStore:
 	
 func _on_current_step_changed(value) -> void:
 	_set_step(value)
-	if _is_running and _run_waiting and _current_step <= _loaded_steps:
-		_start_run_timer()
 	
 func _first_step() -> void:
 	_set_step(0)
 
 func _previous_step() -> void:
-	if _current_step > 0:
-		_set_step(_current_step - 1)
-	else:
-		prints('_previous_step error', _current_step)
+	_set_step(_current_step - 1)
 	
 func _run() -> void:
-	_run_waiting = false
 	_is_running = true
-	_next_step()
+	_step_delta = 0.0
+	_update_ui()
 
 func _pause() -> void:
 	_is_running = false
-	_cancel_run_timer()
 	_update_ui()
 	
 func _next_step() -> void:
-	if _current_step < _num_steps:
-		var next_step = _current_step + 1
-		if _is_running and next_step > _loaded_steps:	
-			_run_waiting = true		
-		else:
-			if _is_running:
-				if next_step == _num_steps:
-					_is_running = false
-				else:
-					_start_run_timer()
-			_set_step(next_step)
-	else:
-		prints('_next_step error', _current_step, _num_steps)
+	_set_step(_current_step + 1)
 
 func _last_step() -> void:
-	_is_running = false
 	_set_step(_num_steps)
 
-func _cancel_run_timer() -> void:
-	if _run_timer:
-		_run_timer.timeout.disconnect(_on_run_timer)
-		_run_timer = null
-
-func _start_run_timer() -> void:
-	_cancel_run_timer()
-	var delta:float = remap(
-		_run_speed_curve.sample(_run_speed_slider.value), 
-		0.0, 1.0,
-		_max_run_speed_delta, _min_run_speed_delta)
-	#prints('delta', delta, _run_speed_slider.value, _run_speed_curve.sample(_run_speed_slider.value))
-	_run_timer = get_tree().create_timer(delta)
-	_run_timer.timeout.connect(_on_run_timer)
-	
-func _on_run_timer() -> void:
-	_next_step()
-	
-func _on_run_speed_changed(_value:float) -> void:
-	if _is_running: _start_run_timer()
+func _on_run_speed_changed(value:float) -> void:
+	_run_steps_per_second = remap(
+		_run_speed_curve.sample(value), 
+		0.0, 
+		1.0,
+		_min_run_run_steps_per_second, 
+		_max_run_run_steps_per_second)
 	
 func _set_step(step_number:int) -> void:
+	
+	if step_number < 0:
+		step_number = 0
+	
+	if step_number > _num_steps:
+		step_number = _num_steps
+		
+	if _current_step == step_number:
+		return
+		
 	_current_step = step_number
+	
+	if _current_step == _num_steps:
+		_is_running = false
+	
 	_update_ui()
+	
 	if _current_step > _loaded_steps:
 		_overlay_label.text = "Loading..."
 		_overlay_panel.visible = true
@@ -365,6 +356,20 @@ func _update_grid() -> void:
 			_set_cell_appearance(index, current_cell_type)
 		_set_cell_state(index, current_history)
 	_displayed_step = _current_step
+
+func _run_process(delta:float) -> void:
+	
+	if _current_step > _loaded_steps:
+		return
+		
+	_step_delta += _run_steps_per_second * delta
+	if _step_delta < 1.0:
+		return
+		
+	var step_delta := floori(_step_delta)
+	_step_delta -= step_delta
+	var new_step := mini(_current_step + step_delta, _loaded_steps)
+	_set_step(new_step)
 
 func _set_cell_appearance(index:HexIndex, cell_type:CellType):
 	var cell_appearance:CellAppearance = cell_type.cell_appearance.instantiate() \
