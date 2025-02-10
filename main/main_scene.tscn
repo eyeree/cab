@@ -28,7 +28,9 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 
 [node name="ViewPanelContainer" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer"]
 layout_mode = 2
@@ -145,6 +147,7 @@ text = "Step"
 
 [node name="CurrentStepValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "9999"
@@ -157,31 +160,32 @@ text = "Of"
 
 [node name="NumStepsValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "9999"
 horizontal_alignment = 2
 
-[node name="SettingsPanel" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
+[node name="ViewSettingsPanel" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"DetailPanel"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel"]
 visible = false
 layout_mode = 2
 
-[node name="RunSpeedContainer" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
+[node name="RunSpeedContainer" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel"]
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel"]
 layout_mode = 2
 columns = 2
 
-[node name="RunSpeedLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
+[node name="RunSpeedLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
 layout_mode = 2
 text = "Speed:"
 
-[node name="RunSpeedSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
+[node name="RunSpeedSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
@@ -191,38 +195,6 @@ tooltip_text = "Speed of playback"
 max_value = 1.0
 step = 0.01
 value = 0.8
-ticks_on_borders = true
-
-[node name="NumStepsLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
-layout_mode = 2
-text = "Steps:"
-
-[node name="NumStepsSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-max_value = 1.0
-step = 0.01
-value = 0.8
-ticks_on_borders = true
-
-[node name="GridSizeLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
-layout_mode = 2
-text = "Size:"
-
-[node name="GridSizeSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/SettingsPanel/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-max_value = 3.0
-value = 2.0
-rounded = true
 ticks_on_borders = true
 
 [node name="CellViewContainer" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
@@ -237,6 +209,7 @@ layout_mode = 2
 [node name="GridPanelContainer" type="PanelContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
 theme_type_variation = &"NomarginPanelContainer"
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer/GridPanelContainer"]
@@ -246,12 +219,11 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/GridPanelContainer/SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(757, 648)
+size = Vector2i(512, 648)
 render_target_update_mode = 4
 
 [node name="HexGrid" parent="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
 unique_name_in_owner = true
-grid_size = 0
 
 [node name="CameraControl" parent="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
 CfgRotateSpeed = 0.8
@@ -289,18 +261,69 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="EditPanelContainer" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/EditPanelContainer"]
 layout_mode = 2
 
-[node name="PlaceholderContainer" type="PanelContainer" parent="HBoxContainer/EditPanelContainer/VBoxContainer"]
+[node name="EditSettingsContainer" type="PanelContainer" parent="HBoxContainer/EditPanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"DetailPanel"
 
-[node name="Label" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/PlaceholderContainer"]
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer"]
 layout_mode = 2
-text = "Placeholder"
+columns = 3
+
+[node name="NumStepsLabel" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
+layout_mode = 2
+text = "Steps:"
+
+[node name="NumStepsSlider" type="HSlider" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Speed of playback"
+min_value = 10.0
+max_value = 5000.0
+step = 10.0
+value = 500.0
+rounded = true
+ticks_on_borders = true
+
+[node name="NumStepsValue2" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "(9999)"
+horizontal_alignment = 1
+
+[node name="GridSizeLabel" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
+layout_mode = 2
+text = "Size:"
+
+[node name="GridSizeSlider" type="HSlider" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Speed of playback"
+min_value = 2.0
+max_value = 15.0
+value = 5.0
+rounded = true
+ticks_on_borders = true
+
+[node name="GridSizeValue" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "(9999)"
+horizontal_alignment = 1
 
 [editable path="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid"]
 [editable path="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl"]

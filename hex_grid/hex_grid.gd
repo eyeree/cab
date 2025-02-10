@@ -10,6 +10,9 @@ class_name HexGrid extends Node3D
 
 #region: Initialization
 
+func _init() -> void:
+	rings = get_script().get_property_default_value("rings")
+
 func _ready() -> void:
 	_on_grid_size_set()
 	set_selected_index(HexIndex.INVALID)
@@ -19,55 +22,36 @@ func _ready() -> void:
 
 #region: HexGrid Size
 
-enum GridSize { SMALL, MEDIUM, LARGE, HUGE }
-
 # percent of plane used, to leave a margin so there is room for outer lines
 const plane_extent_percent:float = 0.9
 
-class GridSizeInfo:
-	var hex_max_distance:int
-	var hex_outer_radius:float
-	var hex_inner_radius:float
-	var content_scale:Vector3
-	var line_size:float
+var _hex_outer_radius:float
+var hex_outer_radius:float:
+	get: return _hex_outer_radius
+	
+var _hex_inner_radius:float
+var hex_inner_radius:float:
+	get: return _hex_inner_radius
+	
+var _content_scale:Vector3
+var content_scale:Vector3:
+	get: return _content_scale
 
-	func _init(
-		hex_max_distance_:int,
-		line_size_:float
-	):
-		line_size = line_size_
-		hex_max_distance = hex_max_distance_
-		hex_outer_radius = (plane_extent_percent / ((hex_max_distance*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
-		hex_inner_radius = (hex_outer_radius * sqrt(3.0) / 2.0)
-		content_scale = Vector3(hex_inner_radius, hex_inner_radius, hex_inner_radius) * 2
-
-	func apply_grid_material_settings(grid_material:ShaderMaterial) -> void:
-		grid_material.set_shader_parameter('max_hex_distance', hex_max_distance)
-		grid_material.set_shader_parameter('hex_outer_radius', hex_outer_radius)
-		#grid_material.set_shader_parameter('line_size', line_size)
-			
-static var _grid_size_info_map: Dictionary[GridSize, GridSizeInfo] = {
-	GridSize.SMALL: GridSizeInfo.new(5, 0.13),
-	GridSize.MEDIUM: GridSizeInfo.new(10, 0.17),
-	GridSize.LARGE: GridSizeInfo.new(20, 0.21),
-	GridSize.HUGE: GridSizeInfo.new(40, 0.30),
-}
-
-@export var grid_size:GridSize = GridSize.SMALL:
-	set(value):
-		grid_size = value
-		_grid_size_info = _grid_size_info_map[value]
+var _rings:int
+@export var rings:int = 3:
+	get: return _rings
+	set(value): 
+		_rings = value
+		_hex_outer_radius = (plane_extent_percent / ((_rings*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
+		_hex_inner_radius = (_hex_outer_radius * sqrt(3.0) / 2.0)
+		_content_scale = Vector3(_hex_inner_radius, _hex_inner_radius, _hex_inner_radius) * 2
 		_on_grid_size_set()
-
-var _grid_size_info:GridSizeInfo = _grid_size_info_map[grid_size]
-
-var rings:int:
-	get: return _grid_size_info.hex_max_distance
 
 func _on_grid_size_set():
 	if not is_inside_tree(): return
 	clear_all_hex_content()
-	_grid_size_info.apply_grid_material_settings(_grid_material)
+	_grid_material.set_shader_parameter('max_hex_distance', rings)
+	_grid_material.set_shader_parameter('hex_outer_radius', hex_outer_radius)	
 
 #endregion
 	
@@ -98,9 +82,9 @@ func clear_highlighted_indexes() -> void:
 var _hex_content:HexStore = HexStore.new()
 
 func _add_content_to_tree(index:HexIndex, content:Node3D):
-	var position2D:Vector2 = index.center_point(_grid_size_info.hex_outer_radius)
+	var position2D:Vector2 = index.center_point(hex_outer_radius)
 	content.position = Vector3(position2D.x, 0, position2D.y)
-	content.scale = _grid_size_info.content_scale
+	content.scale = content_scale
 	_grid_plane.add_child(content)
 
 func _remove_content_from_tree(content:Node3D):
@@ -152,8 +136,8 @@ func _input(event: InputEvent) -> void:
 func _get_mouse_hex_index() -> HexIndex:
 	var grid_position:Vector2 = _mouse_position_to_grid_plane_position()
 	if grid_position == Vector2.INF: return HexIndex.INVALID
-	var hex_index:HexIndex = HexIndex.from_point(grid_position, _grid_size_info.hex_outer_radius)
-	if hex_index.distance_to_center() > _grid_size_info.hex_max_distance: return HexIndex.INVALID
+	var hex_index:HexIndex = HexIndex.from_point(grid_position, hex_outer_radius)
+	if hex_index.distance_to_center() > rings: return HexIndex.INVALID
 	return hex_index
 
 # range of -0.5 to 0.5 over the grid plane adjusted for the plane_extent_percent
@@ -174,14 +158,14 @@ func _mouse_position_to_grid_plane_position() -> Vector2:
 		return Vector2(hit_position.x, -hit_position.y)
 
 func get_center_point(index:HexIndex) -> Vector3:
-	var center_point:Vector2 = index.center_point(_grid_size_info.hex_outer_radius)
+	var center_point:Vector2 = index.center_point(hex_outer_radius)
 	var local_point:Vector3 = Vector3(center_point.x, -center_point.y, 0)
 	return to_global(local_point)
 	
 func point_to_index(global_point:Vector3) -> HexIndex:
 	var local_point = to_local(global_point)
-	var hex_index:HexIndex = HexIndex.from_point(Vector2(local_point.x, local_point.y), _grid_size_info.hex_outer_radius)
-	if hex_index.distance_to_center() > _grid_size_info.hex_max_distance: 
+	var hex_index:HexIndex = HexIndex.from_point(Vector2(local_point.x, local_point.y), hex_outer_radius)
+	if hex_index.distance_to_center() > rings: 
 		return HexIndex.INVALID
 	else:
 		return hex_index

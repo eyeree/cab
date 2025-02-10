@@ -11,9 +11,14 @@ class_name MainScene extends Node
 @onready var _run_speed_slider: HSlider = %RunSpeedSlider
 @onready var _grid: HexGrid = %HexGrid
 @onready var _cell_details_panel: CellViewPanel = %CellViewPanel
-@onready var _overlay_panel: Panel = %OverlayPanel
 @onready var _current_step_value: Label = %CurrentStepValue
 @onready var _num_steps_value: Label = %NumStepsValue
+@onready var _num_steps_slider: HSlider = %NumStepsSlider
+@onready var _grid_size_slider: HSlider = %GridSizeSlider
+@onready var _num_steps_value_2: Label = %NumStepsValue2
+@onready var _grid_size_value: Label = %GridSizeValue
+
+@onready var _overlay_panel: Panel = %OverlayPanel
 @onready var _overlay_label: Label = %OverlayLabel
 
 @onready var _debug_panel: PanelContainer = %DebugPanel
@@ -27,10 +32,10 @@ const _default_run_speed_percent := 0.5
 var _is_running:bool = false
 var _run_steps_per_second:float
 
-var _is_loading:bool = false
+var _is_process_loading:bool = false
+var _load_needed:bool = false
 
 var _world:World = null
-var _world_state:WorldState = null
 
 var _selected_index:HexIndex = HexIndex.INVALID
 var _mouse_index:HexIndex = HexIndex.INVALID
@@ -40,11 +45,12 @@ var _num_steps:int
 var _current_step:int
 var _displayed_step:int
 var _loaded_steps:int
-
 var _step_delta:float
 
 var _load_thread:Thread = null
 var _stop_loading:bool = false
+
+var _initial_content := HexStore.new()
 
 func _ready() -> void:
 	
@@ -54,7 +60,17 @@ func _ready() -> void:
 	_pause_button.pressed.connect(_pause)
 	_next_step_button.pressed.connect(_next_step)
 	_last_step_button.pressed.connect(_last_step)
+	
 	_current_step_slider.value_changed.connect(_on_current_step_changed)
+	_current_step_slider.set_value_no_signal(0)
+	
+	_current_step_value.text = '0'
+	
+	_grid_size_slider.value_changed.connect(_on_grid_size_changed)
+	_on_grid_size_changed(_grid_size_slider.value)
+	
+	_num_steps_slider.value_changed.connect(_on_num_steps_changed)
+	_on_num_steps_changed(_num_steps_slider.value)
 	
 	_run_speed_slider.value_changed.connect(_on_run_speed_changed)
 	_run_speed_slider.value = _default_run_speed_percent
@@ -65,11 +81,9 @@ func _ready() -> void:
 	_grid.hex_selected.connect(_on_hex_selected)
 	
 	GeneViewPanel.gene_signals.highlight_cell.connect(_highlight_cell)
-
-	battle()
 	
 func _process(delta: float) -> void:
-	if _is_loading:	_load_process()
+	if _is_process_loading:	_process_load()
 	if _is_running: _run_process(delta)
 	
 func _highlight_cell(index:HexIndex) -> void:
@@ -94,8 +108,8 @@ func _show_cell(index:HexIndex) -> void:
 	_update_shown_cell()
 	
 func _update_shown_cell() -> void:
-	if _world_state == null: return
-	var cell_state:CellState = _world_state.get_history_entry(_index_shown, _current_step)
+	if _world == null: return
+	var cell_state:CellState = _world.state.get_history_entry(_index_shown, _current_step)
 	_cell_details_panel.show_cell_state(cell_state)
 
 func _show_selected_cell() -> void:
@@ -106,23 +120,12 @@ func _show_selected_cell() -> void:
 	else:
 		_show_cell(_selected_index)
 
-class BattleOptions extends RefCounted:
-	var rings:int = 10
-	var steps:int = 5000
-	var initial_content:HexStore
+func _load() -> void:
 	
-func battle(options:BattleOptions = BattleOptions.new()) -> void:
-	
-	_grid.clear_all_hex_content()
-	
-	_num_steps = options.steps
 	_current_step = -1
 	_displayed_step = -1
 	_loaded_steps = -1
 
-	_num_steps_value.text = str(_num_steps)
-	_current_step_value.text = str(_current_step)
-	
 	_current_step_slider.max_value = _num_steps
 	_current_step_slider.min_value = 0
 	_current_step_slider.set_value_no_signal(0)
@@ -139,22 +142,17 @@ func battle(options:BattleOptions = BattleOptions.new()) -> void:
 	_next_step_button.disabled = true
 	_last_step_button.disabled = true
 	
-	if OS.has_feature('nothreads'):
-		
-		_load(options)
-		
+	var world_options = World.WorldOptions.new()
+	world_options.rings = _grid_size_slider.value
+	world_options.steps = _num_steps_slider.value
+	world_options.initial_content = _initial_content
+	_world = World.new(world_options)
+	
+	if OS.has_feature('nothreads'):		
+		_is_process_loading = true
 	else:
+		_background_load()
 		
-		if _load_thread:
-			_stop_loading = true
-			_load_thread.wait_to_finish()
-			_load_thread = null
-			_stop_loading = false
-			
-		_load_thread = Thread.new()
-		_load_thread.start(_load.bind(options))
-		
-	#_countdown()
 	_current_step_slider.editable = true
 		
 func _exit_tree() -> void:
@@ -162,47 +160,38 @@ func _exit_tree() -> void:
 		_stop_loading = true
 		_load_thread.wait_to_finish()
 		
-func _load(battle_options:BattleOptions) -> void:
+func _background_load() -> void:
 	
-	battle_options.rings = _grid.rings # FIX
-	battle_options.initial_content = _get_initial_content() # FIX
-	
-	_world_state = WorldState.new(battle_options.rings, battle_options.steps)
-	
-	var world_options = World.WorldOptions.new()
-	world_options.rings = battle_options.rings
-	world_options.initial_content = battle_options.initial_content
-	world_options.world_state = _world_state
-	_world = World.new(world_options)
-	
-	if OS.has_feature('nothreads'):
+	if _load_thread:
+		_stop_loading = true
+		_load_thread.wait_to_finish()
+		_load_thread = null
+		_stop_loading = false
 		
-		_is_loading = true
-	
-	else:
-		_load_started.call_deferred()
-		for step_number in range(1, _num_steps + 1):
-			var start_ms:int = Time.get_ticks_msec()
-			_world.step(step_number)
-			var end_ms:int = Time.get_ticks_msec()
-			_load_progress.call_deferred(step_number, end_ms - start_ms)
-			if _stop_loading: break
-		_load_finished.call_deferred()
+	_load_thread = Thread.new()
+	_load_thread.start(
+		func ():
+			_load_started.call_deferred()
+			var start_ms := Time.get_ticks_msec()
+			while _world.step() and not _stop_loading:
+				var end_ms := Time.get_ticks_msec()
+				_load_progress.call_deferred(_world.current_step, end_ms - start_ms)
+				start_ms = Time.get_ticks_msec()
+			_load_finished.call_deferred())
 		
-func _load_process() -> void:
+func _process_load() -> void:
 	if _loaded_steps == 0:
 		_load_started()
 	var total_ms:int = 0
 	while total_ms < 32:
-		var step_number:int = _loaded_steps + 1
 		var start_ms:int = Time.get_ticks_msec()
-		_world.step(step_number)
+		var finished := _world.step()
 		var end_ms:int = Time.get_ticks_msec()
 		var elapsed_ms:int = end_ms - start_ms
 		total_ms += elapsed_ms
-		_load_progress(step_number, elapsed_ms)
-		if _loaded_steps == _num_steps:
-			_is_loading = false
+		_load_progress(_world.current_step, elapsed_ms)
+		if finished:
+			_is_process_loading = false
 			_load_finished()
 			break
 
@@ -223,6 +212,11 @@ func _load_progress(steps_done:int, _ms_per_step:float) -> void:
 	
 func _load_finished() -> void:
 	pass
+	
+func _load_reset() -> void:
+	_load_needed = true
+	_load_progress_bar.value = 0
+	_world = null
 	
 func _countdown() -> void:
 	_overlay_panel.visible = true
@@ -341,10 +335,12 @@ func _update_ui() -> void:
 	_last_step_button.disabled = _current_step == _num_steps
 	_current_step_slider.set_value_no_signal(_current_step)
 	_current_step_value.text = str(_current_step)
+	_grid_size_slider.editable = _current_step == 0
+	_num_steps_slider.editable = _current_step == 0
 		
 func _update_grid() -> void:
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
-		var history:Array[CellState] = _world_state.get_history(index)
+		var history:Array[CellState] = _world.state.get_history(index)
 		var current_history:CellState = history[_current_step]
 		var current_cell_type:CellType = current_history.cell.cell_type \
 			if current_history and current_history.cell else null
@@ -389,3 +385,25 @@ func _set_cell_state(index:HexIndex, cell_state:CellState):
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ToggleDebugPanel"):
 		_debug_panel.visible = not _debug_panel.visible
+
+func _on_num_steps_changed(value:float) -> void:
+	_num_steps = roundi(value)
+	_num_steps_value.text = str(_num_steps)
+	_num_steps_value_2.text = "(%d)" % [_num_steps]
+	_current_step_slider.max_value = _num_steps
+	_load_progress_bar.max_value = _num_steps
+	_load_reset()
+	
+func _on_grid_size_changed(value:float) -> void:
+	var rings = roundi(value)
+	_grid_size_value.text = "(%d)" % [rings]
+	_debounce_on_grid_size_changed(rings)
+
+var _next_rings:int
+func _debounce_on_grid_size_changed(rings:int, delay := 0.5):
+	_next_rings = rings
+	await get_tree().create_timer(delay).timeout
+	if rings == _next_rings:
+		_grid.rings = rings
+		#_world.rings = rings
+		_load_reset()
