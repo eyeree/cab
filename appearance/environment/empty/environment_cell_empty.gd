@@ -75,7 +75,7 @@ func set_state(cell_state:CellState) -> void:
 	_claim_states.sort_custom(ClaimableCellGene.rank_claims)
 	_claim_cell_appearances.assign(
 		_claim_states.map(func (claim): 
-			return claim.cell_type.cell_appearance.instantiate()))
+			return claim.cell_type.instantiate_cell_appearance()))
 			
 	for i:int in range(_claim_cell_appearances.size()):
 		
@@ -88,7 +88,7 @@ func set_state(cell_state:CellState) -> void:
 		percent_complete = max(0.0, percent_complete - (0.1 * i))
 		
 		var start:Vector3 = grid.get_center_point(claim_state.progenitor.index)
-		var end:Vector3 = grid.get_center_point(index)
+		var end:Vector3 = grid.get_center_point(cell_state.cell.index)
 		start += (end - start) * 0.3	
 	
 		var appearance_position:Vector3 = start + ((end - start) * percent_complete)

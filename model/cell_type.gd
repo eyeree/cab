@@ -3,6 +3,7 @@ class_name CellType extends RefCounted
 var genome:Genome
 var name:String = '(new cell type)'
 var gene_configs:Array[GeneConfig] = []
+
 var cell_appearance:PackedScene
 
 var energy_cost:int:
@@ -83,3 +84,8 @@ func get_cell_attribute_list() -> Array[CellAttributeInfo]:
 
 func _to_string() -> String:
 	return "CellType:%s:%s" % [genome.name, name]
+	
+func instantiate_cell_appearance() -> CellAppearance:
+	var instance:CellAppearance = cell_appearance.instantiate()
+	instance.cell_type = self
+	return instance

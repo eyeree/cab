@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=13 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
@@ -15,6 +15,9 @@
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="LabelSettings" id="LabelSettings_rmejh"]
+font_size = 26
+
 [node name="MainScene" type="Node"]
 script = ExtResource("1_im0q4")
 _run_speed_curve = SubResource("Curve_0beij")
@@ -27,6 +30,60 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
+[node name="GridPanelContainer" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+theme_type_variation = &"NomarginPanelContainer"
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer/GridPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/GridPanelContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(832, 648)
+render_target_update_mode = 4
+
+[node name="HexGrid" parent="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
+unique_name_in_owner = true
+
+[node name="CameraControl" parent="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
+CfgRotateSpeed = 0.8
+
+[node name="OverlayPanel" type="Panel" parent="HBoxContainer/GridPanelContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"OverlayPanelOuter"
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/GridPanelContainer/OverlayPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="OverlayLabel" type="Label" parent="HBoxContainer/GridPanelContainer/OverlayPanel/CenterContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"OverlayLabel"
+text = "(overlay)"
+
+[node name="DebugPanel" type="PanelContainer" parent="HBoxContainer/GridPanelContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="DebugHexIndex" type="Label" parent="HBoxContainer/GridPanelContainer/DebugPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="ViewPanelContainer" type="PanelContainer" parent="HBoxContainer"]
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
@@ -36,6 +93,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="GameTitle" parent="HBoxContainer/ViewPanelContainer/VBoxContainer" instance=ExtResource("3_wteyq")]
+custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
@@ -134,37 +192,42 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"DetailPanel"
 
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = -6
+
+[node name="CurrentStepLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-columns = 2
-
-[node name="CurrentStepLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 8
+theme_type_variation = &"FormLabel"
 text = "Step"
 
-[node name="CurrentStepValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
+[node name="CurrentStepValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 4
+theme_type_variation = &"GraphNodeTitleLabel"
 text = "9999"
-horizontal_alignment = 2
+label_settings = SubResource("LabelSettings_rmejh")
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="NumStepsLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="NumStepsLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
+theme_type_variation = &"FormLabel"
 text = "Of"
 
-[node name="NumStepsValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/GridContainer"]
+[node name="NumStepsValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 0
+theme_type_variation = &"FormLabel"
 text = "9999"
-horizontal_alignment = 2
 
 [node name="ViewSettingsPanel" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -180,6 +243,41 @@ layout_mode = 2
 [node name="GridContainer" type="GridContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel"]
 layout_mode = 2
 columns = 2
+
+[node name="NumStepsLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
+layout_mode = 2
+text = "Steps:"
+
+[node name="NumStepsSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Speed of playback"
+min_value = 10.0
+max_value = 5000.0
+step = 10.0
+value = 500.0
+rounded = true
+ticks_on_borders = true
+
+[node name="GridSizeLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
+layout_mode = 2
+text = "Size:"
+
+[node name="GridSizeSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Speed of playback"
+min_value = 2.0
+max_value = 15.0
+value = 5.0
+rounded = true
+ticks_on_borders = true
 
 [node name="RunSpeedLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
 layout_mode = 2
@@ -205,125 +303,6 @@ theme_type_variation = &"DetailPanel"
 [node name="CellViewPanel" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/CellViewContainer" instance=ExtResource("10_ys2ax")]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="GridPanelContainer" type="PanelContainer" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 4.0
-theme_type_variation = &"NomarginPanelContainer"
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer/GridPanelContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="HBoxContainer/GridPanelContainer/SubViewportContainer"]
-handle_input_locally = false
-size = Vector2i(512, 648)
-render_target_update_mode = 4
-
-[node name="HexGrid" parent="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
-unique_name_in_owner = true
-
-[node name="CameraControl" parent="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
-CfgRotateSpeed = 0.8
-
-[node name="OverlayPanel" type="Panel" parent="HBoxContainer/GridPanelContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-theme_type_variation = &"OverlayPanelOuter"
-
-[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/GridPanelContainer/OverlayPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-
-[node name="OverlayLabel" type="Label" parent="HBoxContainer/GridPanelContainer/OverlayPanel/CenterContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"OverlayLabel"
-text = "(overlay)"
-
-[node name="DebugPanel" type="PanelContainer" parent="HBoxContainer/GridPanelContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-
-[node name="DebugHexIndex" type="Label" parent="HBoxContainer/GridPanelContainer/DebugPanel"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="EditPanelContainer" type="PanelContainer" parent="HBoxContainer"]
-custom_minimum_size = Vector2(320, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/EditPanelContainer"]
-layout_mode = 2
-
-[node name="EditSettingsContainer" type="PanelContainer" parent="HBoxContainer/EditPanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_type_variation = &"DetailPanel"
-
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer"]
-layout_mode = 2
-columns = 3
-
-[node name="NumStepsLabel" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
-layout_mode = 2
-text = "Steps:"
-
-[node name="NumStepsSlider" type="HSlider" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-min_value = 10.0
-max_value = 5000.0
-step = 10.0
-value = 500.0
-rounded = true
-ticks_on_borders = true
-
-[node name="NumStepsValue2" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(35, 0)
-layout_mode = 2
-text = "(9999)"
-horizontal_alignment = 1
-
-[node name="GridSizeLabel" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
-layout_mode = 2
-text = "Size:"
-
-[node name="GridSizeSlider" type="HSlider" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-min_value = 2.0
-max_value = 15.0
-value = 5.0
-rounded = true
-ticks_on_borders = true
-
-[node name="GridSizeValue" type="Label" parent="HBoxContainer/EditPanelContainer/VBoxContainer/EditSettingsContainer/GridContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(35, 0)
-layout_mode = 2
-text = "(9999)"
-horizontal_alignment = 1
 
 [editable path="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid"]
 [editable path="HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl"]

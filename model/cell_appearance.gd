@@ -1,6 +1,7 @@
 class_name CellAppearance extends Node3D
 
 var visible_connect_mesh:Node3D = null
+var cell_type:CellType = null
 
 func set_state(cell_history:CellState) -> void:
 	var direction_label := HexIndex.DIRECTION_LABEL[HexIndex.opposite_direction(cell_history.cell.orientation)]
@@ -26,4 +27,3 @@ func get_grid() -> HexGrid:
 		parent = parent.get_parent_node_3d()
 	return null
 	
-var index:HexIndex = null
