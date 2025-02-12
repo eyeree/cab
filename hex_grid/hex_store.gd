@@ -3,7 +3,10 @@ class_name HexStore extends RefCounted
 var _map:Dictionary[HexIndex, Variant] = {}
 
 func set_content(index:HexIndex, value:Variant) -> void:
-	_map.set(index, value)
+	if value == null:
+		_map.erase(index)
+	else:
+		_map.set(index, value)
 
 func clear_content(index:HexIndex) -> void:
 	set_content(index, null)

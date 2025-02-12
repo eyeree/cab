@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=14 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
+[ext_resource type="Script" uid="uid://mpl54ukoekto" path="res://model/world.gd" id="1_rmejh"]
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
 [ext_resource type="PackedScene" uid="uid://pkpl54rmgns7" path="res://main/title.tscn" id="3_wteyq"]
 [ext_resource type="Texture2D" uid="uid://bk1rgby8bl2hr" path="res://icon/FirstStepIcon.png" id="4_di4gq"]
@@ -11,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bjgdddepwt02c" path="res://icon/LastStepIcon.png" id="9_cupta"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_view_panel/cell_view_panel.tscn" id="10_ys2ax"]
 
-[sub_resource type="Curve" id="Curve_0beij"]
+[sub_resource type="Curve" id="Curve_sfolt"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -20,7 +21,12 @@ font_size = 26
 
 [node name="MainScene" type="Node"]
 script = ExtResource("1_im0q4")
-_run_speed_curve = SubResource("Curve_0beij")
+_run_speed_curve = SubResource("Curve_sfolt")
+
+[node name="World" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_rmejh")
+metadata/_custom_type_script = ExtResource("1_rmejh")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchors_preset = 15
@@ -71,7 +77,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"OverlayLabel"
-text = "(overlay)"
+text = "Loading..."
 
 [node name="DebugPanel" type="PanelContainer" parent="HBoxContainer/GridPanelContainer"]
 unique_name_in_owner = true

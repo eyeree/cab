@@ -1,4 +1,4 @@
-class_name World extends RefCounted
+class_name World extends Node
 
 static var empty_args:Array = []
 
@@ -12,7 +12,10 @@ static func debug_cell(cell:Cell, msg:String, args:Array = empty_args) -> void:
 
 var _rings:int
 var _steps:int
+var _initial_content:HexStore
+
 var _cells:HexStore
+
 var state:WorldState
 
 var current_step := 0
@@ -28,22 +31,44 @@ var _genome_rank_index := 0
 var environment_genome := EnvironmentGenome.new()
 var bounds_cell := Cell.new(self, HexIndex.INVALID, environment_genome.bounds_cell_type)
 
-signal cell_changed(index:HexIndex, new_cell:Cell)
+signal load_started()
+signal load_progress(steps_loaded:int)
+signal load_finished()
+
+var _is_process_loading := false
+var _loaded_steps := 0
+
+var _load_thread:Thread = null
+var _stop_loading := false
+
+#signal cell_changed(index:HexIndex, new_cell:Cell)
 
 class WorldOptions:
 	var rings:int
 	var steps:int
 	var initial_content:HexStore
 		
-func _init(options:WorldOptions):	
+func load(options:WorldOptions):	
 	
 	_rings = options.rings
 	_steps = options.steps
-	state = WorldState.new(options.rings, options.steps)
+	_initial_content = options.initial_content
 	
+	current_step = 0
+	
+	if OS.has_feature('nothreads'):		
+		_is_process_loading = true
+	else:
+		_background_load()		
+	
+func _init_state():
+	state = WorldState.new(_rings, _steps)
+	
+func _init_cells():
 	_cells = HexStore.new()
+	
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
-		var cell_type:CellType = options.initial_content.get_content(index)
+		var cell_type:CellType = _initial_content.get_content(index)
 		if cell_type == null:
 			cell_type = environment_genome.empty_cell_type
 		if not _genomes.has(cell_type.genome):
@@ -54,8 +79,57 @@ func _init(options:WorldOptions):
 		var cell:Cell = get_cell(index)
 		var cell_state:CellState = state.get_history_entry(index, 0)
 		cell.update_state(cell_state)	
+		
+func _process(_delta:float) -> void:
+	
+	if not _is_process_loading: 
+		return
+		
+	var start_ms:int = Time.get_ticks_msec()
+	
+	if _loaded_steps == 0:
+		load_started.emit.call_deferred()
+		_init_state()
+		_init_cells()
+		
+	while _step() and not _stop_loading:
+		var end_ms:int = Time.get_ticks_msec()
+		var elapsed_ms:int = end_ms - start_ms
+		if elapsed_ms >= 50: return
+		
+	_stop_loading = false
+	_is_process_loading = false
+	load_finished.emit()
 			
-func step() -> bool:
+func _background_load() -> void:
+	
+	if _load_thread and _load_thread.is_alive():
+		_stop_loading = true
+		_load_thread.wait_to_finish()
+		_load_thread = null
+		
+	_load_thread = Thread.new()
+	_load_thread.start(
+		func ():
+			load_started.emit.call_deferred()
+			_init_state()
+			_init_cells()
+			while _step() and not _stop_loading:
+				pass
+			_stop_loading = false
+			load_finished.emit.call_deferred())
+			
+func _exit_tree() -> void:
+	stop_loading()
+				
+func stop_loading() -> void:
+	if _load_thread and _load_thread.is_alive():
+		_stop_loading = true
+		_load_thread.wait_to_finish()
+	else:
+		_is_process_loading = false
+		
+func _step() -> bool:
 	if current_step == _steps:
 		return false
 	else:
@@ -63,6 +137,7 @@ func step() -> bool:
 		_cells.visit_all(_cell_perform_actions)
 		_cells.visit_all(_cell_update_state)
 		_genome_rank_index = min(_genome_rank_index + 1, _genomes.size())
+		load_progress.emit.call_deferred(current_step)
 		return true
 
 func _cell_perform_actions(index:HexIndex, cell:Cell):
@@ -99,7 +174,6 @@ func set_cell(index:HexIndex, cell_type:CellType, progenitor:Cell = null) -> Cel
 	cell_state.start_life = cell.life
 				
 	_cells.set_content(index, cell)
-	cell_changed.emit(index, cell)
 	
 	return cell
 	
