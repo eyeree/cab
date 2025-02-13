@@ -1,4 +1,4 @@
-class_name CellViewPanel extends PanelContainer
+class_name CellStatePanel extends PanelContainer
 
 @onready var cell_title: Label = %CellTitle
 
@@ -63,13 +63,13 @@ func show_cell_state(cell_state:CellState) -> void:
 		
 		for gene_config:GeneConfig in cell_type.gene_configs:
 			var gene_type:GeneType = gene_config.gene_type
-			var gene_ui:GeneViewPanel = gene_type.get_details_ui()
+			var gene_ui:GeneStatePanel = gene_type.get_gene_state_panel()
 			if gene_ui != null:
 				gene_container.add_child(gene_ui)
 			
 		displayed_cell_type = cell_type
 		
-	for gene_ui:GeneViewPanel in gene_container.get_children():
+	for gene_ui:GeneStatePanel in gene_container.get_children():
 		gene_ui.show_gene_state(cell_state)
 
 	visible = true

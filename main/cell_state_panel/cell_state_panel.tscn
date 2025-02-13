@@ -1,11 +1,11 @@
 [gd_scene load_steps=5 format=3 uid="uid://b128myar7a7y1"]
 
-[ext_resource type="Script" uid="uid://tn051d30ouhs" path="res://main/cell_view_panel/cell_view_panel.gd" id="1_tl2sj"]
+[ext_resource type="Script" uid="uid://tn051d30ouhs" path="res://main/cell_state_panel/cell_state_panel.gd" id="1_tl2sj"]
 [ext_resource type="Texture2D" uid="uid://drrup7wbb1mue" path="res://icon/EnergyIcon.png" id="2_o5trr"]
 [ext_resource type="Script" uid="uid://dd7vxd77cm12g" path="res://shared/equal_hbox_container.gd" id="2_rhete"]
 [ext_resource type="Texture2D" uid="uid://bfu1wwfe0eytf" path="res://icon/LifeIcon.png" id="3_rhete"]
 
-[node name="CellViewPanel" type="PanelContainer"]
+[node name="CellStatePanel" type="PanelContainer"]
 offset_right = 8.0
 offset_bottom = 8.0
 scale = Vector2(1.25, 1.25)

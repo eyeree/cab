@@ -1,4 +1,4 @@
-class_name GeneViewPanel extends PanelContainer
+class_name GeneStatePanel extends PanelContainer
 
 class Signals:
 	@warning_ignore("unused_signal")

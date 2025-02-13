@@ -1,4 +1,4 @@
-class_name GenerateEnergyGeneViewPanel extends GeneViewPanel
+class_name GenerateEnergyGeneStatePanel extends GeneStatePanel
 
 @onready var energy_gained: Label = %EnergyGained
 

@@ -1,4 +1,4 @@
-class_name ClaimableCellGeneViewPanel extends GeneViewPanel
+class_name ClaimableCellGeneStatePanel extends GeneStatePanel
 
 class Signals:
 	signal highlight_claim(claim:ClaimableCellGene.Claim)

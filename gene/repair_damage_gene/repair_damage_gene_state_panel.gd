@@ -1,4 +1,4 @@
-class_name RepairDamageGeneViewPanel extends GeneViewPanel
+class_name RepairDamageGeneStatePanel extends GeneStatePanel
 
 @onready var energy_cost: Label = %EnergyCost
 @onready var life_gained: Label = %LifeGained

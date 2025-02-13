@@ -1,7 +1,7 @@
 class_name MainScene extends Node
 
 @onready var _grid: HexGrid = %HexGrid
-@onready var _cell_details_panel: CellViewPanel = %CellViewPanel
+@onready var _cell_state_panel: CellStatePanel = %CellStatePanel
 @onready var _control_panel: ControlPanel = %ControlPanel
 
 @onready var _overlay_panel: Panel = %OverlayPanel
@@ -35,7 +35,7 @@ func _ready() -> void:
 	_world.load_progress.connect(_load_progress)
 	_world.load_finished.connect(_load_finished)
 	
-	GeneViewPanel.gene_signals.highlight_cell.connect(_highlight_cell)
+	GeneStatePanel.gene_signals.highlight_cell.connect(_highlight_cell)
 	
 	_update_grid()
 
@@ -70,7 +70,7 @@ func _update_shown_cell_state():
 		var cell_state:CellState = _world.state.get_history_entry(
 			_index_shown, 
 			_control_panel.current_step)
-		_cell_details_panel.show_cell_state(cell_state)
+		_cell_state_panel.show_cell_state(cell_state)
 		
 func _update_shown_cell_config():
 	pass
@@ -79,7 +79,7 @@ func _show_selected_cell() -> void:
 	_grid.clear_selected_index()
 	_mouse_index = HexIndex.INVALID
 	if _selected_index == HexIndex.INVALID:
-		_cell_details_panel.hide_panel()
+		_cell_state_panel.hide_panel()
 	else:
 		_show_cell(_selected_index)
 

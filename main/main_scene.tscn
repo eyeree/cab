@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
 [ext_resource type="PackedScene" uid="uid://pkpl54rmgns7" path="res://main/title.tscn" id="3_wteyq"]
 [ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="5_m3hh0"]
-[ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_view_panel/cell_view_panel.tscn" id="10_ys2ax"]
+[ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="10_ys2ax"]
 
 [node name="MainScene" type="Node"]
 script = ExtResource("1_im0q4")
@@ -98,7 +98,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"DetailPanel"
 
-[node name="CellViewPanel" parent="HBoxContainer/SidePanelContainer/VBoxContainer/CellViewContainer" instance=ExtResource("10_ys2ax")]
+[node name="CellStatePanel" parent="HBoxContainer/SidePanelContainer/VBoxContainer/CellViewContainer" instance=ExtResource("10_ys2ax")]
 unique_name_in_owner = true
 layout_mode = 2
 

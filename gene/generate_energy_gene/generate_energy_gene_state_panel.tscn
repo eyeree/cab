@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://bfvyhv3qifrod"]
 
-[ext_resource type="Script" uid="uid://dp3m3nit7ktb8" path="res://gene/generate_energy_gene/generate_energy_gene_view_panel.gd" id="1_uhjjf"]
-[ext_resource type="Script" uid="uid://daf07buglduh1" path="res://main/cell_view_panel/gene_view_panel.gd" id="2_lxlnx"]
-[ext_resource type="Texture2D" uid="uid://drrup7wbb1mue" path="res://icon/EnergyIcon.png" id="3_mslhg"]
+[ext_resource type="Script" uid="uid://dp3m3nit7ktb8" path="res://gene/generate_energy_gene/generate_energy_gene_state_panel.gd" id="1_wlaqm"]
+[ext_resource type="Script" uid="uid://daf07buglduh1" path="res://main/cell_state_panel/gene_state_panel.gd" id="2_vxdpr"]
+[ext_resource type="Texture2D" uid="uid://drrup7wbb1mue" path="res://icon/EnergyIcon.png" id="3_ut5hn"]
 
 [node name="GenerateEnergyGeneViewPanel" type="PanelContainer"]
 theme_type_variation = &"SubDetailPanel"
-script = ExtResource("1_uhjjf")
-metadata/_custom_type_script = ExtResource("2_lxlnx")
+script = ExtResource("1_wlaqm")
+metadata/_custom_type_script = ExtResource("2_vxdpr")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -44,5 +44,5 @@ custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource("3_mslhg")
+texture = ExtResource("3_ut5hn")
 expand_mode = 1

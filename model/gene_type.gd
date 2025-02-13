@@ -37,18 +37,18 @@ static func _load_gene_types_from_directory(dir_path:String) -> void:
 				gene_type.base_resource_path = file_path.replace('.gd', '')
 				_gene_types.append(gene_type)
 
-var _view_panel_loaded:bool = false
-var _view_panel_scene:PackedScene = null
+var _state_panel_loaded:bool = false
+var _state_panel_scene:PackedScene = null
 
-func get_details_ui() -> GeneViewPanel:
-	if not _view_panel_loaded:
-		var view_panel_resource_path:String = base_resource_path + '_view_panel.tscn'
-		view_panel_resource_path = view_panel_resource_path.replace('.remap', '')
-		if ResourceLoader.exists(view_panel_resource_path):
-			_view_panel_scene = load(view_panel_resource_path)
-		_view_panel_loaded = true
-	if _view_panel_scene != null:
-		return _view_panel_scene.instantiate()
+func get_gene_state_panel() -> GeneStatePanel:
+	if not _state_panel_loaded:
+		var state_panel_resource_path:String = base_resource_path + '_state_panel.tscn'
+		state_panel_resource_path = state_panel_resource_path.replace('.remap', '')
+		if ResourceLoader.exists(state_panel_resource_path):
+			_state_panel_scene = load(state_panel_resource_path)
+		_state_panel_loaded = true
+	if _state_panel_scene != null:
+		return _state_panel_scene.instantiate()
 	else:
 		return null
 
