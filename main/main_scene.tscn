@@ -1,27 +1,14 @@
-[gd_scene load_steps=14 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=7 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
 [ext_resource type="Script" uid="uid://mpl54ukoekto" path="res://model/world.gd" id="1_rmejh"]
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
 [ext_resource type="PackedScene" uid="uid://pkpl54rmgns7" path="res://main/title.tscn" id="3_wteyq"]
-[ext_resource type="Texture2D" uid="uid://bk1rgby8bl2hr" path="res://icon/FirstStepIcon.png" id="4_di4gq"]
-[ext_resource type="Texture2D" uid="uid://ddywix2exwiqj" path="res://icon/PreviousStepIcon.png" id="5_gl8mm"]
-[ext_resource type="Texture2D" uid="uid://cq7wxo0lrln85" path="res://icon/RunIcon.png" id="6_uj00j"]
-[ext_resource type="Texture2D" uid="uid://clddh03pvcxm" path="res://icon/PauseIcon.png" id="7_1acvm"]
-[ext_resource type="Texture2D" uid="uid://bpyahsp2glp5p" path="res://icon/NextStepIcon.png" id="8_v52yf"]
-[ext_resource type="Texture2D" uid="uid://bjgdddepwt02c" path="res://icon/LastStepIcon.png" id="9_cupta"]
+[ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="5_m3hh0"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_view_panel/cell_view_panel.tscn" id="10_ys2ax"]
-
-[sub_resource type="Curve" id="Curve_sfolt"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="LabelSettings" id="LabelSettings_rmejh"]
-font_size = 26
 
 [node name="MainScene" type="Node"]
 script = ExtResource("1_im0q4")
-_run_speed_curve = SubResource("Curve_sfolt")
 
 [node name="World" type="Node" parent="."]
 unique_name_in_owner = true
@@ -90,223 +77,28 @@ size_flags_vertical = 0
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ViewPanelContainer" type="PanelContainer" parent="HBoxContainer"]
+[node name="SidePanelContainer" type="PanelContainer" parent="HBoxContainer"]
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/SidePanelContainer"]
 layout_mode = 2
 
-[node name="GameTitle" parent="HBoxContainer/ViewPanelContainer/VBoxContainer" instance=ExtResource("3_wteyq")]
+[node name="GameTitle" parent="HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("3_wteyq")]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="PlayerControlPanel" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_type_variation = &"DetailPanel"
-
-[node name="HBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel"]
-layout_mode = 2
-
-[node name="VBoxContiner" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer"]
-layout_mode = 2
-
-[node name="FirstStepButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-size_flags_vertical = 4
-tooltip_text = "Go to first step"
-icon = ExtResource("4_di4gq")
-icon_alignment = 1
-expand_icon = true
-
-[node name="PreviousStepButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-size_flags_vertical = 4
-tooltip_text = "Go to previous step"
-icon = ExtResource("5_gl8mm")
-icon_alignment = 1
-expand_icon = true
-
-[node name="RunButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-size_flags_vertical = 4
-tooltip_text = "Play from current step"
-icon = ExtResource("6_uj00j")
-icon_alignment = 1
-expand_icon = true
-
-[node name="PauseButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-size_flags_vertical = 5
-tooltip_text = "Pause playing"
-disabled = true
-icon = ExtResource("7_1acvm")
-icon_alignment = 1
-expand_icon = true
-
-[node name="NextStepButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-size_flags_vertical = 5
-tooltip_text = "Go to next step"
-icon = ExtResource("8_v52yf")
-icon_alignment = 1
-expand_icon = true
-
-[node name="LastStepButton" type="Button" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer/VBoxContiner"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-size_flags_vertical = 5
-tooltip_text = "Go to last step"
-icon = ExtResource("9_cupta")
-icon_alignment = 1
-expand_icon = true
-
-[node name="CurrentStepSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Current step"
-value = 20.0
-rounded = true
-ticks_on_borders = true
-
-[node name="LoadProgressBar" type="ProgressBar" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PlayerControlPanel/HBoxContainer"]
+[node name="ControlPanel" parent="HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_m3hh0")]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Loading progress"
-show_percentage = false
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"DetailPanel"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer"]
-layout_mode = 2
-theme_override_constants/separation = -6
-
-[node name="CurrentStepLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_type_variation = &"FormLabel"
-text = "Step"
-
-[node name="CurrentStepValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-theme_type_variation = &"GraphNodeTitleLabel"
-text = "9999"
-label_settings = SubResource("LabelSettings_rmejh")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="NumStepsLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 8
-theme_type_variation = &"FormLabel"
-text = "Of"
-
-[node name="NumStepsValue" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-theme_type_variation = &"FormLabel"
-text = "9999"
-
-[node name="ViewSettingsPanel" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_type_variation = &"DetailPanel"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel"]
-visible = false
-layout_mode = 2
-
-[node name="RunSpeedContainer" type="HBoxContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/VBoxContainer"]
-layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel"]
-layout_mode = 2
-columns = 2
-
-[node name="NumStepsLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
-layout_mode = 2
-text = "Steps:"
-
-[node name="NumStepsSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-min_value = 10.0
-max_value = 5000.0
-step = 10.0
-value = 500.0
-rounded = true
-ticks_on_borders = true
-
-[node name="GridSizeLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
-layout_mode = 2
-text = "Size:"
-
-[node name="GridSizeSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-min_value = 2.0
-max_value = 15.0
-value = 5.0
-rounded = true
-ticks_on_borders = true
-
-[node name="RunSpeedLabel" type="Label" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
-layout_mode = 2
-text = "Speed:"
-
-[node name="RunSpeedSlider" type="HSlider" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/ViewSettingsPanel/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-max_value = 1.0
-step = 0.01
-value = 0.8
-ticks_on_borders = true
-
-[node name="CellViewContainer" type="PanelContainer" parent="HBoxContainer/ViewPanelContainer/VBoxContainer"]
+[node name="CellViewContainer" type="PanelContainer" parent="HBoxContainer/SidePanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"DetailPanel"
 
-[node name="CellViewPanel" parent="HBoxContainer/ViewPanelContainer/VBoxContainer/CellViewContainer" instance=ExtResource("10_ys2ax")]
+[node name="CellViewPanel" parent="HBoxContainer/SidePanelContainer/VBoxContainer/CellViewContainer" instance=ExtResource("10_ys2ax")]
 unique_name_in_owner = true
 layout_mode = 2
 
