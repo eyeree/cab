@@ -12,6 +12,8 @@ config_version=5
 
 config/name="Cellular AutoBata"
 run/main_scene="uid://dmaqlc81kw7f8"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="CellularAutoBata"
 config/features=PackedStringArray("4.4", "Mobile")
 boot_splash/bg_color=Color(0.177001, 0.162603, 0.191404, 1)
 boot_splash/show_image=false
