@@ -3,6 +3,8 @@ class_name MainScene extends Node
 @onready var _grid: HexGrid = %HexGrid
 @onready var _cell_state_panel: CellStatePanel = %CellStatePanel
 @onready var _control_panel: ControlPanel = %ControlPanel
+@onready var _cell_info_panel: PanelContainer = %CellInfoPanel
+@onready var _cell_config_panel: PanelContainer = %CellConfigPanel
 
 @onready var _grid_overlay_panel: Panel = %GridOverlayPanel
 
@@ -22,11 +24,18 @@ class_name MainScene extends Node
 
 var _load_needed:bool = true
 
-var _selected_index:HexIndex = HexIndex.INVALID
-var _mouse_index:HexIndex = HexIndex.INVALID
-var _index_shown:HexIndex = HexIndex.INVALID
+var _selected_index := HexIndex.INVALID
+var _shown_index := HexIndex.INVALID
 
 var _initial_content:HexStore
+
+enum HexColor {
+	Hover = 0,
+	Selected = 1,
+	BadTarget = 2,
+	NeturalTarget = 3,
+	GoodTarget = 4
+}
 
 func _ready() -> void:
 
@@ -48,7 +57,8 @@ func _ready() -> void:
 	_save_game_button.pressed.connect(_save_game)
 	_load_game_button.pressed.connect(_load_game)
 	
-	GeneStatePanel.gene_signals.highlight_cell.connect(_highlight_cell)
+	GeneStatePanel.gene_signals.set_target_highlight.connect(_set_target_highlight)
+	GeneStatePanel.gene_signals.clear_target_highlight.connect(_clear_target_highlight)
 	
 	_save_game_file_dialog.file_selected.connect(_on_save_game_file_selected)
 	_load_game_file_dialog.file_selected.connect(_on_load_game_file_selected)
@@ -60,50 +70,73 @@ func _ready() -> void:
 	
 	_update_grid()
 
-func _highlight_cell(index:HexIndex) -> void:
-	_grid.set_selected_index(index)
+func _set_target_highlight(index:HexIndex, type:GeneStatePanel.TargetType) -> void:
+	
+	var hex_color:HexColor
+	match type:
+		GeneStatePanel.TargetType.Good:
+			hex_color = HexColor.GoodTarget
+		GeneStatePanel.TargetType.Netural:
+			hex_color = HexColor.NeturalTarget
+		GeneStatePanel.TargetType.Bad:
+			hex_color = HexColor.BadTarget
+		
+	_grid.set_hex_color(index, hex_color)
+
+func _clear_target_highlight(index:HexIndex) -> void:
+	if _selected_index == index:
+		_grid.set_hex_color(index, HexColor.Selected)
+	else:
+		_grid.clear_hex_color(index)
 	
 func _on_mouse_entered_hex(index:HexIndex):
-	_grid.set_selected_index(index)
-	_show_cell(index)
-	_mouse_index = index
-	_debug_hex_index.text = str(_mouse_index)
+	if _selected_index == HexIndex.INVALID:
+		_grid.set_hex_color(index, HexColor.Hover)
+		_show_cell_info(index)
+	_debug_hex_index.text = str(index)
 
-func _on_mouse_exited_hex(_index:HexIndex):
-	_show_selected_cell()
+func _on_mouse_exited_hex(index:HexIndex):
+	if _selected_index == HexIndex.INVALID:
+		_grid.clear_hex_color(index)
+		_hide_cell_info()
 
 func _on_hex_selected(index:HexIndex):
-	_selected_index = index
-	_grid.set_highlighted_indexes([_selected_index])
-	_show_selected_cell()
-
-func _show_cell(index:HexIndex) -> void:
-	_index_shown = index
-	_update_shown_cell()
-	
-func _update_shown_cell() -> void:
-	if _control_panel.current_step == 0:
-		_update_shown_cell_config()
+	if _selected_index == index:
+		_selected_index = HexIndex.INVALID
+		_grid.set_hex_color(index, HexColor.Hover)
+		_hide_cell_info()
+	elif index == HexIndex.INVALID:
+		_grid.clear_hex_color(_selected_index)
+		_selected_index = HexIndex.INVALID
+		_hide_cell_info()
 	else:
-		_update_shown_cell_state()
+		_grid.clear_hex_color(_selected_index)
+		_grid.set_hex_color(index, HexColor.Selected)
+		_selected_index = index
+		_show_cell_info(index)
+
+func _show_cell_info(index:HexIndex) -> void:
+	_shown_index = index
+	_cell_info_panel.visible = true
+	if _control_panel.current_step == 0:
+		_cell_state_panel.visible = false
+		_cell_config_panel.visible = true
+		_show_cell_config(index)
+	else:
+		_cell_state_panel.visible = true
+		_cell_config_panel.visible = false
+		_show_cell_state(index)
 		
-func _update_shown_cell_state():
-		var cell_state:CellState = _world.state.get_history_entry(
-			_index_shown, 
-			_control_panel.current_step)
-		_cell_state_panel.show_cell_state(cell_state)
+func _show_cell_state(index:HexIndex):
+	var cell_state := _world.state.get_history_entry(index, _control_panel.current_step)
+	_cell_state_panel.show_cell_state(cell_state)
 		
-func _update_shown_cell_config():
+func _show_cell_config(index:HexIndex):
 	pass
 
-func _show_selected_cell() -> void:
-	_grid.clear_selected_index()
-	_mouse_index = HexIndex.INVALID
-	if _selected_index == HexIndex.INVALID:
-		_cell_state_panel.hide_panel()
-	else:
-		_show_cell(_selected_index)
-
+func _hide_cell_info() -> void:
+	_cell_info_panel.visible = false
+		
 func _start_load() -> void:
 	
 	_control_panel.loaded_steps = 0
@@ -174,8 +207,8 @@ func _set_cell_state(index:HexIndex, cell_state:CellState):
 	var cell_appearance:CellAppearance = _grid.get_hex_content(index)
 	if cell_appearance:
 		cell_appearance.set_state(cell_state)
-	if index == _index_shown:
-		_update_shown_cell()
+	if index == _shown_index:
+		_show_cell_info(index)
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ToggleDebugPanel"):

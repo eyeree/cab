@@ -66,6 +66,10 @@ render_target_update_mode = 4
 
 [node name="HexGrid" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
 unique_name_in_owner = true
+default_line_color = Color(0.450157, 0.0704913, 0.400597, 1)
+default_background_color = Color(0.0722556, 0.000914003, 0.0790231, 1)
+hex_line_colors = Array[Color]([Color(0.437044, 0.00028479, 0.485718, 1), Color(0.840683, 0.00120019, 0.929285, 1), Color(1, 0, 0, 1), Color(0.94, 0.94, 0.1504, 1), Color(0, 0.827936, 0, 1)])
+hex_background_colors = Array[Color]([Color(0.230028, 0.00698035, 0.248247, 1), Color(0.311767, 0.0128437, 0.335206, 1), Color(0.3, 0, 0, 1), Color(0.227295, 0.227013, 0.00258881, 1), Color(0.105882, 0.207843, 0, 1)])
 
 [node name="CameraControl" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
 CfgRotateSpeed = 0.8
@@ -142,14 +146,23 @@ text = "(game file name)"
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CellViewContainer" type="PanelContainer" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer"]
+[node name="CellInfoPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"DetailPanel"
 
-[node name="CellStatePanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellViewContainer" instance=ExtResource("10_ys2ax")]
+[node name="CellStatePanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellInfoPanel" instance=ExtResource("10_ys2ax")]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="CellConfigPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellInfoPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellInfoPanel/CellConfigPanel"]
+layout_mode = 2
+text = "(cell config)"
 
 [node name="WindowOverlayPanel" type="Panel" parent="PanelContainer"]
 unique_name_in_owner = true

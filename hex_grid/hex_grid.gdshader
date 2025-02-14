@@ -1,19 +1,17 @@
 shader_type spatial;
 render_mode unshaded;
 
-uniform vec4 normal_line_color: source_color = vec4( 0.0, 1.0, 0.3, 1.0 );
-uniform vec4 normal_background_color: source_color = vec4( 0.0, 0.0, 0.0, 1.0 );
-uniform vec4 selected_line_color: source_color = vec4( 1.0, 0.0, 0.0, 1.0 );
-uniform vec4 selected_background_color: source_color = vec4( 0.5, 0.0, 0.0, 1.0 );
-uniform vec4 highlight_line_color: source_color = vec4( 1.0, 0.0, 0.0, 1.0 );
-uniform vec4 highlight_background_color: source_color = vec4( 0.3, 0.0, 0.0, 1.0 );
-uniform vec4 outside_color: source_color = vec4( 0.5, 0.0, 0.0, 1.0 );
+uniform vec4 default_line_color: source_color = vec4( 1.0, 1.0, 1.0, 1.0 );
+uniform vec4 default_background_color: source_color = vec4( 0.0, 0.0, 0.0, 1.0 );
+uniform vec4 outside_color: source_color = vec4( 0.0, 0.0, 0.0, 1.0 );
 uniform float line_size = 0.01; // : hint_range(0.1, 50, 0.1) = 0.1;
 uniform int max_hex_distance = 3;
 uniform float hex_outer_radius = 0.08;
-uniform ivec2 selected_index = ivec2(1000);
-uniform int highlighted_index_count = 3;
-uniform ivec2 highlighted_indexes[1000];
+uniform int colored_hex_count = 0;
+uniform ivec2 colored_hex_indexes[1000];
+uniform int colored_hex_color_index[1000];
+uniform vec4 hex_line_colors[10]: source_color;
+uniform vec4 hex_background_colors[10]: source_color;
 
 int axial_distance_from_origin(ivec2 axial) {
     return (abs(axial.x)
@@ -101,8 +99,8 @@ void fragment( )
     bool is_outer_ring = (hex_distance == (max_hex_distance + 1));
     bool is_too_far = (hex_distance > (max_hex_distance + 1));
 
-	vec4 line_color = normal_line_color;
-	vec4 background_color = normal_background_color;
+	vec4 line_color = default_line_color;
+	vec4 background_color = default_background_color;
 
 	if (hex_distance > (max_hex_distance + 1)) {
 		// outside
@@ -116,17 +114,13 @@ void fragment( )
 
 			// inside
 
-			for (int i = 0; i < highlighted_index_count; i++) {
-				if(current_axial == highlighted_indexes[i]) {
-					line_color = highlight_line_color;
-					background_color = highlight_background_color;
+			for (int i = 0; i < colored_hex_count; i++) {
+				if(current_axial == colored_hex_indexes[i]) {
+					int color_index = colored_hex_color_index[i];
+					line_color = hex_line_colors[color_index];
+					background_color = hex_background_colors[color_index];
 					break;
 				}
-			}
-
-			if (current_axial == selected_index) {
-				line_color = selected_line_color;
-				background_color = selected_background_color;
 			}
 
 	    } else {
@@ -156,7 +150,7 @@ void fragment( )
 	            ivec2 neighbor_axial = current_axial + AXIAL_NEIGHBORS[i];
 	            int neighbor_dist = axial_distance_from_origin(neighbor_axial);
 				if (neighbor_dist == max_hex_distance) {
-					line_color = normal_line_color;
+					line_color = default_line_color;
 					neighbor_hex_is_in = true;
 				}
 			}

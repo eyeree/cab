@@ -10,13 +10,14 @@ class_name HexGrid extends Node3D
 
 #region: Initialization
 
-func _init() -> void:
-	rings = get_script().get_property_default_value("rings")
-
 func _ready() -> void:
-	_on_grid_size_set()
-	set_selected_index(HexIndex.INVALID)
-	clear_highlighted_indexes()
+	# setter is not called for props with default values
+	# force updates to set shader parameters now that material is ready
+	default_line_color = default_line_color
+	default_background_color = default_background_color
+	hex_background_colors = hex_background_colors
+	hex_line_colors = hex_line_colors
+	rings = rings
 	
 #endregion
 
@@ -37,46 +38,19 @@ var _content_scale:Vector3
 var content_scale:Vector3:
 	get: return _content_scale
 
-var _rings:int
 @export var rings:int = 3:
-	get: return _rings
 	set(value): 
-		_rings = value
-		_hex_outer_radius = (plane_extent_percent / ((_rings*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
+		rings = value
+		_hex_outer_radius = (plane_extent_percent / ((rings*2+1) * sqrt(3.0))) # (1.0 - _line_size * 2) / ...
 		_hex_inner_radius = (_hex_outer_radius * sqrt(3.0) / 2.0)
 		_content_scale = Vector3(_hex_inner_radius, _hex_inner_radius, _hex_inner_radius) * 2
-		_on_grid_size_set()
-
-func _on_grid_size_set():
-	if not is_inside_tree(): return
-	clear_all_hex_content()
-	_grid_material.set_shader_parameter('max_hex_distance', rings)
-	_grid_material.set_shader_parameter('hex_outer_radius', hex_outer_radius)	
+		if is_inside_tree():
+			clear_all_hex_content()
+			_grid_material.set_shader_parameter('max_hex_distance', rings)
+			_grid_material.set_shader_parameter('hex_outer_radius', hex_outer_radius)	
 
 #endregion
 	
-#region: Hex State
-
-func set_selected_index(index:HexIndex) -> void:
-	_grid_material.set_shader_parameter('selected_index', index.to_axial())
-	
-func clear_selected_index() -> void:
-	_grid_material.set_shader_parameter('selected_index', HexIndex.INVALID.to_axial())
-
-func set_highlighted_indexes(indexes:Array[HexIndex]) -> void:
-	var packed_indexes:PackedInt32Array = []
-	for index:HexIndex in indexes:
-		packed_indexes.append(index.q)
-		packed_indexes.append(index.r)
-	_grid_material.set_shader_parameter('highlighted_indexes', packed_indexes)
-	_grid_material.set_shader_parameter('highlighted_index_count', indexes.size())
-	
-func clear_highlighted_indexes() -> void:
-	_grid_material.set_shader_parameter('highlighted_index_count', 0)
-	_grid_material.set_shader_parameter('highlighted_indexes', null)
-
-#endregion
-  
 #region: Hex Content
   
 var _hex_content:HexStore = HexStore.new()
@@ -174,4 +148,73 @@ signal mouse_entered_hex(index:HexIndex)
 signal mouse_exited_hex(index:HexIndex)
 signal hex_selected(index:HexIndex)
 
+#endregion
+
+#region Hex Color
+
+@export var default_line_color:Color = Color.WHITE:
+	set(value):
+		default_line_color = value
+		if _grid_material:
+			_grid_material.set_shader_parameter('default_line_color', value)	
+
+@export var default_background_color:Color = Color.BLACK:
+	set(value):
+		default_background_color = value
+		if _grid_material:
+			_grid_material.set_shader_parameter('default_background_color', value)	
+
+@export var outside_color:Color = Color.BLACK:
+	set(value):
+		outside_color = value
+		if _grid_material:
+			_grid_material.set_shader_parameter('outside_color', value)
+			
+@export var hex_line_colors:Array[Color] = []:
+	set(value):
+		hex_line_colors = value
+		if _grid_material:
+			_grid_material.set_shader_parameter('hex_line_colors', value)
+			
+@export var hex_background_colors:Array[Color] = []:
+	set(value):
+		hex_background_colors = value
+		if _grid_material:
+			_grid_material.set_shader_parameter('hex_background_colors', value)
+
+var _hex_colors:Dictionary[HexIndex, int] = {}
+
+func set_hex_color(index:HexIndex, color_index:int) -> void:
+	_hex_colors[index] = color_index
+	_set_hex_colors()
+
+func set_hex_colors(indexes:Array[HexIndex], color_index:int) -> void:
+	for index in indexes:
+		_hex_colors[index] = color_index
+	_set_hex_colors()
+
+func clear_hex_color(index:HexIndex) -> void:
+	_hex_colors.erase(index)
+	_set_hex_colors()
+
+func clear_hex_colors(indexes:Array[HexIndex]) -> void:
+	for index in indexes:
+		_hex_colors.erase(index)
+	_set_hex_colors()
+
+func clear_all_hex_colors() -> void:
+	_hex_colors.clear()
+	_set_hex_colors()
+	
+func _set_hex_colors() -> void:
+	var packed_indexes:PackedInt32Array = []
+	var color_indexes:PackedInt32Array = []
+	for index:HexIndex in _hex_colors.keys():
+		packed_indexes.append(index.q)
+		packed_indexes.append(index.r)
+		color_indexes.append(_hex_colors[index])
+	_grid_material.set_shader_parameter('colored_hex_indexes', packed_indexes)
+	_grid_material.set_shader_parameter('colored_hex_color_index', color_indexes)
+	_grid_material.set_shader_parameter('colored_hex_count', _hex_colors.size())
+	
 #endregion

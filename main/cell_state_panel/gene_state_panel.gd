@@ -1,8 +1,13 @@
 class_name GeneStatePanel extends PanelContainer
 
+enum TargetType { Good, Netural, Bad }
+
 class Signals:
 	@warning_ignore("unused_signal")
-	signal highlight_cell(index:HexIndex)
+	signal set_target_highlight(index:HexIndex, type:TargetType)
+	
+	@warning_ignore("unused_signal")
+	signal clear_target_highlight(index:HexIndex)
 
 static var gene_signals := Signals.new()
 
