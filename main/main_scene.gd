@@ -5,22 +5,15 @@ class_name MainScene extends Node
 @onready var _control_panel: ControlPanel = %ControlPanel
 @onready var _cell_info_panel: PanelContainer = %CellInfoPanel
 @onready var _cell_config_panel: PanelContainer = %CellConfigPanel
+@onready var _content_panel: ContentPanel = %ContentPanel
 
 @onready var _grid_overlay_panel: Panel = %GridOverlayPanel
+@onready var _window_overlay_panel: Panel = %WindowOverlayPanel
 
 @onready var _debug_panel: PanelContainer = %DebugPanel
 @onready var _debug_hex_index: Label = %DebugHexIndex
 
 @onready var _world: World = %World
-
-@onready var _new_game_button: Button = %NewGameButton
-@onready var _save_game_button: Button = %SaveGameButton
-@onready var _load_game_button: Button = %LoadGameButton
-
-@onready var _save_game_file_dialog: FileDialog = %SaveGameFileDialog
-@onready var _load_game_file_dialog: FileDialog = %LoadGameFileDialog
-@onready var _window_overlay_panel: Panel = %WindowOverlayPanel
-@onready var _game_file_name: Label = %GameFileName
 
 var _load_needed:bool = true
 
@@ -53,20 +46,11 @@ func _ready() -> void:
 	_world.load_progress.connect(_load_progress)
 	_world.load_finished.connect(_load_finished)
 	
-	_new_game_button.pressed.connect(_new_game)
-	_save_game_button.pressed.connect(_save_game)
-	_load_game_button.pressed.connect(_load_game)
+	_content_panel.dialog_opened.connect(_show_window_overlay)
+	_content_panel.dialog_closed.connect(_hide_window_overlay)
 	
 	GeneStatePanel.gene_signals.set_target_highlight.connect(_set_target_highlight)
 	GeneStatePanel.gene_signals.clear_target_highlight.connect(_clear_target_highlight)
-	
-	_save_game_file_dialog.file_selected.connect(_on_save_game_file_selected)
-	_load_game_file_dialog.file_selected.connect(_on_load_game_file_selected)
-	
-	_save_game_file_dialog.get_cancel_button().pressed.connect(_on_file_dialog_canceled)
-	_load_game_file_dialog.get_cancel_button().pressed.connect(_on_file_dialog_canceled)
-
-	_game_file_name.text = ""
 	
 	_update_grid()
 
@@ -131,7 +115,7 @@ func _show_cell_state(index:HexIndex):
 	var cell_state := _world.state.get_history_entry(index, _control_panel.current_step)
 	_cell_state_panel.show_cell_state(cell_state)
 		
-func _show_cell_config(index:HexIndex):
+func _show_cell_config(_index:HexIndex):
 	pass
 
 func _hide_cell_info() -> void:
@@ -226,39 +210,13 @@ func _reset_load():
 	_world.stop_loading()
 	_load_needed = true
 	_control_panel.loaded_steps = 0
-	
-func _new_game():
-	pass
-	
-func _save_game():
-	_window_overlay_panel.visible = true
-	_save_game_file_dialog.show()
-	
-func _load_game():
-	_window_overlay_panel.visible = true
-	_load_game_file_dialog.show()
-
-func _on_save_game_file_selected(path: String):
-	_window_overlay_panel.visible = false
-	_game_file_name.text = path.replace('user://game/', '').replace('.cab_game', '')
-	prints("save game", path)
-	
-func _on_load_game_file_selected(path: String):
-	_window_overlay_panel.visible = false
-	_game_file_name.text = path.replace('user://game/', '').replace('.cab_game', '')
-	prints("load game", path)
-
-func _on_file_dialog_canceled():
-	_window_overlay_panel.visible = false
-	
-static func _static_init() -> void:
-	_init_user_dirs()
-	
-static func _init_user_dirs():
-	prints("Global Path:", ProjectSettings.globalize_path("user://"))	
-	DirAccess.make_dir_recursive_absolute("user://game")
-	DirAccess.make_dir_recursive_absolute("user://genome")
 		
+func _show_window_overlay():
+	_window_overlay_panel.visible = true
+	
+func _hide_window_overlay():
+	_window_overlay_panel.visible = false
+	
 func _get_initial_content() -> HexStore:
 	
 	var genome1 = Genome.new()

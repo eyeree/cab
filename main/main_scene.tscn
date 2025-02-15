@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=8 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
 [ext_resource type="Script" uid="uid://mpl54ukoekto" path="res://model/world.gd" id="1_rmejh"]
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
 [ext_resource type="PackedScene" uid="uid://pkpl54rmgns7" path="res://main/title.tscn" id="3_wteyq"]
 [ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="5_m3hh0"]
+[ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/content_panel/content_panel.tscn" id="5_vtfip"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="10_ys2ax"]
 
 [node name="MainScene" type="Node"]
@@ -14,28 +15,6 @@ script = ExtResource("1_im0q4")
 unique_name_in_owner = true
 script = ExtResource("1_rmejh")
 metadata/_custom_type_script = ExtResource("1_rmejh")
-
-[node name="SaveGameFileDialog" type="FileDialog" parent="."]
-unique_name_in_owner = true
-title = "Save Game"
-initial_position = 2
-popup_window = true
-mode_overrides_title = false
-access = 1
-root_subfolder = "game"
-filters = PackedStringArray("*.cab_game;Cellular AutoBata Game;application/json")
-
-[node name="LoadGameFileDialog" type="FileDialog" parent="."]
-unique_name_in_owner = true
-auto_translate_mode = 1
-title = "Load Game"
-initial_position = 2
-ok_button_text = "Open"
-mode_overrides_title = false
-file_mode = 0
-access = 1
-root_subfolder = "game"
-filters = PackedStringArray("*.cab_game;Cellular AutoBata Game;application/json")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 anchors_preset = 15
@@ -118,29 +97,9 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 
-[node name="ButtonPanel" type="HBoxContainer" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="NewGameButton" type="Button" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/ButtonPanel"]
+[node name="ContentPanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_vtfip")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "New"
-
-[node name="SaveGameButton" type="Button" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/ButtonPanel"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Save"
-
-[node name="LoadGameButton" type="Button" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/ButtonPanel"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Load"
-
-[node name="GameFileName" type="Label" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/ButtonPanel"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 6
-text = "(game file name)"
 
 [node name="ControlPanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_m3hh0")]
 unique_name_in_owner = true
