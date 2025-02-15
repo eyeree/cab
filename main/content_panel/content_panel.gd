@@ -8,6 +8,8 @@ class_name ContentPanel extends HBoxContainer
 @onready var _save_level_file_dialog: FileDialog = %SaveLevelFileDialog
 @onready var _load_level_file_dialog: FileDialog = %LoadLevelFileDialog
 
+var level:Level
+
 signal level_changed(new_level:Level)
 signal dialog_opened()
 signal dialog_closed()
@@ -23,6 +25,8 @@ const GENOME_PATH := 'user://' + GENOME_DIR_NAME
 const GENOME_EXTENSION := ".cab_genome"
 
 func _ready() -> void:
+	
+	level = _get_initial_level()
 	
 	_new_level_button.pressed.connect(_new_level)
 	_save_level_button.pressed.connect(_save_level)
@@ -73,3 +77,46 @@ static func _init_user_dirs():
 	prints("User Path:", ProjectSettings.globalize_path("user://"))	
 	DirAccess.make_dir_recursive_absolute(LEVEL_PATH)
 	DirAccess.make_dir_recursive_absolute(GENOME_PATH)
+
+func _get_initial_level() -> Level:
+	
+	var genome1 = Genome.new()
+	genome1.name = "Genome1"
+	genome1.appearance_set = preload("res://appearance/simple_a/simple_a_appearance_set.tres")
+	genome1.add_gene(GenerateEnergyGene)
+	genome1.add_gene(RepairDamageGene)
+	genome1.add_gene(ProduceCellGene)
+	
+	var cell_type_1a = genome1.add_cell_type()
+	cell_type_1a.name = '1A'
+	cell_type_1a.cell_appearance = genome1.appearance_set.get_cell_appearance_by_name('simple_a_cell_a')
+	cell_type_1a.add_gene(GenerateEnergyGene)
+	cell_type_1a.add_gene(RepairDamageGene)
+	cell_type_1a.add_gene(ProduceCellGene)
+
+	var genome2 = Genome.new()
+	genome2.name = "Genome2"
+	genome2.appearance_set = preload("res://appearance/simple_b/simple_b_appearance_set.tres")
+	genome2.add_gene(GenerateEnergyGene)
+	genome2.add_gene(RepairDamageGene)
+	genome2.add_gene(ProduceCellGene)
+
+	var cell_type_2a = genome2.add_cell_type()
+	cell_type_2a.name = '2A'
+	cell_type_2a.cell_appearance = genome2.appearance_set.get_cell_appearance_by_name('simple_b_cell_b')
+	cell_type_2a.add_gene(GenerateEnergyGene)
+	cell_type_2a.add_gene(RepairDamageGene)
+	cell_type_2a.add_gene(ProduceCellGene)
+
+	var grid:HexStore = HexStore.new()	
+	
+	grid.set_content(HexIndex.CENTER, cell_type_1a)
+	#grid.set_content(HexIndex.from(-3, 0, 3), cell_type_1a)
+	#grid.set_content(HexIndex.from(2, 2, -4), cell_type_2a)
+	#grid.set_content(HexIndex.from(4, -2, -2), cell_type_2a)
+
+	var level := Level.new()
+	level.genomes = [genome1, genome2]
+	level.grid = grid
+	
+	return level

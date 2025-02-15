@@ -16,7 +16,7 @@ class State extends GeneState:
 		energy_produced = energy_produced_
 		
 class Config extends GeneConfig:
-	var energy_per_step:int = 1
+	@export var energy_per_step:int = 1
 	
 	func create_gene(cell:Cell, _progenitor:Cell) -> GenerateEnergyGene:
 		return GenerateEnergyGene.new(cell, self)

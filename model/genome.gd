@@ -1,12 +1,22 @@
-class_name Genome extends RefCounted
+class_name Genome extends Resource
 
-var name:String = '(new genone)'
-var appearance_set:AppearanceSet
+@export var name:String = '(new genone)'
+@export var appearance_set:AppearanceSet
 var gene_types:Array[GeneType] = []
-var cell_types:Array[CellType] = []
-var hidden:bool = false
+@export var cell_types:Array[CellType] = []
+@export var hidden:bool = false
+
+static var _genome_refs:Array[WeakRef] = []
+static func get_cell_type_genome(cell_type:CellType) -> Genome:
+	for genome_ref in _genome_refs:
+		var genome = genome_ref.get_ref()
+		if genome:
+			if genome.cell_types.has(cell_type):
+				return genome
+	return null
 
 func _init() -> void:
+	_genome_refs.append(weakref(self))
 	appearance_set = AppearanceSet.default
 
 func add_gene(gene_class:Script) -> void:
@@ -27,7 +37,7 @@ func is_gene_type_used(gene_type:GeneType) -> bool:
 	return false
 	
 func add_cell_type() -> CellType:
-	var cell_type = CellType.new(self)
+	var cell_type = CellType.new()
 	cell_types.append(cell_type)
 	return cell_type
 	

@@ -7,6 +7,8 @@ var toxin_cell_type:CellType
 
 func _init() -> void:
 	
+	super._init()
+	
 	GeneType.get_all_gene_types() # force load
 	
 	name = 'Environment'

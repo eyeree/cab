@@ -276,8 +276,8 @@ class State extends GeneState:
 	var claims:Array[ClaimableCellGene.Claim]
 	
 class Config extends GeneConfig:
-	var energy_per_step:int = 1
-	var growth_plan_script:String = DEFAULT_GROWTH_PLAN_SCRIPT
+	@export var energy_per_step:int = 1
+	@export var growth_plan_script:String = DEFAULT_GROWTH_PLAN_SCRIPT
 	
 	func create_gene(cell:Cell, _progenitor:Cell) -> ProduceCellGene:	
 		return ProduceCellGene.new(cell, self)

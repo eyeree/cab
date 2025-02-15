@@ -25,7 +25,7 @@ class State extends GeneState:
 		
 class Config extends GeneConfig:
 	
-	var max_repaired_amount:int = 1
+	@export var max_repaired_amount:int = 1
 	
 	func create_gene(cell:Cell, _progenitor:Cell) -> RepairDamageGene:
 		return RepairDamageGene.new(cell, self)

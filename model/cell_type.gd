@@ -1,10 +1,29 @@
-class_name CellType extends RefCounted
+class_name CellType extends Resource
 
-var genome:Genome
-var name:String = '(new cell type)'
-var gene_configs:Array[GeneConfig] = []
+var _genome_ref:WeakRef = null
+var genome:Genome:
+	get: 
+		if _genome_ref == null:
+			_genome_ref = weakref(Genome.get_cell_type_genome(self))
+			if _genome_ref == null:
+				prints('could not find genome')
+				return null
+		var result = _genome_ref.get_ref()
+		if result == null:
+			prints('genome ref is null')
+			return null
+		return result
 
-var cell_appearance:PackedScene
+@export var name:String = '(new cell type)'
+@export var gene_configs:Array[GeneConfig] = []
+
+var _cell_appearance:PackedScene = null
+var cell_appearance:PackedScene:
+	get:
+		return _cell_appearance if _cell_appearance \
+			else genome.appearance_set.get_default_cell_appearance()
+	set(value):
+		_cell_appearance = value
 
 var energy_cost:int:
 	get:
@@ -13,10 +32,6 @@ var energy_cost:int:
 			total += gene_config.get_energy_cost()
 		return total
 
-func _init(genome_:Genome, cell_appearance_:PackedScene = genome_.appearance_set.get_default_cell_appearance()):
-	genome = genome_
-	cell_appearance = cell_appearance_
-	
 func add_gene_config(gene_config:GeneConfig) -> void:
 	gene_configs.append(gene_config)
 			

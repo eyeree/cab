@@ -1,4 +1,4 @@
-class_name GeneConfig extends RefCounted
+class_name GeneConfig extends Resource
 
 var gene_type:GeneType
 

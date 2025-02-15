@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Genome" load_steps=4 format=3 uid="uid://bdblfa2cb5ne0"]
+
+[ext_resource type="Resource" uid="uid://ba67crpqdyhwb" path="res://appearance/simple_a/simple_a_appearance_set.tres" id="1_63ina"]
+[ext_resource type="Script" uid="uid://w1xr5u1abi26" path="res://model/cell_type.gd" id="2_dutll"]
+[ext_resource type="Script" uid="uid://dhiu7bhj8uois" path="res://model/genome.gd" id="3_qis12"]
+
+[resource]
+script = ExtResource("3_qis12")
+name = "test genome"
+appearance_set = ExtResource("1_63ina")
+cell_types = Array[ExtResource("2_dutll")]([null])
+hidden = false
+metadata/_custom_type_script = ExtResource("3_qis12")

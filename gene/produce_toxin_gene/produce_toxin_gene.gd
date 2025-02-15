@@ -24,7 +24,7 @@ class ProduceToxinGeneState extends GeneState:
 	
 class ProduceToxinGeneConfig extends GeneConfig:
 	
-	var damage:int = 1
+	@export var damage:int = 1
 	
 	func create_gene(cell:Cell, _progenitor:Cell) -> ProduceToxinGene:
 		return ProduceToxinGene.new(cell, self)

@@ -20,8 +20,6 @@ var _load_needed:bool = true
 var _selected_index := HexIndex.INVALID
 var _shown_index := HexIndex.INVALID
 
-var _initial_content:HexStore
-
 enum HexColor {
 	Hover = 0,
 	Selected = 1,
@@ -32,8 +30,6 @@ enum HexColor {
 
 func _ready() -> void:
 
-	_initial_content = _get_initial_content()
-	
 	_control_panel.current_step_changed.connect(_on_current_step_changed)
 	_control_panel.ring_count_changed.connect(_on_ring_count_changed)
 	_control_panel.step_count_changed.connect(_on_step_count_changed)
@@ -129,7 +125,7 @@ func _start_load() -> void:
 	var world_options = World.WorldOptions.new()
 	world_options.rings = _control_panel.ring_count
 	world_options.steps = _control_panel.step_count
-	world_options.initial_content = _initial_content
+	world_options.initial_content = _content_panel.level.grid
 	_world.load(world_options)
 		
 func _load_started() -> void:
@@ -155,7 +151,7 @@ func _on_current_step_changed(current_step:int) -> void:
 
 func _update_grid() -> void:
 	if _control_panel.current_step == 0:
-		_update_grid_from_initial_content()
+		_update_grid_from_level()
 	else:
 		_update_grid_from_world()
 
@@ -167,9 +163,9 @@ func _update_grid_from_world():
 		_set_cell_appearance(index, cell_type)
 		_set_cell_state(index, cell_state)
 	
-func _update_grid_from_initial_content():
+func _update_grid_from_level():
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
-		var cell_type:CellType = _initial_content.get_content(index)
+		var cell_type:CellType = _content_panel.level.grid.get_content(index)
 		_set_cell_appearance(index, cell_type)
 
 func _set_cell_appearance(index:HexIndex, cell_type:CellType):
@@ -216,43 +212,3 @@ func _show_window_overlay():
 	
 func _hide_window_overlay():
 	_window_overlay_panel.visible = false
-	
-func _get_initial_content() -> HexStore:
-	
-	var genome1 = Genome.new()
-	genome1.name = "Genome1"
-	genome1.appearance_set = preload("res://appearance/simple_a/simple_a_appearance_set.tres")
-	genome1.add_gene(GenerateEnergyGene)
-	genome1.add_gene(RepairDamageGene)
-	genome1.add_gene(ProduceCellGene)
-	
-	var cell_type_1a = genome1.add_cell_type()
-	cell_type_1a.name = '1A'
-	cell_type_1a.cell_appearance = genome1.appearance_set.get_cell_appearance_by_name('simple_a_cell_a')
-	cell_type_1a.add_gene(GenerateEnergyGene)
-	cell_type_1a.add_gene(RepairDamageGene)
-	cell_type_1a.add_gene(ProduceCellGene)
-
-	var genome2 = Genome.new()
-	genome2.name = "Genome2"
-	genome2.appearance_set = preload("res://appearance/simple_b/simple_b_appearance_set.tres")
-	genome2.add_gene(GenerateEnergyGene)
-	genome2.add_gene(RepairDamageGene)
-	genome2.add_gene(ProduceCellGene)
-
-	var cell_type_2a = genome2.add_cell_type()
-	cell_type_2a.name = '2A'
-	cell_type_2a.cell_appearance = genome2.appearance_set.get_cell_appearance_by_name('simple_b_cell_b')
-	cell_type_2a.add_gene(GenerateEnergyGene)
-	cell_type_2a.add_gene(RepairDamageGene)
-	cell_type_2a.add_gene(ProduceCellGene)
-
-	var initial_content:HexStore = HexStore.new()	
-	
-	initial_content.set_content(HexIndex.CENTER, cell_type_1a)
-	#initial_content.set_content(HexIndex.from(-3, 0, 3), cell_type_1a)
-	#initial_content.set_content(HexIndex.from(2, 2, -4), cell_type_2a)
-	#initial_content.set_content(HexIndex.from(4, -2, -2), cell_type_2a)
-
-	return initial_content
-	
