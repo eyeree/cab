@@ -54,9 +54,10 @@ func get_default_cell_appearance() -> PackedScene:
 func has_cell_appearance(cell_appearance:PackedScene) -> bool:
 	return cell_appearances.any(func (entry): return cell_appearance.resource_path == entry.resource_path)
 
-func get_cell_appearance_by_name(name:String) -> PackedScene:
-	for cell_appearance:PackedScene in cell_appearances:
-		if cell_appearance.resource_path.get_file().get_basename() == name:
-			return cell_appearance
-	push_error('No cell appearance named %s was found in appearance set %s' % [name, resource_path])
-	return null
+func get_cell_appearance_index_by_name(name:String) -> int:
+	var index := cell_appearances.find_custom(
+		func (cell_appearance:PackedScene): 
+			return cell_appearance.resource_path.get_file().get_basename() == name)
+	if index == -1:
+		push_error('No cell appearance named %s was found in appearance set %s' % [name, resource_path])
+	return index

@@ -89,7 +89,6 @@ func _get_initial_level() -> Level:
 	
 	var cell_type_1a = genome1.add_cell_type()
 	cell_type_1a.name = '1A'
-	cell_type_1a.cell_appearance = genome1.appearance_set.get_cell_appearance_by_name('simple_a_cell_a')
 	cell_type_1a.add_gene(GenerateEnergyGene)
 	cell_type_1a.add_gene(RepairDamageGene)
 	cell_type_1a.add_gene(ProduceCellGene)
@@ -103,7 +102,7 @@ func _get_initial_level() -> Level:
 
 	var cell_type_2a = genome2.add_cell_type()
 	cell_type_2a.name = '2A'
-	cell_type_2a.cell_appearance = genome2.appearance_set.get_cell_appearance_by_name('simple_b_cell_b')
+	cell_type_2a.cell_appearance_index = 1
 	cell_type_2a.add_gene(GenerateEnergyGene)
 	cell_type_2a.add_gene(RepairDamageGene)
 	cell_type_2a.add_gene(ProduceCellGene)
@@ -115,8 +114,8 @@ func _get_initial_level() -> Level:
 	#grid.set_content(HexIndex.from(2, 2, -4), cell_type_2a)
 	#grid.set_content(HexIndex.from(4, -2, -2), cell_type_2a)
 
-	var level := Level.new()
-	level.genomes = [genome1, genome2]
-	level.grid = grid
+	var initial_level := Level.new()
+	initial_level.genomes = [genome1, genome2]
+	initial_level.grid = grid
 	
-	return level
+	return initial_level

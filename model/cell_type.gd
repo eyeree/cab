@@ -16,14 +16,7 @@ var genome:Genome:
 
 @export var name:String = '(new cell type)'
 @export var gene_configs:Array[GeneConfig] = []
-
-var _cell_appearance:PackedScene = null
-var cell_appearance:PackedScene:
-	get:
-		return _cell_appearance if _cell_appearance \
-			else genome.appearance_set.get_default_cell_appearance()
-	set(value):
-		_cell_appearance = value
+@export var cell_appearance_index:int = 0
 
 var energy_cost:int:
 	get:
@@ -101,6 +94,7 @@ func _to_string() -> String:
 	return "CellType:%s:%s" % [genome.name, name]
 	
 func instantiate_cell_appearance() -> CellAppearance:
+	var cell_appearance := genome.appearance_set.cell_appearances[cell_appearance_index]
 	var instance:CellAppearance = cell_appearance.instantiate()
 	instance.cell_type = self
 	return instance
