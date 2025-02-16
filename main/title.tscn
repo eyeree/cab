@@ -1,19 +1,23 @@
-[gd_scene format=3 uid="uid://pkpl54rmgns7"]
+[gd_scene load_steps=2 format=3 uid="uid://pkpl54rmgns7"]
+
+[ext_resource type="Texture2D" uid="uid://bshq4y2gn32w2" path="res://icon/logo.png" id="1_w18pm"]
 
 [node name="GameTitle" type="PanelContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -0.5
+offset_right = 10.0
+offset_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"TitlePanel"
 
-[node name="Label" type="Label" parent="."]
-unique_name_in_owner = true
+[node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 2
-size_flags_vertical = 1
-theme_type_variation = &"TitleLabel"
-text = "Cellular AutoBata"
-horizontal_alignment = 1
-vertical_alignment = 1
-justification_flags = 0
+texture = ExtResource("1_w18pm")
+expand_mode = 1
+stretch_mode = 5
