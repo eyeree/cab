@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=8 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
 [ext_resource type="Script" uid="uid://mpl54ukoekto" path="res://model/world.gd" id="1_rmejh"]
@@ -7,9 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="5_m3hh0"]
 [ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/content_panel/content_panel.tscn" id="5_vtfip"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="10_ys2ax"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vtfip"]
-draw_center = false
 
 [node name="MainScene" type="Node"]
 script = ExtResource("1_im0q4")
@@ -97,12 +94,7 @@ layout_mode = 2
 
 [node name="GameTitle" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("3_wteyq")]
 layout_mode = 2
-theme_type_variation = &""
-theme_override_styles/panel = SubResource("StyleBoxFlat_vtfip")
-
-[node name="TextureRect" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/GameTitle" index="0"]
-expand_mode = 5
-stretch_mode = 4
+theme_type_variation = &"TitlePanel"
 
 [node name="ContentPanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_vtfip")]
 unique_name_in_owner = true
@@ -139,4 +131,3 @@ theme_type_variation = &"OverlayPanelOuter"
 
 [editable path="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid"]
 [editable path="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl"]
-[editable path="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/GameTitle"]
