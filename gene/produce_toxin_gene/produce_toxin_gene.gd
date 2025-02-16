@@ -22,20 +22,5 @@ class ProduceToxinGeneState extends GeneState:
 		damage = damage_
 		damage_delt = damage_delt_
 	
-class ProduceToxinGeneConfig extends GeneConfig:
-	
-	@export var damage:int = 1
-	
-	func create_gene(cell:Cell, _progenitor:Cell) -> ProduceToxinGene:
-		return ProduceToxinGene.new(cell, self)
-		
-class ProduceToxinGeneType extends GeneType:
 
-	func _init():
-		name = 'ProduceToxin'
-	
-	func create_config() -> ProduceToxinGeneConfig:
-		return ProduceToxinGeneConfig.new(self)
-
-static var gene_type_ = ProduceToxinGeneType.new()
 	

@@ -20,7 +20,7 @@ func _init() -> void:
 	appearance_set = AppearanceSet.default
 
 func add_gene(gene_class:Script) -> void:
-	add_gene_type(gene_class.gene_type_)
+	add_gene_type(GeneType.for_gene_class(gene_class))
 	
 func add_gene_type(gene_type:GeneType) -> void:
 	if not gene_types.has(gene_type):

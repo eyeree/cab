@@ -108,20 +108,3 @@ class Claim extends ClaimState:
 		claim_state.energy_provided = energy_provided
 		claim_state.ranking_data = ranking_data.duplicate()
 		return claim_state
-		
-class Config extends GeneConfig:
-		
-	func create_gene(cell:Cell, _progenitor:Cell) -> ClaimableCellGene:
-		return ClaimableCellGene.new(cell)
-		
-class Type extends GeneType:
-	
-	func _init():
-		name = 'ClaimableCell'
-		hidden = true
-		energy_cost = 1
-
-	func create_config() -> GeneConfig:
-		return Config.new(self)
-			
-static var gene_type_ = Type.new()

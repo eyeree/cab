@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="GeneType" load_steps=2 format=3 uid="uid://bdy458rhf6mq0"]
+
+[ext_resource type="Script" uid="uid://bdo3jp27fcue7" path="res://model/gene_type.gd" id="1_6df1i"]
+
+[resource]
+script = ExtResource("1_6df1i")
+name = "RepairDamage"
+energy_cost = 1
+hidden = false
+metadata/_custom_type_script = ExtResource("1_6df1i")

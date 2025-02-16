@@ -9,6 +9,7 @@ enum DamageType {
 var genome:Genome
 var cell_type:CellType
 var orientation:HexIndex.HexDirection = HexIndex.HexDirection.E
+var progenitor:Cell
 
 var cell_number:int
 var title:String
@@ -51,11 +52,12 @@ var is_alive:bool:
 var is_dead:bool:
 	get: return life <= 0
 	
-func _init(world_:World, index_:HexIndex, cell_type_:CellType, progenitor:Cell = null) -> void:
+func _init(world_:World, index_:HexIndex, cell_type_:CellType, progenitor_:Cell = null) -> void:
 	
 	world_ref = weakref(world_)
 	index = index_
 	cell_type = cell_type_
+	progenitor = progenitor_
 
 	genome = cell_type.genome
 	cell_number = world.allocate_cell_number()
@@ -74,7 +76,7 @@ func _init(world_:World, index_:HexIndex, cell_type_:CellType, progenitor:Cell =
 	genes.assign(
 		cell_type.gene_configs.map(
 			func (gene_config:GeneConfig): 
-				return gene_config.create_gene(self, progenitor)))
+				return gene_config.create_gene(self)))
 					
 	immortal = has_gene(ImmortalityGene)
 	

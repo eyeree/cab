@@ -4,20 +4,15 @@ var _cell_ref:WeakRef
 var cell:Cell:
 	get: return _cell_ref.get_ref()
 
+var _gene_type:GeneType
+var gene_type:GeneType:
+	get:
+		if _gene_type == null:
+			_gene_type = load(self.resource_path.get_basename() + "_type.tres")
+		return _gene_type
+		
 func _init(cell_:Cell) -> void:
 	_cell_ref = weakref(cell_)
-		
-# All gene derived classes must define:
-#
-#     static var gene_type_:SomeGeneType = SomeGeneType.new()
-#
-# GDScript resolves instance property access with static property values. So
-# gene.gene_type should work, but isn't defined by Gene. You can use gene_type_
-# as an alternative.
-
-var gene_type:GeneType:
-	get: 
-		return self.get('gene_type_')
 
 var energy_wanted:int = 0
 

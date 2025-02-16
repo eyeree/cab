@@ -48,10 +48,10 @@ func has_gene_type(gene_type:GeneType) -> bool:
 	return false
 
 func add_gene(gene_class:Script) -> GeneConfig:
-	return add_gene_type(gene_class.gene_type_)	
+	return add_gene_type(GeneType.for_gene_class(gene_class))	
 
 func has_gene(gene_class:Script) -> bool:
-	return has_gene_type(gene_class.gene_type_)
+	return has_gene_type(GeneType.for_gene_class(gene_class))
 	
 class AttributeInfo:
 	var name:StringName

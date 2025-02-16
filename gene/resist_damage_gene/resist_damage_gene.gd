@@ -27,32 +27,3 @@ class ResistDamageGeneState extends GeneState:
 		resisted_damage = resisted_damage_
 		resisted_damage_type = resisted_damage_type_
 		
-class ResistDamageGeneConfig extends GeneConfig:
-	
-	@export var resisted_type:Cell.DamageType = Cell.DamageType.Universal
-	@export var resisted_amount:int = 0
-	@export var resisted_percent:float = 0.0
-
-	func create_gene(cell:Cell, _progenitor:Cell) -> ResistDamageGene:
-		return ResistDamageGene.new(cell, self)
-	
-class ResistDamageGeneType extends GeneType:
-	
-	func _init():
-		name = 'ResistDamage'
-		energy_cost = 1
-	
-	func create_config() -> ResistDamageGeneConfig:
-		return ResistDamageGeneConfig.new(self)
-
-static var gene_type_ = ResistDamageGeneType.new()
-
-static var damage_immunity_config:ResistDamageGeneConfig = _get_config_for_damage_immunity()
-
-static func _get_config_for_damage_immunity() -> ResistDamageGeneConfig:
-		var config = ResistDamageGeneConfig.new(gene_type_)
-		config.resisted_type = Cell.DamageType.Universal
-		config.resisted_amount = 0
-		config.resisted_percent = 1.0
-		return config
-	

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="GeneType" load_steps=2 format=3 uid="uid://07v5rrxrjsf3"]
+
+[ext_resource type="Script" uid="uid://bdo3jp27fcue7" path="res://model/gene_type.gd" id="1_rx0bm"]
+
+[resource]
+script = ExtResource("1_rx0bm")
+name = "ProvideFood"
+energy_cost = 0
+hidden = true
+metadata/_custom_type_script = ExtResource("1_rx0bm")

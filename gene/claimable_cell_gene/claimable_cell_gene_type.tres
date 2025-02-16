@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="GeneType" load_steps=2 format=3 uid="uid://bf0ptdmb2gb7d"]
+
+[ext_resource type="Script" uid="uid://bdo3jp27fcue7" path="res://model/gene_type.gd" id="1_cbufr"]
+
+[resource]
+script = ExtResource("1_cbufr")
+name = "ClaimableCell"
+energy_cost = 0
+hidden = true
+metadata/_custom_type_script = ExtResource("1_cbufr")

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="GeneType" load_steps=2 format=3 uid="uid://c8jdatc8r1di0"]
+
+[ext_resource type="Script" uid="uid://bdo3jp27fcue7" path="res://model/gene_type.gd" id="1_cwhc4"]
+
+[resource]
+script = ExtResource("1_cwhc4")
+name = "ProduceToxin"
+energy_cost = 1
+hidden = false
+metadata/_custom_type_script = ExtResource("1_cwhc4")

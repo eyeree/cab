@@ -1,14 +1,12 @@
-class_name GeneType extends RefCounted
+class_name GeneType extends Resource
 	
-var name:String = '(new gene type)'
-var energy_cost:int = 0
-var hidden:bool = false
-var base_resource_path:String = ''
-	
-func create_config() -> GeneConfig:
-	push_error('Gene type %s did not noverride create_config' % [name])
-	return null
+@export var name:String = '(new gene type)'
+@export var energy_cost:int = 0
+@export var hidden:bool = false
 
+var base_resource_path:String:
+	get: return resource_path.get_basename().replace('_type', '') # TODO regex
+	
 const BASE_PATH = "res://gene/"
 
 static var _gene_types:Array[GeneType] = []
@@ -23,27 +21,22 @@ static func get_all_gene_types() -> Array[GeneType]:
 	return _gene_types
 	
 static func _load_gene_types_from_directory(dir_path:String) -> void:
-	var files = DirAccess.get_files_at(dir_path)
-	for file:String in files:
-		file = file.replace('.remap', '')
-		if file.ends_with("_gene.gd"):
+	var files := DirAccess.get_files_at(dir_path)
+	for file in files:
+		if file.get_basename().ends_with("_gene_type"):
 			var file_path = dir_path.path_join(file)
-			var gene_script:Script = load(file_path)
-			var gene_type:GeneType = gene_script.get('gene_type_')
-			if gene_type == null:
-				prints("Gene %s did not define gene_type_" % [file_path])
-				push_error("Gene %s did not define gene_type_" % [file_path])
-			else:
-				gene_type.base_resource_path = file_path.replace('.gd', '')
-				_gene_types.append(gene_type)
+			var gene_type:GeneType = load(file_path)
+			_gene_types.append(gene_type)
 
+static func for_gene_class(gene_class:Script) -> GeneType:
+	return load(gene_class.resource_path.get_basename() + '_type.tres')
+	
 var _state_panel_loaded:bool = false
 var _state_panel_scene:PackedScene = null
 
 func get_gene_state_panel() -> GeneStatePanel:
 	if not _state_panel_loaded:
-		var state_panel_resource_path:String = base_resource_path + '_state_panel.tscn'
-		state_panel_resource_path = state_panel_resource_path.replace('.remap', '')
+		var state_panel_resource_path := base_resource_path + '_state_panel.tscn'
 		if ResourceLoader.exists(state_panel_resource_path):
 			_state_panel_scene = load(state_panel_resource_path)
 		_state_panel_loaded = true
@@ -60,3 +53,10 @@ func get_cell_attribute_list() -> Array[CellType.CellAttributeInfo]:
 	
 func _to_string() -> String:
 	return "GeneType:%s" % [name]
+
+var _config_class:Script = null
+func create_config() -> GeneConfig:
+	if _config_class == null:
+		_config_class = load(base_resource_path + '_config.gd')
+		assert(_config_class, 'gene type %s did not define config class' % [resource_path])
+	return _config_class.new()
