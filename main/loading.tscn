@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://ceitmef5cf1hl"]
+
+[ext_resource type="Texture2D" uid="uid://bilgr7bx72b3m" path="res://icon/game_icon.png" id="1_8umtg"]
+
+[node name="GameTitle" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TitlePanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 50
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture = ExtResource("1_8umtg")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_type_variation = &"TitleLabel"
+theme_override_colors/font_outline_color = Color(0.543128, 0.000454836, 0.602296, 1)
+theme_override_constants/outline_size = 25
+theme_override_font_sizes/font_size = 209
+text = "Cellular AutoBata"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0

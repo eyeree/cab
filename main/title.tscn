@@ -1,12 +1,17 @@
 [gd_scene format=3 uid="uid://pkpl54rmgns7"]
 
 [node name="GameTitle" type="PanelContainer"]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_type_variation = &"TitlePanel"
 
 [node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 1
 theme_type_variation = &"TitleLabel"
 text = "Cellular AutoBata"
 horizontal_alignment = 1

@@ -130,11 +130,9 @@ func stop_loading() -> void:
 		
 func _step() -> bool:
 	if current_step == _steps:
-		prints("_step", "done")
 		return false
 	else:
 		current_step += 1
-		prints("_step", current_step)
 		_cells.visit_all(_cell_perform_actions)
 		_cells.visit_all(_cell_update_state)
 		_genome_rank_index = min(_genome_rank_index + 1, _genomes.size())

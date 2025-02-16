@@ -4,12 +4,12 @@ extends ProgrammaticTheme
 # https://github.com/Inspiaaa/ThemeGen
 
 func setup():
-	set_save_path("res://ui/theme/generated/default_theme.tres")
+	set_save_path("res://theme/generated/default_theme.tres")
 
 var default_spacing = 4
 var default_font_size = 12
 
-var bold_font = load("res://ui/theme/fonts/system/bold_system_font_variation.tres")
+var bold_font = load("res://theme/fonts/system/bold_system_font_variation.tres")
 
 var default_background_color = Color(0.176, 0.176, 0.176)
 var default_border_color = Color(0.223, 0.223, 0.223)
@@ -25,8 +25,8 @@ var sub_detail_border_color = Color(0.202, 0.202, 0.202)
 
 var title_background_color = Color.BLACK
 var title_border_color = default_border_color
-var title_font_color = Color(255, 204, 255)
-var title_font_outline_color = Color(114, 0, 114)
+var title_font_color = Color(0.94, 0.628, 0.96)
+var title_font_outline_color = Color(0.841, 0.001, 0.929)
 
 func define_theme():	
 	

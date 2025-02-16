@@ -2,7 +2,7 @@
 
 [ext_resource type="FontVariation" uid="uid://cts368t0w3ura" path="res://theme/fonts/system/bold_system_font_variation.tres" id="1_ix8h1"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ix8h1"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a0gd0"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -14,7 +14,7 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.202, 0.202, 0.202, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5v2md"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5rpx"]
 content_margin_left = 8.0
 content_margin_top = 8.0
 content_margin_right = 8.0
@@ -26,35 +26,35 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.202, 0.202, 0.202, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_36u6t"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6jwr1"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(0.176, 0.176, 0.176, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4lrps"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dr2da"]
 content_margin_left = 16.0
 content_margin_top = 16.0
 content_margin_right = 16.0
 content_margin_bottom = 16.0
 bg_color = Color(0.176, 0.176, 0.176, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_55tkg"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cu5w8"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(0.176, 0.176, 0.176, 0.65)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fxjs"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qxwiy"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(0.176, 0.176, 0.176, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m0tvv"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_el135"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
@@ -66,7 +66,7 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.202, 0.202, 0.202, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3c1i"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_634m6"]
 content_margin_left = 10.0
 content_margin_top = 0.0
 content_margin_right = 10.0
@@ -81,9 +81,9 @@ border_color = Color(0.223, 0.223, 0.223, 1)
 [resource]
 default_font_size = 12
 Border/base_type = &"PanelContainer"
-Border/styles/panel = SubResource("StyleBoxFlat_ix8h1")
+Border/styles/panel = SubResource("StyleBoxFlat_a0gd0")
 DetailPanel/base_type = &"PanelContainer"
-DetailPanel/styles/panel = SubResource("StyleBoxFlat_5v2md")
+DetailPanel/styles/panel = SubResource("StyleBoxFlat_t5rpx")
 DetailTitleLabel/base_type = &"Label"
 DetailTitleLabel/font_sizes/font_size = 16
 FormGridContainer/base_type = &"GridContainer"
@@ -101,23 +101,23 @@ GridHeaderLabel/font_sizes/font_size = 10
 GridHeaderLabel/fonts/font = ExtResource("1_ix8h1")
 HBoxContainer/constants/separation = 4
 NomarginPanelContainer/base_type = &"PanelContainer"
-NomarginPanelContainer/styles/panel = SubResource("StyleBoxFlat_36u6t")
+NomarginPanelContainer/styles/panel = SubResource("StyleBoxFlat_6jwr1")
 OverlayLabel/base_type = &"Label"
 OverlayLabel/font_sizes/font_size = 72
 OverlayPanelInner/base_type = &"PanelContainer"
-OverlayPanelInner/styles/panel = SubResource("StyleBoxFlat_4lrps")
+OverlayPanelInner/styles/panel = SubResource("StyleBoxFlat_dr2da")
 OverlayPanelOuter/base_type = &"Panel"
-OverlayPanelOuter/styles/panel = SubResource("StyleBoxFlat_55tkg")
-PanelContainer/styles/panel = SubResource("StyleBoxFlat_0fxjs")
+OverlayPanelOuter/styles/panel = SubResource("StyleBoxFlat_cu5w8")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_qxwiy")
 SubDetailPanel/base_type = &"PanelContainer"
-SubDetailPanel/styles/panel = SubResource("StyleBoxFlat_m0tvv")
+SubDetailPanel/styles/panel = SubResource("StyleBoxFlat_el135")
 SubDetailTitleLabel/base_type = &"Label"
 SubDetailTitleLabel/font_sizes/font_size = 14
 TitleLabel/base_type = &"Label"
-TitleLabel/colors/font_color = Color(255, 204, 255, 1)
-TitleLabel/colors/font_outline_color = Color(114, 0, 114, 1)
+TitleLabel/colors/font_color = Color(0.94, 0.628, 0.96, 1)
+TitleLabel/colors/font_outline_color = Color(0.841, 0.001, 0.929, 1)
 TitleLabel/constants/outline_size = 3
 TitleLabel/font_sizes/font_size = 32
 TitlePanel/base_type = &"PanelContainer"
-TitlePanel/styles/panel = SubResource("StyleBoxFlat_c3c1i")
+TitlePanel/styles/panel = SubResource("StyleBoxFlat_634m6")
 VBoxContainer/constants/separation = 4

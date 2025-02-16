@@ -15,9 +15,18 @@ run/main_scene="uid://dmaqlc81kw7f8"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="CellularAutoBata"
 config/features=PackedStringArray("4.4", "Mobile")
-boot_splash/bg_color=Color(0.177001, 0.162603, 0.191404, 1)
-boot_splash/show_image=false
-boot_splash/minimum_display_time=2000
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="uid://bm7n4ri34invy"
+boot_splash/fullsize=false
+config/icon="uid://bilgr7bx72b3m"
+boot_splash/minimum_display_time=5000
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [gui]
 
