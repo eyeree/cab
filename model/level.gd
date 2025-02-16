@@ -7,7 +7,7 @@ class_name Level extends Resource
 
 @export var serialized_content:Array:
 	set(value): 
-		#prints('serialized_content set')
+		#prints('serialized_content set', value.size())
 		serialized_content = value
 		_deserialize_content(value)
 	get:

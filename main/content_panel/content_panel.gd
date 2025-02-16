@@ -24,9 +24,11 @@ const GENOME_DIR_NAME := 'genome'
 const GENOME_PATH := 'user://' + GENOME_DIR_NAME
 const GENOME_EXTENSION := ".cab_genome"
 
+const DEFAULT_LEVEL_PATH := 'res://level/default.cab_level.tres'
+
 func _ready() -> void:
 	
-	level = _get_initial_level()
+	level = _load_level_resource(DEFAULT_LEVEL_PATH)
 	_level_file_name.text = '(unsaved)'
 	
 	_new_level_button.pressed.connect(_new_level)
@@ -45,7 +47,7 @@ func _ready() -> void:
 	_load_level_file_dialog.get_cancel_button().pressed.connect(_on_file_dialog_canceled)
 
 func _new_level():
-	level = _get_initial_level()
+	level = _load_level_resource(DEFAULT_LEVEL_PATH)
 	_level_file_name.text = '(unsaved)'
 	level_changed.emit()
 	
@@ -65,7 +67,7 @@ func _on_save_level_file_selected(path: String):
 func _on_load_level_file_selected(path: String):
 	dialog_closed.emit()
 	_set_level_file_name(path)
-	level = ResourceLoader.load(path)
+	level = _load_level_resource(path)
 	level_changed.emit()
 
 func _set_level_file_name(path: String):
@@ -73,6 +75,9 @@ func _set_level_file_name(path: String):
 	
 func _on_file_dialog_canceled():
 	dialog_closed.emit()
+	
+func _load_level_resource(path:String) -> Level:
+	return ResourceLoader.load(path).duplicate()
 	
 static func _static_init() -> void:
 	_init_user_dirs()

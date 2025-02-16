@@ -217,8 +217,9 @@ func _hide_window_overlay():
 	_window_overlay_panel.visible = false
 
 func _level_changed() -> void:
-	_control_panel.reset(_content_panel.level.rings, _content_panel.level.steps)
-	_grid.rings = _content_panel.level.rings
+	var level := _content_panel.level
+	_control_panel.reset(level.rings, level.steps)
+	_grid.rings = level.rings
 	_on_hex_selected(HexIndex.INVALID)
 	_reset_load()
 	_update_grid()

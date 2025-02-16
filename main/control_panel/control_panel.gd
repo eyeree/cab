@@ -46,10 +46,10 @@ func _ready() -> void:
 	_current_step_slider.set_value_no_signal(0)
 	
 	_grid_size_slider.value_changed.connect(_on_grid_size_changed)
-	_on_grid_size_changed(_grid_size_slider.value)
+	#_on_grid_size_changed(_grid_size_slider.value)
 	
 	_num_steps_slider.value_changed.connect(_on_num_steps_changed)
-	_on_num_steps_changed(_num_steps_slider.value)
+	#_on_num_steps_changed(_num_steps_slider.value)
 	
 	_run_speed_slider.value_changed.connect(_on_run_speed_changed)
 	_on_run_speed_changed(_run_speed_slider.value)
@@ -149,4 +149,6 @@ func reset(ring_count_:int, step_count_:int) -> void:
 	step_count = step_count_
 	_is_running = false
 	_loaded_steps = 0
+	_grid_size_slider.set_value_no_signal(ring_count)
+	_num_steps_slider.set_value_no_signal(step_count)
 	_update_ui()

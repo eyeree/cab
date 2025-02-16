@@ -1,0 +1,86 @@
+[gd_resource type="Resource" script_class="Level" load_steps=20 format=3 uid="uid://b7van7m33wnoq"]
+
+[ext_resource type="Script" uid="uid://dhiu7bhj8uois" path="res://model/genome.gd" id="1_cpf3p"]
+[ext_resource type="Resource" uid="uid://ba67crpqdyhwb" path="res://appearance/simple_a/simple_a_appearance_set.tres" id="2_vra2q"]
+[ext_resource type="Script" uid="uid://w1xr5u1abi26" path="res://model/cell_type.gd" id="3_3fg1m"]
+[ext_resource type="Script" uid="uid://ev1uoxapsujg" path="res://model/gene_config.gd" id="4_j8mrs"]
+[ext_resource type="Script" uid="uid://v5tmnfjju0do" path="res://gene/generate_energy_gene/generate_energy_gene_config.gd" id="5_w46t7"]
+[ext_resource type="Script" uid="uid://nhn2ul4wq5uq" path="res://gene/repair_damage_gene/repair_damage_gene_config.gd" id="6_jp6d4"]
+[ext_resource type="Script" uid="uid://d1ynbcenkbqfs" path="res://gene/produce_cell_gene/produce_cell_gene_config.gd" id="7_7page"]
+[ext_resource type="Resource" uid="uid://crebatxblxe01" path="res://appearance/simple_b/simple_b_appearance_set.tres" id="8_idvqs"]
+[ext_resource type="Script" uid="uid://bysfn5wqavi1t" path="res://model/level.gd" id="9_ik4hw"]
+
+[sub_resource type="Resource" id="Resource_7dl4d"]
+script = ExtResource("5_w46t7")
+energy_per_step = 1
+
+[sub_resource type="Resource" id="Resource_hgek8"]
+script = ExtResource("6_jp6d4")
+max_repaired_amount = 1
+
+[sub_resource type="Resource" id="Resource_4n2st"]
+script = ExtResource("7_7page")
+energy_per_step = 1
+growth_plan_script = "
+#grow(E)
+#grow(NE)
+if not grow(SE):
+	grow(E)
+#grow(NW)
+#grow(SW)
+#grow(W)
+"
+
+[sub_resource type="Resource" id="Resource_qfnf3"]
+script = ExtResource("3_3fg1m")
+name = "1A"
+gene_configs = Array[ExtResource("4_j8mrs")]([SubResource("Resource_7dl4d"), SubResource("Resource_hgek8"), SubResource("Resource_4n2st")])
+cell_appearance_index = 0
+
+[sub_resource type="Resource" id="Resource_bke0h"]
+script = ExtResource("1_cpf3p")
+name = "Genome1"
+appearance_set = ExtResource("2_vra2q")
+cell_types = Array[ExtResource("3_3fg1m")]([SubResource("Resource_qfnf3")])
+hidden = false
+
+[sub_resource type="Resource" id="Resource_rdqkt"]
+script = ExtResource("5_w46t7")
+energy_per_step = 1
+
+[sub_resource type="Resource" id="Resource_rnseo"]
+script = ExtResource("6_jp6d4")
+max_repaired_amount = 1
+
+[sub_resource type="Resource" id="Resource_xhsj2"]
+script = ExtResource("7_7page")
+energy_per_step = 1
+growth_plan_script = "
+#grow(E)
+#grow(NE)
+if not grow(SE):
+	grow(E)
+#grow(NW)
+#grow(SW)
+#grow(W)
+"
+
+[sub_resource type="Resource" id="Resource_bllqk"]
+script = ExtResource("3_3fg1m")
+name = "2A"
+gene_configs = Array[ExtResource("4_j8mrs")]([SubResource("Resource_rdqkt"), SubResource("Resource_rnseo"), SubResource("Resource_xhsj2")])
+cell_appearance_index = 1
+
+[sub_resource type="Resource" id="Resource_c41nw"]
+script = ExtResource("1_cpf3p")
+name = "Genome2"
+appearance_set = ExtResource("8_idvqs")
+cell_types = Array[ExtResource("3_3fg1m")]([SubResource("Resource_bllqk")])
+hidden = false
+
+[resource]
+script = ExtResource("9_ik4hw")
+rings = 5
+steps = 500
+genomes = Array[ExtResource("1_cpf3p")]([SubResource("Resource_bke0h"), SubResource("Resource_c41nw")])
+serialized_content = [[[-3, 0], SubResource("Resource_qfnf3")], [[2, 2], SubResource("Resource_bllqk")], [[4, -2], SubResource("Resource_bllqk")]]
