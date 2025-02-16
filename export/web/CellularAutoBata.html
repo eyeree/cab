@@ -52,6 +52,20 @@ body {
 	margin: auto;
 }
 
+#status-splash.show-image--false {
+	display: none;
+}
+
+#status-splash.fullsize--true {
+	height: 100%;
+	width: 100%;
+	object-fit: contain;
+}
+
+#status-splash.use-filter--false {
+	image-rendering: pixelated;
+}
+
 #status-progress, #status-notice {
 	display: none;
 }
@@ -90,14 +104,14 @@ body {
 		</noscript>
 
 		<div id="status">
-			<img id="status-splash" src="CellularAutoBata.png" alt="">
+			<img id="status-splash" class="show-image--false fullsize--true use-filter--true" src="CellularAutoBata.png" alt="">
 			<progress id="status-progress"></progress>
 			<div id="status-notice"></div>
 		</div>
 
 		<script src="CellularAutoBata.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"CellularAutoBata","experimentalVK":false,"fileSizes":{"CellularAutoBata.pck":2334688,"CellularAutoBata.wasm":39689717},"focusCanvas":true,"gdextensionLibs":[]};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"CellularAutoBata","experimentalVK":false,"fileSizes":{"CellularAutoBata.pck":2638960,"CellularAutoBata.wasm":43651929},"focusCanvas":true,"gdextensionLibs":[]};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 

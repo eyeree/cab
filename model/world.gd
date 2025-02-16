@@ -36,7 +36,6 @@ signal load_progress(steps_loaded:int)
 signal load_finished()
 
 var _is_process_loading := false
-var _loaded_steps := 0
 
 var _load_thread:Thread = null
 var _stop_loading := false
@@ -87,7 +86,7 @@ func _process(_delta:float) -> void:
 		
 	var start_ms:int = Time.get_ticks_msec()
 	
-	if _loaded_steps == 0:
+	if current_step == 0:
 		load_started.emit.call_deferred()
 		_init_state()
 		_init_cells()
@@ -99,7 +98,7 @@ func _process(_delta:float) -> void:
 		
 	_stop_loading = false
 	_is_process_loading = false
-	load_finished.emit()
+	load_finished.emit.call_deferred()
 			
 func _background_load() -> void:
 	
@@ -131,9 +130,11 @@ func stop_loading() -> void:
 		
 func _step() -> bool:
 	if current_step == _steps:
+		prints("_step", "done")
 		return false
 	else:
 		current_step += 1
+		prints("_step", current_step)
 		_cells.visit_all(_cell_perform_actions)
 		_cells.visit_all(_cell_update_state)
 		_genome_rank_index = min(_genome_rank_index + 1, _genomes.size())
