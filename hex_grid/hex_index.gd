@@ -226,10 +226,10 @@ func _to_string() -> String:
 	return "{q: %d, r: %d, s: %d}" % [q, r, s]
 
 func serialize() -> Variant:
-	return [q, r, s]
+	return [q, r]
 	
 static func deserialize(data:Variant) -> HexIndex:
-	return HexIndex.from(data[0], data[1], data[2])
+	return HexIndex.from(data[0], data[1])
 
 static var INVALID:HexIndex = HexIndex.from(10000, 10000, 10000)
 static var CENTER:HexIndex = HexIndex.from(0, 0, 0)

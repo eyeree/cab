@@ -142,3 +142,11 @@ func _on_num_steps_changed(value:float) -> void:
 func _on_grid_size_changed(value:float) -> void:
 	ring_count = roundi(value)
 	ring_count_changed.emit(ring_count)
+
+func reset(ring_count_:int, step_count_:int) -> void:
+	current_step = 0
+	ring_count = ring_count_
+	step_count = step_count_
+	_is_running = false
+	_loaded_steps = 0
+	_update_ui()

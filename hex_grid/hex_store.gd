@@ -2,11 +2,15 @@ class_name HexStore extends RefCounted
 
 var _map:Dictionary[HexIndex, Variant] = {}
 
-func set_content(index:HexIndex, value:Variant) -> void:
-	if value == null:
+signal content_changed(index:HexIndex, old_value:Variant, new_value:Variant)
+
+func set_content(index:HexIndex, new_value:Variant) -> void:
+	var old_value = _map.get(index)
+	if new_value == null:
 		_map.erase(index)
 	else:
-		_map.set(index, value)
+		_map.set(index, new_value)
+	content_changed.emit(index, old_value, new_value)
 
 func clear_content(index:HexIndex) -> void:
 	set_content(index, null)
@@ -30,6 +34,7 @@ func visit_all(callback:Callable) -> void:
 
 func clear_all_content() -> void:
 	_map = {}
+	content_changed.emit(null, null, null)
 	
 func size() -> int:
 	return _map.size()
@@ -55,17 +60,21 @@ func find_max_distance() -> int:
 			max_distance = distance
 	return max_distance
 
-func serialize(serialize_value:Callable) -> Variant:
+func _default_serialize_value(value:Variant) -> Variant:
+	return value
+
+func _default_deserialize_value(value:Variant) -> Variant:
+	return value
+	
+func serialize(serialize_value:Callable = _default_serialize_value) -> Array:
 	return get_all_indexes().map(
 		func (index): 
 			return [index.serialize(), serialize_value.call(get_content(index))]
 	)
 
-static func deserialize(data:Variant, deserialize_value:Callable) -> HexStore:
-	var hex_store = HexStore.new()
+func deserialize(data:Array, deserialize_value:Callable = _default_deserialize_value) -> void:
 	for entry in data:
-		hex_store.set_content(
+		set_content(
 			HexIndex.deserialize(entry[0]),
 			deserialize_value.call(entry[1])
 		)
-	return hex_store
