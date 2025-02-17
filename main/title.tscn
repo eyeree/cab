@@ -1,19 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://pkpl54rmgns7"]
+[gd_scene load_steps=2 format=3 uid="uid://pkpl54rmgns7"]
 
 [ext_resource type="Texture2D" uid="uid://bshq4y2gn32w2" path="res://icon/logo.png" id="1_w18pm"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vtfip"]
-draw_center = false
 
 [node name="GameTitle" type="PanelContainer"]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 287.259
 grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_vtfip")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 2
 texture = ExtResource("1_w18pm")
 expand_mode = 5
 stretch_mode = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2

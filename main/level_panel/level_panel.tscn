@@ -1,11 +1,25 @@
-[gd_scene load_steps=2 format=3 uid="uid://dod8px5mjxrtn"]
+[gd_scene load_steps=3 format=3 uid="uid://dod8px5mjxrtn"]
 
 [ext_resource type="Script" uid="uid://dsyn4vcyu2ev8" path="res://main/level_panel/level_panel.gd" id="1_omehg"]
 
-[node name="LevelPanel" type="HBoxContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dat5q"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.311767, 0.0128437, 0.335206, 1)
+
+[node name="PanelContainer" type="PanelContainer"]
+offset_left = 220.0
+offset_right = 228.0
+offset_bottom = 25.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dat5q")
 script = ExtResource("1_omehg")
 
-[node name="SaveLevelFileDialog" type="FileDialog" parent="."]
+[node name="LevelPanel" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="SaveLevelFileDialog" type="FileDialog" parent="LevelPanel"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 title = "Save Level"
@@ -14,7 +28,7 @@ popup_window = true
 mode_overrides_title = false
 access = 1
 
-[node name="LoadLevelFileDialog" type="FileDialog" parent="."]
+[node name="LoadLevelFileDialog" type="FileDialog" parent="LevelPanel"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 title = "Load Level"
@@ -24,22 +38,22 @@ mode_overrides_title = false
 file_mode = 0
 access = 1
 
-[node name="NewLevelButton" type="Button" parent="."]
+[node name="NewLevelButton" type="Button" parent="LevelPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "New"
 
-[node name="SaveLevelButton" type="Button" parent="."]
+[node name="SaveLevelButton" type="Button" parent="LevelPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save"
 
-[node name="LoadLevelButton" type="Button" parent="."]
+[node name="LoadLevelButton" type="Button" parent="LevelPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Load"
 
-[node name="LevelFileName" type="Label" parent="."]
+[node name="LevelFileName" type="Label" parent="LevelPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6

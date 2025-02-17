@@ -1,4 +1,4 @@
-class_name LevelPanel extends HBoxContainer
+class_name LevelPanel extends PanelContainer
 
 @onready var _new_level_button: Button = %NewLevelButton
 @onready var _save_level_button: Button = %SaveLevelButton
