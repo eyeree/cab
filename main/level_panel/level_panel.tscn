@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://dod8px5mjxrtn"]
+
+[ext_resource type="Script" uid="uid://dsyn4vcyu2ev8" path="res://main/level_panel/level_panel.gd" id="1_omehg"]
+
+[node name="LevelPanel" type="HBoxContainer"]
+script = ExtResource("1_omehg")
+
+[node name="SaveLevelFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+auto_translate_mode = 1
+title = "Save Level"
+initial_position = 2
+popup_window = true
+mode_overrides_title = false
+access = 1
+
+[node name="LoadLevelFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+auto_translate_mode = 1
+title = "Load Level"
+initial_position = 2
+ok_button_text = "Open"
+mode_overrides_title = false
+file_mode = 0
+access = 1
+
+[node name="NewLevelButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New"
+
+[node name="SaveLevelButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save"
+
+[node name="LoadLevelButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load"
+
+[node name="LevelFileName" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+text = "(game file name)"

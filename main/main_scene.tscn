@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
 [ext_resource type="PackedScene" uid="uid://pkpl54rmgns7" path="res://main/title.tscn" id="3_wteyq"]
 [ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="5_m3hh0"]
-[ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/content_panel/content_panel.tscn" id="5_vtfip"]
+[ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/level_panel/level_panel.tscn" id="5_vtfip"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="10_ys2ax"]
 
 [node name="MainScene" type="Node"]
@@ -96,7 +96,7 @@ layout_mode = 2
 layout_mode = 2
 theme_type_variation = &"TitlePanel"
 
-[node name="ContentPanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_vtfip")]
+[node name="LevelPanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_vtfip")]
 unique_name_in_owner = true
 layout_mode = 2
 

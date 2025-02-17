@@ -5,7 +5,7 @@ class_name MainScene extends Node
 @onready var _control_panel: ControlPanel = %ControlPanel
 @onready var _cell_info_panel: PanelContainer = %CellInfoPanel
 @onready var _cell_config_panel: PanelContainer = %CellConfigPanel
-@onready var _content_panel: ContentPanel = %ContentPanel
+@onready var _level_panel: LevelPanel = %LevelPanel
 
 @onready var _grid_overlay_panel: Panel = %GridOverlayPanel
 @onready var _window_overlay_panel: Panel = %WindowOverlayPanel
@@ -42,9 +42,9 @@ func _ready() -> void:
 	_world.load_progress.connect(_load_progress)
 	_world.load_finished.connect(_load_finished)
 	
-	_content_panel.dialog_opened.connect(_show_window_overlay)
-	_content_panel.dialog_closed.connect(_hide_window_overlay)
-	_content_panel.level_changed.connect(_level_changed)
+	_level_panel.dialog_opened.connect(_show_window_overlay)
+	_level_panel.dialog_closed.connect(_hide_window_overlay)
+	_level_panel.level_changed.connect(_level_changed)
 	
 	GeneStatePanel.gene_signals.set_target_highlight.connect(_set_target_highlight)
 	GeneStatePanel.gene_signals.clear_target_highlight.connect(_clear_target_highlight)
@@ -124,9 +124,9 @@ func _start_load() -> void:
 	_load_needed = false
 	
 	var world_options = World.WorldOptions.new()
-	world_options.rings = _content_panel.level.rings
-	world_options.steps = _content_panel.level.steps
-	world_options.initial_content = _content_panel.level.content
+	world_options.rings = _level_panel.level.rings
+	world_options.steps = _level_panel.level.steps
+	world_options.initial_content = _level_panel.level.content
 	_world.load(world_options)
 		
 func _load_started() -> void:
@@ -166,7 +166,7 @@ func _update_grid_from_world():
 	
 func _update_grid_from_level():
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
-		var cell_type:CellType = _content_panel.level.content.get_content(index)
+		var cell_type:CellType = _level_panel.level.content.get_content(index)
 		_set_cell_appearance(index, cell_type)
 
 func _set_cell_appearance(index:HexIndex, cell_type:CellType):
@@ -196,11 +196,13 @@ func _input(_event: InputEvent) -> void:
 		_debug_panel.visible = not _debug_panel.visible
 
 func _on_step_count_changed(step_count:int) -> void:
-	_content_panel.level.steps = step_count
+	_level_panel.level.steps = step_count
+	_level_panel.level.signals.level_modified.emit()
 	_reset_load()
 	
 func _on_ring_count_changed(ring_count:int) -> void:
-	_content_panel.level.rings = ring_count
+	_level_panel.level.rings = ring_count
+	_level_panel.level.signals.level_modified.emit()
 	_grid.rings = ring_count
 	_reset_load()
 	_update_grid()
@@ -217,7 +219,7 @@ func _hide_window_overlay():
 	_window_overlay_panel.visible = false
 
 func _level_changed() -> void:
-	var level := _content_panel.level
+	var level := _level_panel.level
 	_control_panel.reset(level.rings, level.steps)
 	_grid.rings = level.rings
 	_on_hex_selected(HexIndex.INVALID)
