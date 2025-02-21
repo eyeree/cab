@@ -151,4 +151,6 @@ func reset(ring_count_:int, step_count_:int) -> void:
 	_loaded_steps = 0
 	_grid_size_slider.set_value_no_signal(ring_count)
 	_num_steps_slider.set_value_no_signal(step_count)
+	_num_steps_value.text = str(step_count)
+	_load_progress_bar.max_value = step_count	
 	_update_ui()
