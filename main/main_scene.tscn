@@ -47,7 +47,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(1310, 1072)
+size = Vector2i(1588, 1072)
 render_target_update_mode = 4
 
 [node name="HexGrid" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
@@ -111,7 +111,6 @@ theme_override_constants/margin_right = -1
 theme_override_constants/margin_bottom = -1
 
 [node name="TextureRect" type="TextureRect" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/MarginContainer"]
-custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 texture = ExtResource("4_ncflg")
 expand_mode = 5

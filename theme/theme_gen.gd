@@ -81,10 +81,6 @@ func define_theme():
 		panel = default_panel_style
 	})
 	
-	define_style('Label', {
-		font_color = Color(0.896, 0.486, 0.98)
-	})
-	
 	define_variant_style("DetailPanel", "PanelContainer", {
 		panel = merge(base_detail_panel_stype, thick_border_panel_style, {
 			content_margin_ = content_margins(default_spacing * 2)
@@ -103,17 +99,13 @@ func define_theme():
 		})
 	})
 	
-	define_variant_style("MajorSubDetailPanelLabel", "Label", {
-		font_color = Color(0.94, 0.94, 0.15)
-	})
-	
 	define_variant_style("NestedDetailPanel", "PanelContainer", {
 		panel = stylebox_flat({
 			bg_color = detail_background_color,
 			content_margin_ = content_margins(0)
 		})
 	})
-	
+		
 	define_variant_style("DetailTitleLabel", "Label", {
 		font_size = default_font_size + 4
 	})

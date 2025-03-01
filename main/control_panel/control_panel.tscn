@@ -17,7 +17,7 @@ theme_type_variation = &"DetailPanel"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 5
 
 [node name="PlayerControlPanel" type="HBoxContainer" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2
@@ -116,7 +116,7 @@ show_percentage = false
 
 [node name="StepInfoPanel" type="VBoxContainer" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 6
 size_flags_vertical = 4
 theme_override_constants/separation = -6
 
@@ -127,7 +127,6 @@ text = "Step"
 
 [node name="CurrentStepValue" type="Label" parent="PanelContainer/HBoxContainer/StepInfoPanel"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"StepsLabel"
@@ -150,64 +149,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "9999"
 
-[node name="GridContainer" type="GridContainer" parent="PanelContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-columns = 2
-
-[node name="NumStepsLabel" type="Label" parent="PanelContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Steps:"
-
-[node name="NumStepsSlider" type="HSlider" parent="PanelContainer/HBoxContainer/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-min_value = 10.0
-max_value = 5000.0
-step = 10.0
-value = 500.0
-rounded = true
-ticks_on_borders = true
-
-[node name="GridSizeLabel" type="Label" parent="PanelContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Size:"
-
-[node name="GridSizeSlider" type="HSlider" parent="PanelContainer/HBoxContainer/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-min_value = 2.0
-max_value = 15.0
-value = 5.0
-rounded = true
-ticks_on_borders = true
-
-[node name="RunSpeedLabel" type="Label" parent="PanelContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Speed:"
-
-[node name="RunSpeedSlider" type="HSlider" parent="PanelContainer/HBoxContainer/GridContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-tooltip_text = "Speed of playback"
-min_value = 1.0
-max_value = 500.0
-value = 250.0
-ticks_on_borders = true
-
 [node name="ViewSettingsPanel" type="PanelContainer" parent="."]
-visible = false
 layout_mode = 2
 theme_type_variation = &"DetailPanel"
 
@@ -219,7 +161,7 @@ columns = 2
 layout_mode = 2
 text = "Steps:"
 
-[node name="NumStepsSlider2" type="HSlider" parent="ViewSettingsPanel/GridContainer"]
+[node name="NumStepsSlider" type="HSlider" parent="ViewSettingsPanel/GridContainer"]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
@@ -237,7 +179,7 @@ ticks_on_borders = true
 layout_mode = 2
 text = "Size:"
 
-[node name="GridSizeSlider2" type="HSlider" parent="ViewSettingsPanel/GridContainer"]
+[node name="GridSizeSlider" type="HSlider" parent="ViewSettingsPanel/GridContainer"]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
@@ -254,7 +196,7 @@ ticks_on_borders = true
 layout_mode = 2
 text = "Speed:"
 
-[node name="RunSpeedSlider2" type="HSlider" parent="ViewSettingsPanel/GridContainer"]
+[node name="RunSpeedSlider" type="HSlider" parent="ViewSettingsPanel/GridContainer"]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
