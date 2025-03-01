@@ -28,6 +28,22 @@ enum HexColor {
 	GoodTarget = 4
 }
 
+const HEX_LINE_COLORS:Array[Color] = [
+	DefaultTheme.GRID_HOVER_LINE_COLOR, 
+	DefaultTheme.GRID_SELECTED_LINE_COLOR, 
+	DefaultTheme.GRID_BAD_TARGET_LINE_COLOR, 
+	DefaultTheme.GRID_NETURAL_TARGET_LINE_COLOR, 
+	DefaultTheme.GRID_GOOD_TARGET_LINE_COLOR
+]
+
+const HEX_FILL_COLORS:Array[Color] = [
+	DefaultTheme.GRID_HOVER_FILL_COLOR, 
+	DefaultTheme.GRID_SELECTED_FILL_COLOR, 
+	DefaultTheme.GRID_BAD_TARGET_FILL_COLOR, 
+	DefaultTheme.GRID_NETURAL_TARGET_FILL_COLOR, 
+	DefaultTheme.GRID_GOOD_TARGET_FILL_COLOR
+]
+
 func _ready() -> void:
 
 	_control_panel.current_step_changed.connect(_on_current_step_changed)
@@ -37,6 +53,10 @@ func _ready() -> void:
 	_grid.mouse_entered_hex.connect(_on_mouse_entered_hex)
 	_grid.mouse_exited_hex.connect(_on_mouse_exited_hex)
 	_grid.hex_selected.connect(_on_hex_selected)
+	_grid.default_line_color = DefaultTheme.GRID_DEFAULT_LINE_COLOR
+	_grid.default_background_color = DefaultTheme.GRID_DEFAULT_FILL_COLOR
+	_grid.hex_line_colors = HEX_LINE_COLORS
+	_grid.hex_background_colors = HEX_FILL_COLORS
 	
 	_world.load_started.connect(_load_started)
 	_world.load_progress.connect(_load_progress)

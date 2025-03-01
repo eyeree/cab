@@ -1,10 +1,27 @@
 @tool
-extends ProgrammaticTheme
+class_name DefaultTheme extends ProgrammaticTheme
 
 # https://github.com/Inspiaaa/ThemeGen
 
+const GRID_DEFAULT_LINE_COLOR := Color(0.451, 0.071, 0.4)
+const GRID_DEFAULT_FILL_COLOR := Color(0.071, 0.0, 0.078)
+const GRID_HOVER_LINE_COLOR := Color(0.435, 0.0, 0.486)
+const GRID_HOVER_FILL_COLOR := Color(0.231, 0.008, 0.247)
+const GRID_SELECTED_LINE_COLOR := Color(0.839, 0.0, 0.929)
+const GRID_SELECTED_FILL_COLOR := Color(0.312, 0.013, 0.335)
+const GRID_BAD_TARGET_LINE_COLOR := Color(1.0, 0.0, 0.0)
+const GRID_BAD_TARGET_FILL_COLOR := Color(0.3, 0.0, 0.0)
+const GRID_NETURAL_TARGET_LINE_COLOR := Color(0.94, 0.94, 0.15)
+const GRID_NETURAL_TARGET_FILL_COLOR := Color(0.227, 0.227, 0.003)
+const GRID_GOOD_TARGET_LINE_COLOR := Color(0.0, 0.828, 0.0)
+const GRID_GOOD_TARGET_FILL_COLOR := Color(0.106, 0.208, 0.0)
+
 func setup():
-	set_save_path("res://theme/generated/default_theme.tres")
+	set_save_path("res://theme/generated/default_theme_old.tres")
+
+func setup_major_sub_detail_panel():
+	set_save_path("res://theme/generated/major_sub_detail_panel_theme_old.tres")
+	set_theme_generator(define_major_sub_detail_panel_theme)
 
 var default_spacing = 4
 var default_font_size = 12
@@ -54,6 +71,10 @@ func define_theme():
 	var thick_border_panel_style = stylebox_flat({
 		border_color = default_border_color,
 		border_ = border_width(2)
+	})
+	
+	define_style('Control', {
+		font_color = GRID_SELECTED_LINE_COLOR
 	})
 	
 	define_style('PanelContainer', {
@@ -169,4 +190,89 @@ func define_theme():
 		font_color = form_label_font_color,
 		font = bold_font,
 		line_spacing = 0
+	})
+	
+	define_variant_style('PlaybackControlButton', 'Button', {
+		normal = stylebox_flat({
+			bg_color = GRID_HOVER_FILL_COLOR,
+			content_margin_ = content_margins(2)
+		}),
+		disabled = stylebox_flat({
+			bg_color = GRID_HOVER_FILL_COLOR,
+			content_margin_ = content_margins(2)
+		})
+	})
+	
+	define_variant_style('ButtonBar', 'PanelContainer', {
+		panel = stylebox_flat({
+			bg_color = GRID_DEFAULT_LINE_COLOR,
+			content_margin_ = content_margins(4)
+		})
+	})
+
+	define_variant_style('ButtonBarButton', 'Button', {
+		normal = stylebox_flat({
+			bg_color = GRID_HOVER_FILL_COLOR,
+			content_margin_ = content_margins(2)
+		}),
+		disabled = stylebox_flat({
+			bg_color = GRID_HOVER_FILL_COLOR,
+			content_margin_ = content_margins(2)
+		}),
+		font_color = GRID_NETURAL_TARGET_LINE_COLOR
+	})
+	
+	define_variant_style('ButtonBarLabel', 'Label', {
+		font_color = GRID_NETURAL_TARGET_LINE_COLOR
+	})
+	
+	define_style('Slider', {
+		grabber = load("res://icon/slider_grabber.svg"),
+		grabber_disabled = load("res://icon/slider_grabber_disabled.svg"),
+		grabber_highlight = load("res://icon/slider_grabber_highlight.svg"),
+		slider = stylebox_flat({
+			bg_color = GRID_HOVER_FILL_COLOR,
+			corner_radius_ = corner_radius(3),
+			content_margin_top = 3,
+			content_margin_bottom = 3
+		}),
+		grabber_area = stylebox_flat({
+			bg_color = GRID_HOVER_LINE_COLOR,
+			corner_radius_ = corner_radius(3),
+		}),
+		grabber_area_highlight = stylebox_flat({
+			bg_color = GRID_HOVER_LINE_COLOR,
+			corner_radius_ = corner_radius(3),
+		})
+	})
+	
+	define_style('ProgressBar', {
+		background = stylebox_flat({
+			bg_color = GRID_HOVER_FILL_COLOR,
+			corner_radius_ = corner_radius(2),
+		}),		
+		fill = stylebox_flat({
+			bg_color = Color(GRID_SELECTED_LINE_COLOR, 0.25),
+			corner_radius_ = corner_radius(2),
+			content_margin_top = 2,
+			content_margin_bottom = 2
+		}),		
+	})
+	
+	define_variant_style('DimLabel', 'Label', {
+		font_color = GRID_HOVER_LINE_COLOR
+	})
+	
+	define_variant_style('StepsLabel', 'Label', {
+		font_color = GRID_SELECTED_LINE_COLOR,
+		font_size = 26
+	})
+
+	define_variant_style('BigLabel', 'Label', {
+		font_size = 32
+	})	
+
+func define_major_sub_detail_panel_theme():
+	define_style('Label', {
+		font_color = GRID_NETURAL_TARGET_LINE_COLOR
 	})

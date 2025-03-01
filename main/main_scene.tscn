@@ -9,15 +9,22 @@
 [ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/level_panel/level_panel.tscn" id="5_vtfip"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="10_ys2ax"]
 
-[node name="MainScene" type="Node"]
+[node name="MainScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_im0q4")
 
 [node name="World" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_rmejh")
-metadata/_custom_type_script = ExtResource("1_rmejh")
+metadata/_custom_type_script = "uid://mpl54ukoekto"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -52,6 +59,9 @@ hex_background_colors = Array[Color]([Color(0.230028, 0.00698035, 0.248247, 1), 
 
 [node name="CameraControl" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
 CfgRotateSpeed = 0.8
+
+[node name="Camera" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl" index="0"]
+current = true
 
 [node name="GridOverlayPanel" type="Panel" parent="PanelContainer/HBoxContainer/GridPanelContainer"]
 unique_name_in_owner = true
