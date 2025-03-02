@@ -29,6 +29,8 @@ enum HexColor {
 }
 
 func _ready() -> void:
+	
+	
 
 	_control_panel.current_step_changed.connect(_on_current_step_changed)
 	_control_panel.ring_count_changed.connect(_on_ring_count_changed)

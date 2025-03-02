@@ -1,0 +1,87 @@
+[gd_scene load_steps=7 format=3 uid="uid://cnu6eysxol3tc"]
+
+[ext_resource type="Texture2D" uid="uid://bshq4y2gn32w2" path="res://icon/logo.png" id="1_4i4f8"]
+[ext_resource type="PackedScene" uid="uid://pkpl54rmgns7" path="res://main/title.tscn" id="2_m6xkr"]
+[ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/level_panel/level_panel.tscn" id="3_1x3tc"]
+[ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="4_khmyp"]
+[ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="5_4rm75"]
+[ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="6_m6xkr"]
+
+[node name="Test" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+follow_viewport_scale = 3.0
+
+[node name="SidePanelContainer" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -301.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_type_variation = &"NomarginPanelContainer"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/SidePanelContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/SidePanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -1
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = -1
+theme_override_constants/margin_bottom = -1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/SidePanelContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("1_4i4f8")
+expand_mode = 5
+stretch_mode = 4
+
+[node name="GameTitle" parent="CanvasLayer/SidePanelContainer/VBoxContainer" instance=ExtResource("2_m6xkr")]
+visible = false
+layout_mode = 2
+theme_type_variation = &"TitlePanel"
+
+[node name="LevelPanel" parent="CanvasLayer/SidePanelContainer/VBoxContainer" instance=ExtResource("3_1x3tc")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ControlPanel" parent="CanvasLayer/SidePanelContainer/VBoxContainer" instance=ExtResource("4_khmyp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CellInfoPanel" type="PanelContainer" parent="CanvasLayer/SidePanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"DetailPanel"
+
+[node name="CellStatePanel" parent="CanvasLayer/SidePanelContainer/VBoxContainer/CellInfoPanel" instance=ExtResource("5_4rm75")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CellConfigPanel" type="PanelContainer" parent="CanvasLayer/SidePanelContainer/VBoxContainer/CellInfoPanel"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/SidePanelContainer/VBoxContainer/CellInfoPanel/CellConfigPanel"]
+layout_mode = 2
+text = "(cell config)"
+
+[node name="HexGrid" parent="." instance=ExtResource("6_m6xkr")]
+unique_name_in_owner = true
+default_line_color = Color(0.230028, 0.00698035, 0.248247, 1)
+default_background_color = Color(0.0722556, 0.000914003, 0.0790231, 1)
+hex_line_colors = Array[Color]([Color(0.437044, 0.00028479, 0.485718, 1), Color(0.840683, 0.00120019, 0.929285, 1), Color(1, 0, 0, 1), Color(0.94, 0.94, 0.1504, 1), Color(0, 0.827936, 0, 1)])
+hex_background_colors = Array[Color]([Color(0.230028, 0.00698035, 0.248247, 1), Color(0.311767, 0.0128437, 0.335206, 1), Color(0.3, 0, 0, 1), Color(0.227295, 0.227013, 0.00258881, 1), Color(0.105882, 0.207843, 0, 1)])
+
+[node name="CameraControl" parent="HexGrid/GridPlane" index="1"]
+CfgRotateSpeed = 0.8
+
+[node name="Camera" parent="HexGrid/GridPlane/CameraControl" index="0"]
+current = true
+
+[editable path="HexGrid"]
+[editable path="HexGrid/GridPlane/CameraControl"]

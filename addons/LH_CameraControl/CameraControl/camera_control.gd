@@ -230,19 +230,19 @@ func _process(delta):
 
 	
 # Debug info
-	$DebugInfo.text = "FPS: " + str(Engine.get_frames_per_second()) \
-					+ "\n" + "Actual move speed: " + str(abs(ActualMoveSpeed)) \
-					+ "\n" + "Actual zoom distance: " + str(abs(ActualZoomDistance)) \
-					+ "\n" + "Global position: " + str(global_position) \
-					+ "\n" + "Relative position: " + str(position) \
-					+ "\n" + "Actual rotate angle: " + str(rad_to_deg(rotation.y)) \
-					+ "\n" + "Actual tilt angle: " + str(ActualTiltAngle) \
-					+ "\n" + "Actual camera angle: " + str(rad_to_deg($Camera.rotation.x)) \
-					+ "\n" + "Mouse rotate and tilt clicked: " + str(Input.is_action_pressed(CfgInputMouseRotateAndTilt)) \
-					+ "\n" + "Mouse move clicked: " + str(Input.is_action_pressed(CfgInputMouseMove)) \
-					+ "\n" + "Intersection: " + str(intersection) \
-					+ "\n" + "Intersection Length: " + str(intersection.length())
-	$DebugInfo.visible = CfgShowDebugInfo
+	#$DebugInfo.text = "FPS: " + str(Engine.get_frames_per_second()) \
+					#+ "\n" + "Actual move speed: " + str(abs(ActualMoveSpeed)) \
+					#+ "\n" + "Actual zoom distance: " + str(abs(ActualZoomDistance)) \
+					#+ "\n" + "Global position: " + str(global_position) \
+					#+ "\n" + "Relative position: " + str(position) \
+					#+ "\n" + "Actual rotate angle: " + str(rad_to_deg(rotation.y)) \
+					#+ "\n" + "Actual tilt angle: " + str(ActualTiltAngle) \
+					#+ "\n" + "Actual camera angle: " + str(rad_to_deg($Camera.rotation.x)) \
+					#+ "\n" + "Mouse rotate and tilt clicked: " + str(Input.is_action_pressed(CfgInputMouseRotateAndTilt)) \
+					#+ "\n" + "Mouse move clicked: " + str(Input.is_action_pressed(CfgInputMouseMove)) \
+					#+ "\n" + "Intersection: " + str(intersection) \
+					#+ "\n" + "Intersection Length: " + str(intersection.length())
+	#$DebugInfo.visible = CfgShowDebugInfo
 
 func KeyAndMouseCtrl(Value : float, KeyNegative : String, KeyPositive : String, InvertDirection : bool, MouseActive : bool, MouseSensitivity : float):
 	var Status = {"Xvalue" : 0.0, "Yvalue" : 0.0}

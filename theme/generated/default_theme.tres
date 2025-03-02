@@ -155,12 +155,12 @@ content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.312, 0.013, 0.335, 1)
+bg_color = Color(0.230028, 0.00698035, 0.248247, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.841, 0.001, 0.929, 1)
+border_color = Color(0.437044, 0.00028479, 0.485718, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5wc2h"]
 content_margin_left = 0.0
@@ -377,14 +377,14 @@ thickness = 2
 vertical = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phit5"]
-bg_color = Color(0.311767, 0.0128437, 0.335206, 1)
+bg_color = Color(0.230028, 0.00698035, 0.248247, 1)
 expand_margin_left = 4.0
 expand_margin_top = 32.0
 expand_margin_right = 4.0
 expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xwg1m"]
-bg_color = Color(0.230028, 0.00698035, 0.248247, 1)
+bg_color = Color(0.144667, 0.00297348, 0.157429, 1)
 expand_margin_left = 4.0
 expand_margin_top = 32.0
 expand_margin_right = 4.0
@@ -393,6 +393,7 @@ expand_margin_bottom = 4.0
 [resource]
 default_font_size = 12
 BigLabel/base_type = &"Label"
+BigLabel/colors/font_color = Color(0.840683, 0.00120019, 0.929285, 1)
 BigLabel/font_sizes/font_size = 32
 Border/base_type = &"PanelContainer"
 Border/styles/panel = SubResource("StyleBoxFlat_dr2da")
@@ -555,7 +556,7 @@ VScrollBar/styles/grabber_pressed = ExtResource("5_clonq")
 VScrollBar/styles/scroll = ExtResource("6_5c78g")
 VScrollBar/styles/scroll_focus = ExtResource("2_80vn2")
 VSeparator/styles/separator = SubResource("StyleBoxLine_2noaa")
-Window/colors/title_color = Color(0.87451, 0.87451, 0, 1)
+Window/colors/title_color = Color(0.895904, 0.486315, 0.979658, 1)
 Window/font_sizes/title_font_size = 18
 Window/icons/close = ExtResource("5_qxwiy")
 Window/icons/close_pressed = ExtResource("6_el135")
