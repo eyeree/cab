@@ -35,6 +35,7 @@ ambient_light_energy = 0.65
 
 [node name="HexGrid" type="Node3D"]
 script = ExtResource("1_ppiwg")
+outside_color = Color(0.960784, 0, 0, 1)
 
 [node name="GridPlane" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=11 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
 [ext_resource type="Script" uid="uid://mpl54ukoekto" path="res://model/world.gd" id="1_rmejh"]
@@ -9,13 +9,15 @@
 [ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/level_panel/level_panel.tscn" id="5_vtfip"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="10_ys2ax"]
 
-[node name="MainScene" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mhk4r"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ncflg"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+
+[node name="MainScene" type="Node3D"]
 script = ExtResource("1_im0q4")
 
 [node name="World" type="Node" parent="."]
@@ -23,53 +25,57 @@ unique_name_in_owner = true
 script = ExtResource("1_rmejh")
 metadata/_custom_type_script = "uid://mpl54ukoekto"
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 1
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_mhk4r")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainer"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
-[node name="GridPanelContainer" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
+[node name="GridPanelContainer" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
-theme_type_variation = &"NomarginPanelContainer"
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ncflg")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="PanelContainer/HBoxContainer/GridPanelContainer"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(1607, 1072)
+size = Vector2i(1679, 1024)
 render_target_update_mode = 4
 
-[node name="HexGrid" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
+[node name="HexGrid" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
 unique_name_in_owner = true
 default_line_color = Color(0.230028, 0.00698035, 0.248247, 1)
 default_background_color = Color(0.0722556, 0.000914003, 0.0790231, 1)
+outside_color = Color(0, 0, 0, 1)
 hex_line_colors = Array[Color]([Color(0.437044, 0.00028479, 0.485718, 1), Color(0.840683, 0.00120019, 0.929285, 1), Color(1, 0, 0, 1), Color(0.94, 0.94, 0.1504, 1), Color(0, 0.827936, 0, 1)])
 hex_background_colors = Array[Color]([Color(0.230028, 0.00698035, 0.248247, 1), Color(0.311767, 0.0128437, 0.335206, 1), Color(0.3, 0, 0, 1), Color(0.227295, 0.227013, 0.00258881, 1), Color(0.105882, 0.207843, 0, 1)])
 
-[node name="CameraControl" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
+[node name="CameraControl" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
 CfgRotateSpeed = 0.8
 
-[node name="Camera" parent="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl" index="0"]
+[node name="Camera" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl" index="0"]
 current = true
 
-[node name="GridOverlayPanel" type="Panel" parent="PanelContainer/HBoxContainer/GridPanelContainer"]
+[node name="GridOverlayPanel" type="Panel" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_type_variation = &"OverlayPanelOuter"
 
-[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/HBoxContainer/GridPanelContainer/GridOverlayPanel"]
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/GridOverlayPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,81 +84,83 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 
-[node name="GridOverlayLabel" type="Label" parent="PanelContainer/HBoxContainer/GridPanelContainer/GridOverlayPanel/CenterContainer"]
+[node name="GridOverlayLabel" type="Label" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/GridOverlayPanel/CenterContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"OverlayLabel"
 text = "Loading..."
 
-[node name="DebugPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer/GridPanelContainer"]
+[node name="DebugPanel" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="DebugHexIndex" type="Label" parent="PanelContainer/HBoxContainer/GridPanelContainer/DebugPanel"]
+[node name="DebugHexIndex" type="Label" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/DebugPanel"]
 unique_name_in_owner = true
 layout_mode = 2
+text = "(hex index)"
 
-[node name="SidePanelContainer" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
+[node name="SidePanelContainer" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"NomarginPanelContainer"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/SidePanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = -1
 theme_override_constants/margin_top = -1
 theme_override_constants/margin_right = -1
 theme_override_constants/margin_bottom = -1
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 texture = ExtResource("4_ncflg")
 expand_mode = 5
 stretch_mode = 4
 
-[node name="GameTitle" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("3_wteyq")]
+[node name="GameTitle" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("3_wteyq")]
 visible = false
 layout_mode = 2
 theme_type_variation = &"TitlePanel"
 
-[node name="LevelPanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_vtfip")]
+[node name="LevelPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_vtfip")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ControlPanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_m3hh0")]
+[node name="ControlPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_m3hh0")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CellInfoPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer"]
+[node name="CellInfoPanel" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"DetailPanel"
 
-[node name="CellStatePanel" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellInfoPanel" instance=ExtResource("10_ys2ax")]
+[node name="CellStatePanel" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellInfoPanel" instance=ExtResource("10_ys2ax")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CellConfigPanel" type="PanelContainer" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellInfoPanel"]
+[node name="CellConfigPanel" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellInfoPanel"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellInfoPanel/CellConfigPanel"]
+[node name="Label" type="Label" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/CellInfoPanel/CellConfigPanel"]
 layout_mode = 2
 text = "(cell config)"
 
-[node name="WindowOverlayPanel" type="Panel" parent="PanelContainer"]
+[node name="WindowOverlayPanel" type="Panel" parent="CanvasLayer/PanelContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 mouse_force_pass_scroll_events = false
 theme_type_variation = &"OverlayPanelOuter"
 
-[editable path="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid"]
-[editable path="PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl"]
+[editable path="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid"]
+[editable path="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl"]

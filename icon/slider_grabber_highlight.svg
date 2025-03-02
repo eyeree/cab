@@ -19,7 +19,7 @@
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#505050"
      inkscape:zoom="36.65625"
-     inkscape:cx="6.3972719"
+     inkscape:cx="6.4109122"
      inkscape:cy="6.7519182"
      inkscape:window-width="3440"
      inkscape:window-height="1369"
@@ -35,7 +35,7 @@
   </defs>
   <path
      sodipodi:type="star"
-     style="fill:#d600ed;stroke-width:0.264999;stroke-dasharray:none;fill-opacity:1"
+     style="fill:#d600ed;fill-opacity:1;stroke-width:0.264999;stroke-dasharray:none"
      id="path1"
      inkscape:flatsided="true"
      sodipodi:sides="6"
@@ -48,5 +48,5 @@
      inkscape:rounded="0"
      inkscape:randomized="0"
      d="m 8.8621409,7.1675694 -6.4451378,3.7211016 -6.4451377,-3.7211016 0,-7.44220403 6.4451378,-3.72110197 6.4451377,3.72110203 z"
-     transform="matrix(0,1.0860901,-1.0473376,0,11.609615,5.3749168)" />
+     transform="matrix(0,1.0860901,-1.0749504,0,11.704782,5.3749168)" />
 </svg>
