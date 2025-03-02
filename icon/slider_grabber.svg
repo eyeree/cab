@@ -18,13 +18,13 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#505050"
-     inkscape:zoom="73.3125"
-     inkscape:cx="8"
-     inkscape:cy="8"
+     inkscape:zoom="25.919883"
+     inkscape:cx="8.699885"
+     inkscape:cy="13.175214"
      inkscape:window-width="2010"
      inkscape:window-height="1237"
-     inkscape:window-x="426"
-     inkscape:window-y="88"
+     inkscape:window-x="35"
+     inkscape:window-y="48"
      inkscape:window-maximized="0"
      inkscape:current-layer="Layer_1" />
   <!-- Generator: Adobe Illustrator 29.3.1, SVG Export Plug-In . SVG Version: 2.1.0 Build 151)  -->
@@ -33,10 +33,20 @@
     <style
        id="style1">&#10;      .st0 {&#10;        fill: #d600ed;&#10;        fill-opacity: .8;&#10;      }&#10;    </style>
   </defs>
-  <circle
-     class="st0"
-     cx="8"
-     cy="8"
-     r="7"
-     id="circle1" />
+  <path
+     sodipodi:type="star"
+     style="fill:#e47cfa;stroke-width:0.264999;stroke-dasharray:none"
+     id="path1"
+     inkscape:flatsided="true"
+     sodipodi:sides="6"
+     sodipodi:cx="2.4170032"
+     sodipodi:cy="3.4464674"
+     sodipodi:r1="7.442204"
+     sodipodi:r2="6.4451375"
+     sodipodi:arg1="0.52359878"
+     sodipodi:arg2="1.0471976"
+     inkscape:rounded="0"
+     inkscape:randomized="0"
+     d="m 8.8621409,7.1675694 -6.4451378,3.7211016 -6.4451377,-3.7211016 0,-7.44220403 6.4451378,-3.72110197 6.4451377,3.72110203 z"
+     transform="matrix(0,1.0860901,-1.0473376,0,11.609615,5.3749168)" />
 </svg>

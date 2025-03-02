@@ -17,7 +17,6 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 title = "Save Level"
 initial_position = 2
-visible = true
 popup_window = true
 mode_overrides_title = false
 access = 1
@@ -35,18 +34,21 @@ access = 1
 [node name="NewLevelButton" type="Button" parent="LevelPanel"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 theme_type_variation = &"ButtonBarButton"
 text = "New"
 
 [node name="SaveLevelButton" type="Button" parent="LevelPanel"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 theme_type_variation = &"ButtonBarButton"
 text = "Save"
 
 [node name="LoadLevelButton" type="Button" parent="LevelPanel"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 theme_type_variation = &"ButtonBarButton"
 text = "Load"
 
