@@ -36,6 +36,8 @@ func _ready() -> void:
 	_load_level_file_dialog.filters = Level.LEVEL_FILTERS
 	_load_level_file_dialog.root_subfolder = Level.LEVEL_DIR_NAME
 	
+	_save_level_file_dialog.close_requested.connect(_on_file_dialog_canceled)
+	_load_level_file_dialog.close_requested.connect(_on_file_dialog_canceled)
 	_save_level_file_dialog.get_cancel_button().pressed.connect(_on_file_dialog_canceled)
 	_load_level_file_dialog.get_cancel_button().pressed.connect(_on_file_dialog_canceled)
 	

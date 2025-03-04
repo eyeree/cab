@@ -21,6 +21,7 @@ var ring_count:int = 0
 var run_speed:float:
 	set(value):
 		_run_speed_slider.value = value
+		_on_run_speed_changed(value)
 	get:
 		return _run_speed_slider.value
 

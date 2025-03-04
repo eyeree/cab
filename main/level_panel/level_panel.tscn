@@ -18,6 +18,7 @@ auto_translate_mode = 1
 title = "Save Level"
 initial_position = 2
 popup_window = true
+content_scale_factor = 1.5
 mode_overrides_title = false
 access = 1
 
@@ -26,6 +27,7 @@ unique_name_in_owner = true
 auto_translate_mode = 1
 title = "Load Level"
 initial_position = 2
+content_scale_factor = 1.5
 ok_button_text = "Open"
 mode_overrides_title = false
 file_mode = 0
