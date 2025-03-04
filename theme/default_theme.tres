@@ -418,12 +418,12 @@ content_margin_bottom = 4.0
 bg_color = Color(0.230028, 0.00698035, 0.248247, 1)
 corner_detail = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hk6yn"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ctcw6"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.144667, 0.00297348, 0.157429, 1)
+bg_color = Color(0.230028, 0.00698035, 0.248247, 1)
 corner_detail = 5
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_2noaa"]
@@ -642,7 +642,7 @@ Tree/styles/focus = ExtResource("1_2etsi")
 Tree/styles/hovered = SubResource("StyleBoxFlat_vc5wl")
 Tree/styles/panel = SubResource("StyleBoxFlat_gwyvi")
 Tree/styles/selected = SubResource("StyleBoxFlat_gyudv")
-Tree/styles/selected_focus = SubResource("StyleBoxFlat_hk6yn")
+Tree/styles/selected_focus = SubResource("StyleBoxFlat_ctcw6")
 VBoxContainer/constants/separation = 4
 VScrollBar/styles/grabber = ExtResource("10_cg4h7")
 VScrollBar/styles/grabber_highlight = ExtResource("11_hfmhm")

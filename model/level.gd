@@ -14,6 +14,7 @@ static func _static_init() -> void:
 	DirAccess.make_dir_recursive_absolute(LEVEL_PATH)
 	
 class LevelSignals:
+	@warning_ignore("unused_signal")
 	signal level_modified()
 	
 static var signals := LevelSignals.new()

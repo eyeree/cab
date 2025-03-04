@@ -26,7 +26,6 @@ boot_splash/minimum_display_time=5000
 window/size/viewport_width=1980
 window/size/viewport_height=1024
 window/stretch/mode="canvas_items"
-window/stretch/scale=2.0
 
 [editor_plugins]
 

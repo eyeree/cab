@@ -32,6 +32,8 @@ enum HexColor {
 
 func _ready() -> void:
 	
+	ScaleContainer.set_font_oversampling(3)
+	
 	_control_panel.current_step_changed.connect(_on_current_step_changed)
 	_control_panel.ring_count_changed.connect(_on_ring_count_changed)
 	_control_panel.step_count_changed.connect(_on_step_count_changed)
@@ -51,42 +53,7 @@ func _ready() -> void:
 	GeneStatePanel.gene_signals.set_target_highlight.connect(_set_target_highlight)
 	GeneStatePanel.gene_signals.clear_target_highlight.connect(_clear_target_highlight)
 	
-	#_side_panel_container.scale = Vector2(2, 2)
-	
-	#prints('_grid_panel_container.size', _grid_panel_container.size, _grid.position)
-	#
-	#_grid_panel_container.item_rect_changed.connect(func ():
-		##_grid.position.x = -(_grid_panel_container.size.x/2) 
-		#prints('_grid_panel_container.size', _grid_panel_container.size, _grid.position))
-	
 	_level_changed()
-	
-	#call_deferred("_center_hex_grid")
-
-func _center_hex_grid():
-	# 1. Compute the screen coordinate for center of GridPanelContainer
-	# rect_global_position is the Control's top-left in global screen coords
-	# rect_size is the Control's width & height
-	var global_center = _grid_panel_container.global_position + (_grid_panel_container.size * 0.5)
-	prints('_grid_panel_container.size', _grid_panel_container.global_position, _grid_panel_container.size, global_center)
-
-	# 2. Project a ray into 3D from that pixel.
-	var camera_node = get_viewport().get_camera_3d()
-	var from = camera_node.project_ray_origin(global_center)
-	var dir  = camera_node.project_ray_normal(global_center)
-	var to   = from + dir * 1000  # or however far you need to go
-
-	# 3. Cast that ray onto your grid plane.
-	var space_state = get_world_3d().direct_space_state
-	var intersect_ray_params := PhysicsRayQueryParameters3D.new()
-	intersect_ray_params.from = from
-	intersect_ray_params.to = to
-	var result = space_state.intersect_ray(intersect_ray_params)
-
-	if result:
-		# 4. Move the HexGrid origin to that 3D intersection
-		prints('  _grid.transform.origin', result.position)
-		_grid.transform.origin = result.position
 
 func _set_target_highlight(index:HexIndex, type:GeneStatePanel.TargetType) -> void:
 	
