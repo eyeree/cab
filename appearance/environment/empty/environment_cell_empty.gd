@@ -56,7 +56,9 @@ func set_state(cell_state:CellState) -> void:
 	
 	for claim_cell_appearance in _claim_cell_appearances:
 		var parent = claim_cell_appearance.get_parent()
-		if parent: parent.remove_child(claim_cell_appearance)
+		if parent: 
+			parent.remove_child(claim_cell_appearance)
+		claim_cell_appearance.visible = false
 		claim_cell_appearance.queue_free()
 	_claim_cell_appearances.clear()
 	
@@ -82,8 +84,6 @@ func set_state(cell_state:CellState) -> void:
 		var cell_appearance:CellAppearance = _claim_cell_appearances[i]
 		var claim_state:ClaimableCellGene.ClaimState = _claim_states[i]
 
-		add_child(cell_appearance)
-		
 		var percent_complete:float = min(1.0, float(claim_state.energy_provided) / float(claim_state.cell_type.energy_cost))
 		percent_complete = max(0.0, percent_complete - (0.1 * i))
 		
@@ -94,6 +94,8 @@ func set_state(cell_state:CellState) -> void:
 		var appearance_position:Vector3 = start + ((end - start) * percent_complete)
 		cell_appearance.position = to_local(appearance_position)
 		
-		var appearance_scale = 0.2 + (0.7 * percent_complete)
+		var appearance_scale:float = 0.2 + (0.7 * percent_complete)
 		cell_appearance.scale = Vector3(appearance_scale, appearance_scale, appearance_scale)
-		
+		cell_appearance.visible = false
+		add_child(cell_appearance)
+		cell_appearance.set_visible.call_deferred(true)

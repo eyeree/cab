@@ -1,7 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://dhfungrs048gu"]
+[gd_scene load_steps=11 format=3 uid="uid://dhfungrs048gu"]
 
 [ext_resource type="Script" uid="uid://kckkiu27lorn" path="res://appearance/environment/empty/environment_cell_empty.gd" id="1_x1tuy"]
-[ext_resource type="Script" uid="uid://30gtos621ds5" path="res://model/cell_appearance.gd" id="2_5d6q5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gjv6y"]
 albedo_color = Color(0, 0, 0, 1)
@@ -47,7 +46,7 @@ height = 0.4
 
 [node name="EnvironmentCellEmpty" type="Node3D"]
 script = ExtResource("1_x1tuy")
-metadata/_custom_type_script = ExtResource("2_5d6q5")
+metadata/_custom_type_script = "uid://30gtos621ds5"
 
 [node name="Base" type="CSGCylinder3D" parent="."]
 unique_name_in_owner = true

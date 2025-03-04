@@ -107,14 +107,12 @@ func _process_run(delta:float) -> void:
 		
 	_step_delta += _run_steps_per_second * delta
 	if _step_delta < 1.0:
-		prints('skipped', _run_steps_per_second * delta)
 		return
 		
 	var step_delta := floori(_step_delta)
 	_step_delta -= step_delta
 	var new_step := mini(current_step + step_delta, _loaded_steps)
 	_set_step(new_step)
-	prints('delta', step_delta)
 	
 func _set_step(step_number:int) -> void:
 	
