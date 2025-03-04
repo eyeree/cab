@@ -3,6 +3,7 @@ class_name LevelEditorState extends Resource
 const LEVEL_EDITOR_STATE_PATH := 'user://level_editor_state.tres'
 
 @export var current_level_path:String = ''
+@export var run_speed:float = 250.0
 
 static func load() -> LevelEditorState:
 	if ResourceLoader.exists(LEVEL_EDITOR_STATE_PATH):

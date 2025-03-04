@@ -10,7 +10,7 @@ class_name LevelPanel extends PanelContainer
 
 var level:Level
 
-var _state:LevelEditorState
+var state:LevelEditorState
 
 signal level_changed()
 signal dialog_opened()
@@ -41,12 +41,12 @@ func _ready() -> void:
 	
 	Level.signals.level_modified.connect(_on_level_modified)
 
-	_state = LevelEditorState.load()
-	if _state.current_level_path == '':
+	state = LevelEditorState.load()
+	if state.current_level_path == '':
 		ResourceSaver.save(ResourceLoader.load(Level.DEFAULT_LEVEL_PATH), Level.INITIAL_LEVEL_PATH)
 		_load_level_resource(Level.INITIAL_LEVEL_PATH)
 	else:
-		_load_level_resource(_state.current_level_path)
+		_load_level_resource(state.current_level_path)
 		
 func _new_level():
 	var path = _get_next_level_path()
@@ -83,8 +83,8 @@ func _on_file_dialog_canceled():
 	
 func _load_level_resource(path:String) -> void:
 	level = ResourceLoader.load(path)
-	_state.current_level_path = path
-	_state.save()
+	state.current_level_path = path
+	state.save()
 	_level_file_name.text = path.replace(Level.LEVEL_PATH_PREFIX, '').replace(Level.LEVEL_EXTENSION, '')
 	_change_number = 0
 	level_changed.emit()

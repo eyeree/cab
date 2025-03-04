@@ -18,9 +18,16 @@ var current_step:int = 0
 var step_count:int = 0
 var ring_count:int = 0
 
+var run_speed:float:
+	set(value):
+		_run_speed_slider.value = value
+	get:
+		return _run_speed_slider.value
+
 signal current_step_changed(value:int)
 signal step_count_changed(value:int)
 signal ring_count_changed(value:int)
+signal run_speed_changed(value:float)
 
 var _is_running:bool = false
 var _run_steps_per_second:float
@@ -52,7 +59,7 @@ func _ready() -> void:
 	#_on_num_steps_changed(_num_steps_slider.value)
 	
 	_run_speed_slider.value_changed.connect(_on_run_speed_changed)
-	_on_run_speed_changed(_run_speed_slider.value)
+	#_on_run_speed_changed(_run_speed_slider.value)
 	
 	_update_ui()
 
@@ -90,6 +97,7 @@ func _last_step() -> void:
 
 func _on_run_speed_changed(value:float) -> void:
 	_run_steps_per_second = value
+	run_speed_changed.emit(value)
 	
 func _process_run(delta:float) -> void:
 	

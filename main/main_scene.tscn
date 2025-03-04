@@ -41,7 +41,6 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="GridPanelContainer" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer"]
-unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
@@ -110,7 +109,6 @@ ui_scale = 1.5
 metadata/_custom_type_script = "uid://bqmrltjv5ji5c"
 
 [node name="SidePanelContainer" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer"]
-unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"NomarginPanelContainer"
 

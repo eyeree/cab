@@ -6,8 +6,6 @@ class_name MainScene extends Node3D
 @onready var _cell_info_panel: PanelContainer = %CellInfoPanel
 @onready var _cell_config_panel: PanelContainer = %CellConfigPanel
 @onready var _level_panel: LevelPanel = %LevelPanel
-@onready var _grid_panel_container: PanelContainer = %GridPanelContainer
-@onready var _side_panel_container: PanelContainer = %SidePanelContainer
 
 @onready var _grid_overlay_panel: Panel = %GridOverlayPanel
 @onready var _window_overlay_panel: Panel = %WindowOverlayPanel
@@ -32,11 +30,14 @@ enum HexColor {
 
 func _ready() -> void:
 	
+	prints("User directory:", OS.get_user_data_dir())
+	
 	ScaleContainer.set_font_oversampling(3)
 	
 	_control_panel.current_step_changed.connect(_on_current_step_changed)
 	_control_panel.ring_count_changed.connect(_on_ring_count_changed)
 	_control_panel.step_count_changed.connect(_on_step_count_changed)
+	_control_panel.run_speed_changed.connect(_run_speed_changed)
 	
 	_grid.mouse_entered_hex.connect(_on_mouse_entered_hex)
 	_grid.mouse_exited_hex.connect(_on_mouse_exited_hex)
@@ -53,8 +54,14 @@ func _ready() -> void:
 	GeneStatePanel.gene_signals.set_target_highlight.connect(_set_target_highlight)
 	GeneStatePanel.gene_signals.clear_target_highlight.connect(_clear_target_highlight)
 	
+	_control_panel.run_speed = _level_panel.state.run_speed
+	
 	_level_changed()
 
+func _run_speed_changed(value:float) -> void:
+	_level_panel.state.run_speed = value
+	_level_panel.state.save()
+	
 func _set_target_highlight(index:HexIndex, type:GeneStatePanel.TargetType) -> void:
 	
 	var hex_color:HexColor
