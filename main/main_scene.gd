@@ -137,10 +137,8 @@ func _load_started() -> void:
 	pass
 
 func _load_progress(loaded_steps:int) -> void:
-	var was_waiting = _control_panel.current_step > _control_panel.loaded_steps \
-		and _control_panel.current_step <= loaded_steps
 	_control_panel.loaded_steps = loaded_steps
-	if was_waiting:
+	if _control_panel.current_step <= loaded_steps:
 		_grid_overlay_panel.visible = false
 		_update_grid()
 	
@@ -152,7 +150,10 @@ func _on_current_step_changed(current_step:int) -> void:
 	if current_step > 0 and _load_needed:
 		_start_load()
 	if current_step <= _control_panel.loaded_steps:
-		_update_grid()	
+		_grid_overlay_panel.visible = false
+		_update_grid()
+	elif current_step > _control_panel.loaded_steps + 1:
+		_grid_overlay_panel.visible = true
 
 func _update_grid() -> void:
 	if _control_panel.current_step == 0:

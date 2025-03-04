@@ -60,27 +60,32 @@ func _process(delta: float) -> void:
 	if _is_running: _process_run(delta)
 	
 func _on_current_step_changed(value) -> void:
+	_is_running = false
 	_set_step(value)
 	
 func _first_step() -> void:
+	_is_running = false
 	_set_step(0)
 
 func _previous_step() -> void:
+	_is_running = false
 	_set_step(current_step - 1)
 	
 func _run() -> void:
 	_is_running = true
 	_step_delta = 0.0
-	_next_step()
+	_set_step(current_step + 1)
 
 func _pause() -> void:
 	_is_running = false
 	_update_ui()
 	
 func _next_step() -> void:
+	_is_running = false
 	_set_step(current_step + 1)
 
 func _last_step() -> void:
+	_is_running = false
 	_set_step(step_count)
 
 func _on_run_speed_changed(value:float) -> void:
@@ -93,12 +98,14 @@ func _process_run(delta:float) -> void:
 		
 	_step_delta += _run_steps_per_second * delta
 	if _step_delta < 1.0:
+		prints('skipped', _run_steps_per_second * delta)
 		return
 		
 	var step_delta := floori(_step_delta)
 	_step_delta -= step_delta
 	var new_step := mini(current_step + step_delta, _loaded_steps)
 	_set_step(new_step)
+	prints('delta', step_delta)
 	
 func _set_step(step_number:int) -> void:
 	
@@ -152,5 +159,6 @@ func reset(ring_count_:int, step_count_:int) -> void:
 	_grid_size_slider.set_value_no_signal(ring_count)
 	_num_steps_slider.set_value_no_signal(step_count)
 	_num_steps_value.text = str(step_count)
-	_load_progress_bar.max_value = step_count	
+	_load_progress_bar.max_value = step_count
+	_current_step_slider.max_value = step_count
 	_update_ui()
