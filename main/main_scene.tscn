@@ -51,7 +51,12 @@ layout_mode = 2
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer"]
+own_world_3d = true
 handle_input_locally = false
+msaa_3d = 3
+screen_space_aa = 1
+scaling_3d_scale = 2.0
+anisotropic_filtering_level = 4
 size = Vector2i(1679, 1024)
 render_target_update_mode = 4
 
