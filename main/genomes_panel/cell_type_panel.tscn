@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://ddw2i3utc1jti"]
 
 [ext_resource type="Texture2D" uid="uid://cvjpeir0ejt2v" path="res://icon/delete.svg" id="1_cicca"]
-[ext_resource type="Script" uid="uid://cb5t4vrxrj43j" path="res://main/edit_panel/cell_type_panel.gd" id="1_fk5vb"]
+[ext_resource type="Script" uid="uid://cb5t4vrxrj43j" path="res://main/genomes_panel/cell_type_panel.gd" id="1_fk5vb"]
 [ext_resource type="PackedScene" uid="uid://b7w4l8gi8wh08" path="res://appearance/simple_a/simple_a_cell_b.tscn" id="2_ogvsj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ogvsj"]
@@ -25,8 +25,8 @@ ambient_light_energy = 0.65
 
 [node name="CellTypePanel" type="PanelContainer"]
 offset_left = 186.0
-offset_right = 194.0
-offset_bottom = 42.0
+offset_right = 518.0
+offset_bottom = 62.0
 theme_type_variation = &"CellTypePanel"
 script = ExtResource("1_fk5vb")
 
@@ -79,14 +79,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.633)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="CellTypeName" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="CellTypeName" type="LineEdit" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_type_variation = &"LineEditFlat"
 text = "(cell type name)"
+flat = true
 
 [node name="GridContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2

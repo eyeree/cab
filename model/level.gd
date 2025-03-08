@@ -12,13 +12,12 @@ const DEFAULT_LEVEL_PATH := 'res://level/default.cab_level.tres'
 
 static func _static_init() -> void:
 	DirAccess.make_dir_recursive_absolute(LEVEL_PATH)
-	
-class LevelSignals:
-	@warning_ignore("unused_signal")
-	signal level_modified()
-	
-static var signals := LevelSignals.new()
 
+static var current:Level = null
+	
+@warning_ignore("unused_signal")
+signal level_modified()
+	
 @export var rings:int = 5
 @export var steps:int = 500
 @export var genomes:Array[Genome] = []

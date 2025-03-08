@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bshq4y2gn32w2" path="res://icon/logo.png" id="4_ncflg"]
 [ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="5_m3hh0"]
 [ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/level_panel/level_panel.tscn" id="5_vtfip"]
-[ext_resource type="PackedScene" uid="uid://60tr0jrk0ckj" path="res://main/edit_panel/edit_panel.tscn" id="9_mhk4r"]
+[ext_resource type="PackedScene" uid="uid://60tr0jrk0ckj" path="res://main/genomes_panel/genomes_panel.tscn" id="9_mhk4r"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="10_ys2ax"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mhk4r"]
@@ -146,7 +146,7 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="EditPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("9_mhk4r")]
+[node name="GenomesPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("9_mhk4r")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3

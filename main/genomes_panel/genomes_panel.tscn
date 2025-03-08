@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://60tr0jrk0ckj"]
 
-[ext_resource type="Script" uid="uid://bf2d302nt0wfo" path="res://main/edit_panel/edit_panel.gd" id="1_v6waw"]
+[ext_resource type="Script" uid="uid://bf2d302nt0wfo" path="res://main/genomes_panel/genomes_panel.gd" id="1_v6waw"]
 [ext_resource type="Texture2D" uid="uid://dbsq7g2fpejwq" path="res://icon/add.svg" id="3_edt6l"]
 
-[node name="EditPanel" type="PanelContainer"]
+[node name="GenomesPanel" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

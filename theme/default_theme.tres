@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=91 format=3 uid="uid://vswv5lu4ne81"]
+[gd_resource type="Theme" load_steps=95 format=3 uid="uid://vswv5lu4ne81"]
 
 [ext_resource type="StyleBox" uid="uid://d330kfaba42bf" path="res://theme/focus_style_box.tres" id="1_2etsi"]
 [ext_resource type="StyleBox" uid="uid://d36ynantycr15" path="res://theme/hover_style_box.tres" id="2_xa1oh"]
@@ -161,6 +161,35 @@ content_margin_bottom = 0.0
 color = Color(0.230028, 0.00698035, 0.248247, 1)
 thickness = 2
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ctcw6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hfmhm"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.311767, 0.0128437, 0.335206, 1)
+border_color = Color(0.437044, 0.00028479, 0.485718, 1)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_goq1p"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.144667, 0.00297348, 0.157429, 1)
+border_color = Color(0, 0, 0, 0.6)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w05jk"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.144667, 0.00297348, 0.157429, 1)
+border_color = Color(0, 0, 0, 0.3)
+corner_detail = 5
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_80vn2"]
 content_margin_left = 4.0
 content_margin_top = 4.0
@@ -250,17 +279,17 @@ content_margin_right = 4.0
 content_margin_bottom = 0.0
 color = Color(0.311767, 0.0128437, 0.335206, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbne1"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5kbpj"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
 bg_color = Color(0.0722556, 0.000914003, 0.0790231, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.437044, 0.00028479, 0.485718, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5c78g"]
 bg_color = Color(0.144667, 0.00297348, 0.157429, 1)
@@ -555,13 +584,18 @@ HScrollBar/styles/grabber_pressed = ExtResource("12_goq1p")
 HScrollBar/styles/scroll = ExtResource("13_w05jk")
 HScrollBar/styles/scroll_focus = ExtResource("1_2etsi")
 HSeparator/styles/separator = SubResource("StyleBoxLine_5wc2h")
-LineEdit/colors/caret_color = Color(0.94, 0.94, 0.1504, 1)
+Label/styles/normal = SubResource("StyleBoxEmpty_ctcw6")
+LineEdit/colors/caret_color = Color(0.840683, 0.00120019, 0.929285, 1)
 LineEdit/colors/font_selected_color = Color(0.895904, 0.486315, 0.979658, 1)
 LineEdit/colors/font_uneditable_color = Color(0.437044, 0.00028479, 0.485718, 1)
 LineEdit/colors/selection_color = Color(0.437044, 0.00028479, 0.485718, 1)
 LineEdit/styles/focus = ExtResource("1_2etsi")
 LineEdit/styles/normal = ExtResource("14_fgq16")
 LineEdit/styles/read_only = ExtResource("15_ci0lh")
+LineEditFlat/base_type = &"LineEdit"
+LineEditFlat/styles/focus = SubResource("StyleBoxFlat_hfmhm")
+LineEditFlat/styles/normal = SubResource("StyleBoxFlat_goq1p")
+LineEditFlat/styles/read_only = SubResource("StyleBoxFlat_w05jk")
 MajorSubDetailPanel/base_type = &"PanelContainer"
 MajorSubDetailPanel/styles/panel = SubResource("StyleBoxFlat_80vn2")
 NestedDetailPanel/base_type = &"PanelContainer"
@@ -594,7 +628,7 @@ PopupMenu/icons/unchecked_disabled = ExtResource("6_xyjj5")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_q2smm")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_pldkb")
 PopupMenu/styles/separator = SubResource("StyleBoxLine_rvamu")
-PopupPanel/styles/panel = SubResource("StyleBoxFlat_lbne1")
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_5kbpj")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_5c78g")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_1ufxu")
 Slider/icons/grabber = ExtResource("17_cnooe")

@@ -5,7 +5,7 @@ class_name MainScene extends Node3D
 @onready var _control_panel: ControlPanel = %ControlPanel
 @onready var _cell_config_panel: PanelContainer = %CellConfigPanel
 @onready var _level_panel: LevelPanel = %LevelPanel
-@onready var _edit_panel: EditPanel = %EditPanel
+@onready var _genomes_panel: GenomesPanel = %GenomesPanel
 
 @onready var _grid_overlay_panel: Panel = %GridOverlayPanel
 @onready var _window_overlay_panel: Panel = %WindowOverlayPanel
@@ -113,12 +113,12 @@ func _show_cell_info(index:HexIndex) -> void:
 	if _control_panel.current_step == 0:
 		_cell_state_panel.visible = false
 		_cell_config_panel.visible = true
-		_edit_panel.visible = true
+		_genomes_panel.visible = true
 		_show_cell_config(index)
 	else:
 		_cell_state_panel.visible = true
 		_cell_config_panel.visible = false
-		_edit_panel.visible = false
+		_genomes_panel.visible = false
 		_show_cell_state(index)
 		
 func _show_cell_state(index:HexIndex):
@@ -137,9 +137,9 @@ func _start_load() -> void:
 	_load_needed = false
 	
 	var world_options = World.WorldOptions.new()
-	world_options.rings = _level_panel.level.rings
-	world_options.steps = _level_panel.level.steps
-	world_options.initial_content = _level_panel.level.content
+	world_options.rings = Level.current.rings
+	world_options.steps = Level.current.steps
+	world_options.initial_content = Level.current.content
 	_world.load(world_options)
 		
 func _load_started() -> void:
@@ -179,9 +179,8 @@ func _update_grid_from_world():
 		_set_cell_state(index, cell_state)
 	
 func _update_grid_from_level():
-	_hide_cell_info()
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
-		var cell_type:CellType = _level_panel.level.content.get_content(index)
+		var cell_type:CellType = Level.current.content.get_content(index)
 		_set_cell_appearance(index, cell_type)
 
 func _set_cell_appearance(index:HexIndex, cell_type:CellType):
@@ -211,13 +210,13 @@ func _input(_event: InputEvent) -> void:
 		_debug_panel.visible = not _debug_panel.visible
 
 func _on_step_count_changed(step_count:int) -> void:
-	_level_panel.level.steps = step_count
-	_level_panel.level.signals.level_modified.emit()
+	Level.current.steps = step_count
+	Level.current.level_modified.emit()
 	_reset_load()
 	
 func _on_ring_count_changed(ring_count:int) -> void:
-	_level_panel.level.rings = ring_count
-	_level_panel.level.signals.level_modified.emit()
+	Level.current.rings = ring_count
+	Level.current.level_modified.emit()
 	_grid.rings = ring_count
 	_reset_load()
 	_update_grid()
@@ -234,10 +233,13 @@ func _hide_window_overlay():
 	_window_overlay_panel.visible = false
 
 func _level_changed() -> void:
-	var level := _level_panel.level
-	_control_panel.reset(level.rings, level.steps)
-	_grid.rings = level.rings
+	Level.current.level_modified.connect(_on_level_modified)
+	_control_panel.reset(Level.current.rings, Level.current.steps)
+	_grid.rings = Level.current.rings
 	_on_hex_selected(HexIndex.INVALID)
 	_reset_load()
 	_update_grid()
-	_edit_panel.show_genomes(level.genomes)
+	_genomes_panel.show_genomes()
+	
+func _on_level_modified() -> void:
+	_update_grid()

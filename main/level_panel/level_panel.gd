@@ -8,8 +8,6 @@ class_name LevelPanel extends PanelContainer
 @onready var _save_level_file_dialog: FileDialog = %SaveLevelFileDialog
 @onready var _load_level_file_dialog: FileDialog = %LoadLevelFileDialog
 
-var level:Level
-
 var state:LevelEditorState
 
 signal level_changed()
@@ -41,14 +39,16 @@ func _ready() -> void:
 	_save_level_file_dialog.get_cancel_button().pressed.connect(_on_file_dialog_canceled)
 	_load_level_file_dialog.get_cancel_button().pressed.connect(_on_file_dialog_canceled)
 	
-	Level.signals.level_modified.connect(_on_level_modified)
-
 	state = LevelEditorState.load()
-	if state.current_level_path == '':
-		ResourceSaver.save(ResourceLoader.load(Level.DEFAULT_LEVEL_PATH), Level.INITIAL_LEVEL_PATH)
-		_load_level_resource(Level.INITIAL_LEVEL_PATH)
+	if state.current_level_path == '' or not FileAccess.file_exists(state.current_level_path):
+		_load_default_level()
 	else:
 		_load_level_resource(state.current_level_path)
+
+func _load_default_level() -> void:
+	if not FileAccess.file_exists(Level.INITIAL_LEVEL_PATH):
+		ResourceSaver.save(ResourceLoader.load(Level.DEFAULT_LEVEL_PATH), Level.INITIAL_LEVEL_PATH)
+	_load_level_resource(Level.INITIAL_LEVEL_PATH)
 		
 func _new_level():
 	var path = _get_next_level_path()
@@ -73,7 +73,7 @@ func _load_level():
 
 func _on_save_level_file_selected(path: String):
 	dialog_closed.emit()
-	ResourceSaver.save(level, path)
+	ResourceSaver.save(Level.current, path)
 	_load_level_resource(path)
 	
 func _on_load_level_file_selected(path: String):
@@ -84,12 +84,18 @@ func _on_file_dialog_canceled():
 	dialog_closed.emit()
 	
 func _load_level_resource(path:String) -> void:
-	level = ResourceLoader.load(path)
-	state.current_level_path = path
-	state.save()
-	_level_file_name.text = path.replace(Level.LEVEL_PATH_PREFIX, '').replace(Level.LEVEL_EXTENSION, '')
-	_change_number = 0
-	level_changed.emit()
+	Level.current = ResourceLoader.load(path)
+	if Level.current == null:
+		if path == Level.INITIAL_LEVEL_PATH:
+			DirAccess.remove_absolute(Level.INITIAL_LEVEL_PATH)
+		_load_default_level()
+	else:
+		Level.current.level_modified.connect(_on_level_modified)
+		state.current_level_path = path
+		state.save()
+		_level_file_name.text = path.replace(Level.LEVEL_PATH_PREFIX, '').replace(Level.LEVEL_EXTENSION, '')
+		_change_number = 0
+		level_changed.emit()
 	
 var _change_number := 0
 func _on_level_modified() -> void:
@@ -97,7 +103,7 @@ func _on_level_modified() -> void:
 	var my_change_number = _change_number
 	await get_tree().create_timer(0.5).timeout
 	if _change_number == my_change_number:
-		level.save()
+		Level.current.save()
 	
 func _get_initial_level() -> Level:
 	
