@@ -1,21 +1,16 @@
 GIMP Palette
 Name: Godot Icon Colors
-71 140 191 Godot Blue
-65 64 66 Godot Gray
-255 255 255 Pure White
-0 0 0 Pure Black
-255 0 0 Pure Red
-0 255 0 Pure Green
-0 0 255 Pure Blue
-224 224 224 Common icon color
-195 142 241 Animation
-252 127 127 Spatial
-141 165 243 2D
-142 239 151 Control
-255 69 69 Red
-255 227 69 Yellow
-128 255 69 Green
-69 255 162 Aqua
-69 215 255 Blue
-128 69 255 Purple
-255 69 150 Pink
+18 0 20 
+37 1 40 
+59 2 63 
+80 3 85 
+111 0 124 
+214 0 237 
+131 71 143 
+228 124 250 
+255 0 0 
+77 0 0 
+240 240 38 
+58 58 1 
+0 211 0 
+27 53 0 

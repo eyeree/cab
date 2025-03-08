@@ -9,20 +9,25 @@ offset_right = 137.0
 offset_bottom = 67.0
 theme_type_variation = &"SubDetailPanel"
 script = ExtResource("2_ikbai")
-metadata/_custom_type_script = ExtResource("2_ikbai")
+metadata/_custom_type_script = "uid://bakijue8q2tsq"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"SubDetailTitleLabel"
 text = "Repair Damage"
 
-[node name="Status" type="Label" parent="VBoxContainer"]
-unique_name_in_owner = true
+[node name="Status" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 1
+theme_type_variation = &"GridHeaderLabel"
 theme_override_font_sizes/font_size = 10
 text = "Enabled"
 
@@ -32,6 +37,7 @@ columns = 3
 
 [node name="EnergyCostLabel" type="Label" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
+theme_type_variation = &"GridHeaderLabel"
 text = "Energy Cost:"
 
 [node name="EnergyCost" type="Label" parent="VBoxContainer/GridContainer"]
@@ -51,6 +57,7 @@ expand_mode = 1
 
 [node name="LifeGainedLabel" type="Label" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
+theme_type_variation = &"GridHeaderLabel"
 text = "Life Gained:"
 
 [node name="LifeGained" type="Label" parent="VBoxContainer/GridContainer"]

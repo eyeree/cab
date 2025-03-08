@@ -29,7 +29,7 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 5
 columns = 5
 script = ExtResource("2_7nejv")
-metadata/_custom_type_script = ExtResource("2_7nejv")
+metadata/_custom_type_script = "uid://dkqa4fl5ot5jf"
 
 [node name="Direction Heading" type="Label" parent="VBoxContainer/ClaimGridContainer"]
 layout_mode = 2
@@ -129,7 +129,7 @@ theme_override_constants/separation = 8
 
 [node name="Label" type="Label" parent="VBoxContainer/RankingDataPanel"]
 layout_mode = 2
-theme_type_variation = &"SubDetailTitleLabel"
+theme_type_variation = &"SubDetailSectionLabel"
 text = "Claim Ranking Data"
 horizontal_alignment = 1
 
@@ -139,7 +139,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 columns = 2
 script = ExtResource("2_7nejv")
-metadata/_custom_type_script = ExtResource("2_7nejv")
+metadata/_custom_type_script = "uid://dkqa4fl5ot5jf"
 
 [node name="PropertyHeading" type="Label" parent="VBoxContainer/RankingDataPanel/RankingDataGrid"]
 layout_mode = 2

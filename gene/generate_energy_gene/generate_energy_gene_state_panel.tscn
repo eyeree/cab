@@ -1,26 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://bfvyhv3qifrod"]
+[gd_scene load_steps=3 format=3 uid="uid://bfvyhv3qifrod"]
 
 [ext_resource type="Script" uid="uid://dp3m3nit7ktb8" path="res://gene/generate_energy_gene/generate_energy_gene_state_panel.gd" id="1_wlaqm"]
-[ext_resource type="Script" uid="uid://daf07buglduh1" path="res://main/cell_state_panel/gene_state_panel.gd" id="2_vxdpr"]
 [ext_resource type="Texture2D" uid="uid://drrup7wbb1mue" path="res://icon/EnergyIcon.png" id="3_ut5hn"]
 
 [node name="GenerateEnergyGeneViewPanel" type="PanelContainer"]
 theme_type_variation = &"SubDetailPanel"
 script = ExtResource("1_wlaqm")
-metadata/_custom_type_script = ExtResource("2_vxdpr")
+metadata/_custom_type_script = "uid://daf07buglduh1"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 2
 theme_type_variation = &"SubDetailTitleLabel"
 text = "Generate Energy"
 
-[node name="Status" type="Label" parent="VBoxContainer"]
+[node name="Status" type="Label" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 1
+theme_type_variation = &"GridHeaderLabel"
 theme_override_font_sizes/font_size = 10
 text = "Enabled"
 
@@ -30,6 +35,7 @@ columns = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
+theme_type_variation = &"GridHeaderLabel"
 text = "Energy Gained:"
 
 [node name="EnergyGained" type="Label" parent="VBoxContainer/GridContainer"]
