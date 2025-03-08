@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://60tr0jrk0ckj"]
+
+[ext_resource type="Script" uid="uid://bf2d302nt0wfo" path="res://main/edit_panel/edit_panel.gd" id="1_v6waw"]
+[ext_resource type="Texture2D" uid="uid://dbsq7g2fpejwq" path="res://icon/add.svg" id="3_edt6l"]
+
+[node name="EditPanel" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"DetailPanel"
+script = ExtResource("1_v6waw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DetailTitleLabel"
+text = "Genomes"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GenomesContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddGenomeButtom" type="Button" parent="VBoxContainer/ScrollContainer/GenomesContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+text = "Add Genome"
+icon = ExtResource("3_edt6l")

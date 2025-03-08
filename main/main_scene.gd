@@ -3,9 +3,9 @@ class_name MainScene extends Node3D
 @onready var _grid: HexGrid = %HexGrid
 @onready var _cell_state_panel: CellStatePanel = %CellStatePanel
 @onready var _control_panel: ControlPanel = %ControlPanel
-@onready var _cell_info_panel: PanelContainer = %CellInfoPanel
 @onready var _cell_config_panel: PanelContainer = %CellConfigPanel
 @onready var _level_panel: LevelPanel = %LevelPanel
+@onready var _edit_panel: EditPanel = %EditPanel
 
 @onready var _grid_overlay_panel: Panel = %GridOverlayPanel
 @onready var _window_overlay_panel: Panel = %WindowOverlayPanel
@@ -109,14 +109,16 @@ func _on_hex_selected(index:HexIndex):
 
 func _show_cell_info(index:HexIndex) -> void:
 	_shown_index = index
-	_cell_info_panel.visible = true
+	_cell_state_panel.visible = true
 	if _control_panel.current_step == 0:
 		_cell_state_panel.visible = false
 		_cell_config_panel.visible = true
+		_edit_panel.visible = true
 		_show_cell_config(index)
 	else:
 		_cell_state_panel.visible = true
 		_cell_config_panel.visible = false
+		_edit_panel.visible = false
 		_show_cell_state(index)
 		
 func _show_cell_state(index:HexIndex):
@@ -127,7 +129,7 @@ func _show_cell_config(_index:HexIndex):
 	pass
 
 func _hide_cell_info() -> void:
-	_cell_info_panel.visible = false
+	_cell_state_panel.visible = false
 		
 func _start_load() -> void:
 	
@@ -177,6 +179,7 @@ func _update_grid_from_world():
 		_set_cell_state(index, cell_state)
 	
 func _update_grid_from_level():
+	_hide_cell_info()
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
 		var cell_type:CellType = _level_panel.level.content.get_content(index)
 		_set_cell_appearance(index, cell_type)
@@ -237,3 +240,4 @@ func _level_changed() -> void:
 	_on_hex_selected(HexIndex.INVALID)
 	_reset_load()
 	_update_grid()
+	_edit_panel.show_genomes(level.genomes)

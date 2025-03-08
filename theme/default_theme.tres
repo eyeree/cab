@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=88 format=3 uid="uid://vswv5lu4ne81"]
+[gd_resource type="Theme" load_steps=91 format=3 uid="uid://vswv5lu4ne81"]
 
 [ext_resource type="StyleBox" uid="uid://d330kfaba42bf" path="res://theme/focus_style_box.tres" id="1_2etsi"]
 [ext_resource type="StyleBox" uid="uid://d36ynantycr15" path="res://theme/hover_style_box.tres" id="2_xa1oh"]
@@ -117,6 +117,20 @@ content_margin_right = 4.0
 content_margin_bottom = 2.0
 bg_color = Color(0.437044, 0.00028479, 0.485718, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd8gn"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.072, 0.001, 0.079, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cg4h7"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.230028, 0.00698035, 0.248247, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5x4tk"]
 bg_color = Color(0.0722556, 0.000914003, 0.0790231, 1)
 
@@ -165,6 +179,13 @@ content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(0.072, 0.001, 0.079, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3emk5"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.230028, 0.00698035, 0.248247, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2noaa"]
 content_margin_left = 0.0
@@ -482,6 +503,10 @@ ButtonBarButton/styles/hover = SubResource("StyleBoxFlat_p8eeo")
 ButtonBarButton/styles/normal = SubResource("StyleBoxFlat_el135")
 ButtonBarButton/styles/pressed = SubResource("StyleBoxFlat_mpmq1")
 ButtonBarLabel/base_type = &"Label"
+CellTypePanel/base_type = &"PanelContainer"
+CellTypePanel/styles/panel = SubResource("StyleBoxFlat_hd8gn")
+CellTypePanelSelected/base_type = &"PanelContainer"
+CellTypePanelSelected/styles/panel = SubResource("StyleBoxFlat_cg4h7")
 CheckBox/icons/checked = ExtResource("3_hhank")
 CheckBox/icons/checked_disabled = ExtResource("4_1k06r")
 CheckBox/icons/radio_checked = ExtResource("5_ctcw6")
@@ -541,6 +566,8 @@ MajorSubDetailPanel/base_type = &"PanelContainer"
 MajorSubDetailPanel/styles/panel = SubResource("StyleBoxFlat_80vn2")
 NestedDetailPanel/base_type = &"PanelContainer"
 NestedDetailPanel/styles/panel = SubResource("StyleBoxFlat_5wc2h")
+NestedDetailPanelSelected/base_type = &"PanelContainer"
+NestedDetailPanelSelected/styles/panel = SubResource("StyleBoxFlat_3emk5")
 NomarginPanelContainer/base_type = &"PanelContainer"
 NomarginPanelContainer/styles/panel = SubResource("StyleBoxFlat_2noaa")
 OptionButton/icons/arrow = ExtResource("16_gd2t2")

@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
 [ext_resource type="Script" uid="uid://mpl54ukoekto" path="res://model/world.gd" id="1_rmejh"]
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
-[ext_resource type="PackedScene" uid="uid://pkpl54rmgns7" path="res://main/title.tscn" id="3_wteyq"]
 [ext_resource type="Script" uid="uid://bqmrltjv5ji5c" path="res://theme/scale_container.gd" id="4_mhk4r"]
 [ext_resource type="Texture2D" uid="uid://bshq4y2gn32w2" path="res://icon/logo.png" id="4_ncflg"]
 [ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="5_m3hh0"]
 [ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/level_panel/level_panel.tscn" id="5_vtfip"]
+[ext_resource type="PackedScene" uid="uid://60tr0jrk0ckj" path="res://main/edit_panel/edit_panel.tscn" id="9_mhk4r"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="10_ys2ax"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mhk4r"]
@@ -52,7 +52,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(1529, 1024)
+size = Vector2i(1679, 1024)
 render_target_update_mode = 4
 
 [node name="HexGrid" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
@@ -105,7 +105,6 @@ text = "(hex index)"
 [node name="ScaleContainer" type="Container" parent="CanvasLayer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 script = ExtResource("4_mhk4r")
-ui_scale = 1.5
 metadata/_custom_type_script = "uid://bqmrltjv5ji5c"
 
 [node name="SidePanelContainer" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer"]
@@ -128,11 +127,6 @@ texture = ExtResource("4_ncflg")
 expand_mode = 5
 stretch_mode = 4
 
-[node name="GameTitle" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("3_wteyq")]
-visible = false
-layout_mode = 2
-theme_type_variation = &"TitlePanel"
-
 [node name="LevelPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_vtfip")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -141,22 +135,23 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CellInfoPanel" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer"]
+[node name="CellStatePanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("10_ys2ax")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EditPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("9_mhk4r")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_type_variation = &"DetailPanel"
 
-[node name="CellStatePanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer/CellInfoPanel" instance=ExtResource("10_ys2ax")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="CellConfigPanel" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer/CellInfoPanel"]
+[node name="CellConfigPanel" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer/CellInfoPanel/CellConfigPanel"]
+[node name="Label" type="Label" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer/CellConfigPanel"]
 layout_mode = 2
 text = "(cell config)"
 

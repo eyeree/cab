@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://ckafdr87gk60b"]
+
+[ext_resource type="Script" uid="uid://c5devewfjvl86" path="res://main/edit_panel/genome_panel.gd" id="1_smwaa"]
+[ext_resource type="Texture2D" uid="uid://cukjbr1i65ply" path="res://icon/arrow_down.svg" id="1_uac58"]
+[ext_resource type="Texture2D" uid="uid://cvjpeir0ejt2v" path="res://icon/delete.svg" id="2_smwaa"]
+[ext_resource type="Texture2D" uid="uid://dbsq7g2fpejwq" path="res://icon/add.svg" id="3_vh8r0"]
+
+[node name="GenomePanel" type="PanelContainer"]
+size_flags_horizontal = 3
+theme_type_variation = &"SubDetailPanel"
+script = ExtResource("1_smwaa")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="CellTypesToggleButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+icon = ExtResource("1_uac58")
+
+[node name="GenomeName" type="Label" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SubDetailSectionLabel"
+text = "(genome name)"
+
+[node name="DeleteGenomeButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+icon = ExtResource("2_smwaa")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+
+[node name="CellTypeContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AddCellTypeButton" type="Button" parent="VBoxContainer/MarginContainer/CellTypeContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "New Cell Type"
+icon = ExtResource("3_vh8r0")

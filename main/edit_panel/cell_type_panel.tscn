@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddw2i3utc1jti"]
+
+[ext_resource type="Texture2D" uid="uid://cvjpeir0ejt2v" path="res://icon/delete.svg" id="1_cicca"]
+[ext_resource type="Script" uid="uid://cb5t4vrxrj43j" path="res://main/edit_panel/cell_type_panel.gd" id="1_fk5vb"]
+
+[node name="CellTypePanel" type="PanelContainer"]
+offset_left = 186.0
+offset_right = 194.0
+offset_bottom = 42.0
+theme_type_variation = &"CellTypePanel"
+script = ExtResource("1_fk5vb")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="CellAppearance" type="SubViewport" parent="HBoxContainer/SubViewportContainer"]
+unique_name_in_owner = true
+handle_input_locally = false
+size = Vector2i(42, 42)
+render_target_update_mode = 4
+
+[node name="CellTypeName" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "(cell type name)"
+
+[node name="DeleteCellTypeButton" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = ExtResource("1_cicca")
