@@ -4,5 +4,6 @@
 
 [resource]
 script = ExtResource("1_6ki51")
+name = "Simple B"
 hidden = false
-metadata/_custom_type_script = ExtResource("1_6ki51")
+metadata/_custom_type_script = "uid://ho6wkjjygk5j"

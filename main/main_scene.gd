@@ -187,9 +187,9 @@ func _set_cell_appearance(index:HexIndex, cell_type:CellType):
 	
 	var current_cell_appearance:CellAppearance = _grid.get_hex_content(index)
 	
-	if current_cell_appearance and current_cell_appearance.cell_type == cell_type:
+	if cell_type and cell_type.is_correct_cell_appearance(current_cell_appearance):
 		return
-		
+	
 	var new_cell_appearance:CellAppearance = cell_type.instantiate_cell_appearance() \
 		if cell_type else null
 		
@@ -211,12 +211,12 @@ func _input(_event: InputEvent) -> void:
 
 func _on_step_count_changed(step_count:int) -> void:
 	Level.current.steps = step_count
-	Level.current.level_modified.emit()
+	Level.current.modified()
 	_reset_load()
 	
 func _on_ring_count_changed(ring_count:int) -> void:
 	Level.current.rings = ring_count
-	Level.current.level_modified.emit()
+	Level.current.modified()
 	_grid.rings = ring_count
 	_reset_load()
 	_update_grid()

@@ -9,13 +9,22 @@ static func get_all_appearance_sets() -> Array[AppearanceSet]:
 	var base_dir:String = "res://appearance"
 	var sub_dirs = DirAccess.get_directories_at(base_dir)
 	for sub_dir:String in sub_dirs:
-		var files = DirAccess.get_files_at(base_dir.path_join(sub_dir))
+		var sub_dir_path := base_dir.path_join(sub_dir)
+		var files = DirAccess.get_files_at(sub_dir_path)
 		for file:String in files:
 			file = file.replace('.remap', '')
 			if file.ends_with("_appearance_set.tres"):
-				result.append(load(file))
+				var file_path := sub_dir_path.path_join(file)
+				result.append(load(file_path))
 	return result
 	
+static func get_appearance_set(name:String) -> AppearanceSet:
+	for appearance_set in get_all_appearance_sets():
+		if appearance_set.name == name:
+			return appearance_set
+	return null
+	
+@export var name:String = ''
 @export var hidden:bool = false
 
 var _base_name:String:

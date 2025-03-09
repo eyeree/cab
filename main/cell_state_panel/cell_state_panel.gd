@@ -72,7 +72,10 @@ func show_cell_state(cell_state:CellState) -> void:
 	for gene_ui:GeneStatePanel in gene_container.get_children():
 		gene_ui.show_gene_state(cell_state)
 
-	visible = true
+	if cell_type.genome.hidden and not gene_container.get_children().any(func (child): return child.visible):
+		visible = false
+	else:
+		visible = true
 
 func _show_history_prop(history:Dictionary, prop_name:String, history_label:Label) -> void:
 	var value = history.get(prop_name)

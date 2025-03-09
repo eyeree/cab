@@ -58,3 +58,6 @@ func _serialize_content() -> Array:
 func save() -> void:
 	prints("Saving level", resource_path)
 	ResourceSaver.save(self)
+
+func modified():
+	Level.current.level_modified.emit()

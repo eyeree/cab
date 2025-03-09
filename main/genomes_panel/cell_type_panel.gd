@@ -36,7 +36,7 @@ func _gui_input(event: InputEvent) -> void:
 
 func _on_cell_type_name_text_changed(new_text:String) -> void:
 	cell_type.name = new_text
-	Level.current.level_modified.emit()
+	Level.current.modified()
 	
 func _on_cell_type_name_focus_entered() -> void:
 	if not _is_selected:
@@ -56,11 +56,10 @@ var _is_selected:bool:
 		
 func _on_delete_cell_type_button_pressed() -> void:
 	cell_type.genome.remove_cell_type(cell_type)
-	Level.current.level_modified.emit()
+	Level.current.modified()
 	get_parent().remove_child(self)	
 	queue_free()
 	
 func _exit_tree() -> void:
-	prints('_exit_tree', cell_type, _is_selected)
 	if _is_selected:
 		signals.cell_type_selected.emit(null)

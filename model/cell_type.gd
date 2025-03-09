@@ -98,3 +98,7 @@ func instantiate_cell_appearance() -> CellAppearance:
 	var instance:CellAppearance = cell_appearance.instantiate()
 	instance.cell_type = self
 	return instance
+
+func is_correct_cell_appearance(cell_appearance:CellAppearance) -> bool:
+	var actual_cell_appearance := genome.appearance_set.cell_appearances[cell_appearance_index]
+	return cell_appearance != null and cell_appearance.scene_file_path == actual_cell_appearance.resource_path
