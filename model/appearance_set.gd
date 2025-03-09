@@ -18,9 +18,9 @@ static func get_all_appearance_sets() -> Array[AppearanceSet]:
 				result.append(load(file_path))
 	return result
 	
-static func get_appearance_set(name:String) -> AppearanceSet:
+static func get_appearance_set(appearance_set_name:String) -> AppearanceSet:
 	for appearance_set in get_all_appearance_sets():
-		if appearance_set.name == name:
+		if appearance_set.name == appearance_set_name:
 			return appearance_set
 	return null
 	
@@ -63,10 +63,10 @@ func get_default_cell_appearance() -> PackedScene:
 func has_cell_appearance(cell_appearance:PackedScene) -> bool:
 	return cell_appearances.any(func (entry): return cell_appearance.resource_path == entry.resource_path)
 
-func get_cell_appearance_index_by_name(name:String) -> int:
+func get_cell_appearance_index_by_name(appearance_set_name:String) -> int:
 	var index := cell_appearances.find_custom(
 		func (cell_appearance:PackedScene): 
-			return cell_appearance.resource_path.get_file().get_basename() == name)
+			return cell_appearance.resource_path.get_file().get_basename() == appearance_set_name)
 	if index == -1:
-		push_error('No cell appearance named %s was found in appearance set %s' % [name, resource_path])
+		push_error('No cell appearance named %s was found in appearance set %s' % [appearance_set_name, resource_path])
 	return index

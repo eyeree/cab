@@ -3,7 +3,7 @@ class_name MainScene extends Node3D
 @onready var _grid: HexGrid = %HexGrid
 @onready var _cell_state_panel: CellStatePanel = %CellStatePanel
 @onready var _control_panel: ControlPanel = %ControlPanel
-@onready var _cell_config_panel: PanelContainer = %CellConfigPanel
+@onready var _genes_panel: GenesPanel = %GenesPanel
 @onready var _level_panel: LevelPanel = %LevelPanel
 @onready var _genomes_panel: GenomesPanel = %GenomesPanel
 @onready var _grid_viewport_container: GridViewportContainer = %GridViewportContainer
@@ -19,7 +19,10 @@ class_name MainScene extends Node3D
 var _load_needed:bool = true
 
 var _selected_index := HexIndex.INVALID
+var _hover_index := HexIndex.INVALID
 var _shown_index := HexIndex.INVALID
+
+var _is_build_mode:bool 
 
 enum HexColor {
 	Hover = 0,
@@ -57,9 +60,43 @@ func _ready() -> void:
 	GeneStatePanel.gene_signals.set_target_highlight.connect(_set_target_highlight)
 	GeneStatePanel.gene_signals.clear_target_highlight.connect(_clear_target_highlight)
 	
+	CellTypePanel.signals.cell_type_selected.connect(_on_cell_type_selected)
+	
 	_control_panel.run_speed = _level_panel.state.run_speed
 	
 	_level_changed()
+	
+func _build_mode() -> void:
+	
+	_is_build_mode = true
+	
+	_cell_state_panel.visible = false
+	_genomes_panel.visible = true
+	_genes_panel.visible = true
+	
+	if _selected_index != HexIndex.INVALID:
+		_grid.clear_hex_color(_selected_index)
+		if _hover_index != HexIndex.INVALID:
+			_grid.set_hex_color(_hover_index, HexColor.Hover)
+			
+	_update_grid_from_level()
+	
+func _view_mode() -> void:
+	
+	_is_build_mode = false
+	
+	_genomes_panel.visible = false
+	_genes_panel.visible = false
+
+	if _selected_index != HexIndex.INVALID:
+		if _hover_index != HexIndex.INVALID:
+			_grid.clear_hex_color(_hover_index)
+		_grid.set_hex_color(_selected_index, HexColor.Selected)
+		_cell_state_panel.visible = true
+
+	if _load_needed:
+		_start_load()
+		
 
 func _run_speed_changed(value:float) -> void:
 	_level_panel.state.run_speed = value
@@ -85,53 +122,56 @@ func _clear_target_highlight(index:HexIndex) -> void:
 		_grid.clear_hex_color(index)
 	
 func _on_mouse_entered_hex(index:HexIndex):
-	if _selected_index == HexIndex.INVALID:
-		_grid.set_hex_color(index, HexColor.Hover)
-		_show_cell_info(index)
 	_debug_hex_index.text = str(index)
+	_hover_index = index
+	if _is_build_mode:
+		_grid.set_hex_color(index, HexColor.Hover)
+	else:		
+		if _selected_index == HexIndex.INVALID:
+			_grid.set_hex_color(index, HexColor.Hover)
+			_show_cell_state(index)
 
 func _on_mouse_exited_hex(index:HexIndex):
-	if _selected_index == HexIndex.INVALID:
+	_hover_index = HexIndex.INVALID
+	if _is_build_mode:
 		_grid.clear_hex_color(index)
-		_hide_cell_info()
+	else:
+		if _selected_index == HexIndex.INVALID:
+			_grid.clear_hex_color(index)
+			_hide_cell_state()
 
 func _on_hex_selected(index:HexIndex):
+	if _is_build_mode:
+		_on_hex_selected_build(index)
+	else:
+		_on_hex_selected_view(index)
+		
+func _on_hex_selected_build(index:HexIndex) -> void:
+	var cell_type:CellType = Level.current.content.get_content(index)
+	CellTypePanel.signals.cell_type_selected.emit(cell_type)
+	
+func _on_hex_selected_view(index:HexIndex) -> void:
 	if _selected_index == index:
 		_selected_index = HexIndex.INVALID
 		_grid.set_hex_color(index, HexColor.Hover)
-		_hide_cell_info()
 	elif index == HexIndex.INVALID:
 		_grid.clear_hex_color(_selected_index)
 		_selected_index = HexIndex.INVALID
-		_hide_cell_info()
+		_hide_cell_state()
 	else:
 		_grid.clear_hex_color(_selected_index)
 		_grid.set_hex_color(index, HexColor.Selected)
 		_selected_index = index
-		_show_cell_info(index)
+		_show_cell_state(index)
 
-func _show_cell_info(index:HexIndex) -> void:
+func _show_cell_state(index:HexIndex):
 	_shown_index = index
 	_cell_state_panel.visible = true
-	if _control_panel.current_step == 0:
-		_cell_state_panel.visible = false
-		_cell_config_panel.visible = true
-		_genomes_panel.visible = true
-		_show_cell_config(index)
-	else:
-		_cell_state_panel.visible = true
-		_cell_config_panel.visible = false
-		_genomes_panel.visible = false
-		_show_cell_state(index)
-		
-func _show_cell_state(index:HexIndex):
 	var cell_state := _world.state.get_history_entry(index, _control_panel.current_step)
 	_cell_state_panel.show_cell_state(cell_state)
 		
-func _show_cell_config(_index:HexIndex):
-	pass
-
-func _hide_cell_info() -> void:
+func _hide_cell_state() -> void:
+	_shown_index = HexIndex.INVALID
 	_cell_state_panel.visible = false
 		
 func _start_load() -> void:
@@ -152,26 +192,30 @@ func _load_progress(loaded_steps:int) -> void:
 	_control_panel.loaded_steps = loaded_steps
 	if _control_panel.current_step <= loaded_steps:
 		_grid_overlay_panel.visible = false
-		_update_grid()
+		_update_grid_from_world()
 	
 func _load_finished() -> void:
 	if _load_needed:
 		_control_panel.loaded_steps = 0
 		
 func _on_current_step_changed(current_step:int) -> void:
-	if current_step > 0 and _load_needed:
-		_start_load()
+	
+	if current_step == 0:
+		_build_mode()
+	else:
+		_view_mode()
+	
+	if _is_build_mode:
+		pass
+	else:
+		_on_current_step_changed_view(current_step)
+		
+func _on_current_step_changed_view(current_step:int) -> void:
 	if current_step <= _control_panel.loaded_steps:
 		_grid_overlay_panel.visible = false
-		_update_grid()
+		_update_grid_from_world()
 	elif current_step > _control_panel.loaded_steps + 1:
 		_grid_overlay_panel.visible = true
-
-func _update_grid() -> void:
-	if _control_panel.current_step == 0:
-		_update_grid_from_level()
-	else:
-		_update_grid_from_world()
 
 func _update_grid_from_world():
 	var current_step := _control_panel.current_step
@@ -206,7 +250,7 @@ func _set_cell_state(index:HexIndex, cell_state:CellState):
 	if cell_appearance:
 		cell_appearance.set_state(cell_state)
 	if index == _shown_index:
-		_show_cell_info(index)
+		_show_cell_state(index)
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ToggleDebugPanel"):
@@ -222,7 +266,7 @@ func _on_ring_count_changed(ring_count:int) -> void:
 	Level.current.modified()
 	_grid.rings = ring_count
 	_reset_load()
-	_update_grid()
+	_update_grid_from_level()
 	
 func _reset_load():
 	_world.stop_loading()
@@ -239,14 +283,17 @@ func _level_changed() -> void:
 	Level.current.level_modified.connect(_on_level_modified)
 	_control_panel.reset(Level.current.rings, Level.current.steps)
 	_grid.rings = Level.current.rings
-	_on_hex_selected(HexIndex.INVALID)
+	_selected_index = HexIndex.INVALID
 	_reset_load()
-	_update_grid()
 	_genomes_panel.show_genomes()
+	_build_mode()
 	
 func _on_level_modified() -> void:
-	_update_grid()
+	_update_grid_from_level()
 
 func _on_grid_viewport_container_cell_type_dropped(index:HexIndex, cell_type:CellType) -> void:
 	Level.current.content.set_content(index, cell_type)
 	Level.current.modified()
+
+func _on_cell_type_selected(cell_type:CellType) -> void:
+	_genes_panel.show_cell_type(cell_type)

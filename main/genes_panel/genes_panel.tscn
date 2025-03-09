@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://bed4qwum2vs03"]
+
+[ext_resource type="Script" uid="uid://djqolgwwbf6bx" path="res://main/genes_panel/genes_panel.gd" id="1_w5nct"]
+
+[node name="GenesPanel" type="PanelContainer"]
+theme_type_variation = &"DetailPanel"
+script = ExtResource("1_w5nct")
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "(cell type panel)"

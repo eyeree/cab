@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=14 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
 [ext_resource type="Script" uid="uid://mpl54ukoekto" path="res://model/world.gd" id="1_rmejh"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/level_panel/level_panel.tscn" id="5_vtfip"]
 [ext_resource type="PackedScene" uid="uid://60tr0jrk0ckj" path="res://main/genomes_panel/genomes_panel.tscn" id="9_mhk4r"]
 [ext_resource type="PackedScene" uid="uid://b128myar7a7y1" path="res://main/cell_state_panel/cell_state_panel.tscn" id="10_ys2ax"]
+[ext_resource type="PackedScene" uid="uid://bed4qwum2vs03" path="res://main/genes_panel/genes_panel.tscn" id="11_sfolt"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mhk4r"]
 
@@ -157,14 +158,10 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="CellConfigPanel" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer"]
+[node name="GenesPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("11_sfolt")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
-
-[node name="Label" type="Label" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer/CellConfigPanel"]
-layout_mode = 2
-text = "(cell config)"
+size_flags_vertical = 3
 
 [node name="WindowOverlayPanel" type="Panel" parent="CanvasLayer/PanelContainer"]
 unique_name_in_owner = true

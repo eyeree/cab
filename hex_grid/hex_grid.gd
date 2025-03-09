@@ -89,10 +89,17 @@ func clear_all_hex_content() -> void:
 	
 var mouse_hex_index:HexIndex = HexIndex.INVALID
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	
+	var viewport = get_viewport()
+	var mouse_position = viewport.get_mouse_position()
+	
+	if not viewport.get_visible_rect().has_point(mouse_position):
+		return
+		
+	var hex_index = _getmouse_hex_index(mouse_position)
 	
 	if _camera_control.ActualMouseState == CameraControl.E_MOUSE_ACTION_STATES.IDLE:
-		var hex_index = _getmouse_hex_index()
 		if hex_index != mouse_hex_index:			
 			if mouse_hex_index != HexIndex.INVALID:
 				mouse_exited_hex.emit(mouse_hex_index)
@@ -101,8 +108,6 @@ func _process(delta: float) -> void:
 				mouse_entered_hex.emit(mouse_hex_index)
 	
 	if Input.is_action_just_pressed("GridSelect"):
-		prints('GridSelect')
-		var hex_index = _getmouse_hex_index()
 		hex_selected.emit(hex_index)
 
 #func _input(event: InputEvent) -> void:
@@ -123,18 +128,16 @@ func _process(delta: float) -> void:
 		#var hex_index = _getmouse_hex_index()
 		#hex_selected.emit(hex_index)
 		
-func _getmouse_hex_index() -> HexIndex:
-	var grid_position:Vector2 = _mouse_position_to_grid_plane_position()
+func _getmouse_hex_index(mouse_position:Vector2) -> HexIndex:
+	var grid_position:Vector2 = _mouse_position_to_grid_plane_position(mouse_position)
 	if grid_position == Vector2.INF: return HexIndex.INVALID
 	var hex_index:HexIndex = HexIndex.from_point(grid_position, hex_outer_radius)
 	if hex_index.distance_to_center() > rings: return HexIndex.INVALID
 	return hex_index
 
 # range of -0.5 to 0.5 over the grid plane adjusted for the plane_extent_percent
-func _mouse_position_to_grid_plane_position() -> Vector2:
-	var viewport = get_viewport()
-	var mouse_position = viewport.get_mouse_position()
-	var camera:Camera3D = viewport.get_camera_3d()
+func _mouse_position_to_grid_plane_position(mouse_position:Vector2) -> Vector2:
+	var camera:Camera3D = get_viewport().get_camera_3d()
 	var origin:Vector3 = camera.project_ray_origin(mouse_position) 
 	var normal:Vector3 = camera.project_ray_normal(mouse_position)
 	var end = origin + normal * 100
