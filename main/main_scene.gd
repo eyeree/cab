@@ -79,6 +79,7 @@ func _build_mode() -> void:
 		if _hover_index != HexIndex.INVALID:
 			_grid.set_hex_color(_hover_index, HexColor.Hover)
 			
+	_update_cell_type_selection()			
 	_update_grid_from_level()
 	
 func _view_mode() -> void:
@@ -87,11 +88,14 @@ func _view_mode() -> void:
 	
 	_genomes_panel.visible = false
 	_genes_panel.visible = false
+	
+	_grid.clear_all_hex_colors()
 
 	if _selected_index != HexIndex.INVALID:
-		if _hover_index != HexIndex.INVALID:
-			_grid.clear_hex_color(_hover_index)
 		_grid.set_hex_color(_selected_index, HexColor.Selected)
+		_cell_state_panel.visible = true
+	elif _hover_index != HexIndex.INVALID:
+		_grid.set_hex_color(_hover_index, HexColor.Hover)
 		_cell_state_panel.visible = true
 
 	if _load_needed:
@@ -125,20 +129,38 @@ func _on_mouse_entered_hex(index:HexIndex):
 	_debug_hex_index.text = str(index)
 	_hover_index = index
 	if _is_build_mode:
-		_grid.set_hex_color(index, HexColor.Hover)
+		_on_mouse_entered_hex_build(index)
 	else:		
-		if _selected_index == HexIndex.INVALID:
-			_grid.set_hex_color(index, HexColor.Hover)
-			_show_cell_state(index)
+		_on_mouse_entered_hex_view(index)
+
+func _on_mouse_entered_hex_build(index:HexIndex):
+	var cell_type = Level.current.content.get_content(index)
+	if cell_type == null or cell_type != _selected_cell_type:
+		_grid.set_hex_color(index, HexColor.Hover)
+
+func _on_mouse_entered_hex_view(index:HexIndex):
+	if _selected_index == HexIndex.INVALID:
+		_grid.set_hex_color(index, HexColor.Hover)
+		_show_cell_state(index)
 
 func _on_mouse_exited_hex(index:HexIndex):
 	_hover_index = HexIndex.INVALID
 	if _is_build_mode:
-		_grid.clear_hex_color(index)
+		_on_mouse_exited_hex_build(index)
 	else:
-		if _selected_index == HexIndex.INVALID:
-			_grid.clear_hex_color(index)
-			_hide_cell_state()
+		_on_mouse_exited_hex_view(index)
+		
+func _on_mouse_exited_hex_build(index:HexIndex):
+	var cell_type = Level.current.content.get_content(index)
+	if cell_type != null and cell_type == _selected_cell_type:
+		_grid.set_hex_color(index, HexColor.Selected)
+	else:
+		_grid.clear_hex_color(index)
+
+func _on_mouse_exited_hex_view(index:HexIndex):
+	if _selected_index == HexIndex.INVALID:
+		_grid.clear_hex_color(index)
+		_hide_cell_state()
 
 func _on_hex_selected(index:HexIndex):
 	if _is_build_mode:
@@ -295,5 +317,16 @@ func _on_grid_viewport_container_cell_type_dropped(index:HexIndex, cell_type:Cel
 	Level.current.content.set_content(index, cell_type)
 	Level.current.modified()
 
+var _selected_cell_type:CellType = null
 func _on_cell_type_selected(cell_type:CellType) -> void:
 	_genes_panel.show_cell_type(cell_type)
+	_selected_cell_type = cell_type
+	_update_cell_type_selection()
+	
+func _update_cell_type_selection() -> void:
+	_grid.clear_all_hex_colors()
+	if _selected_cell_type != null:
+		for index in HexIndex.CENTER.spiral(Level.current.rings):
+			var hex_cell_type = Level.current.content.get_content(index)
+			if hex_cell_type == _selected_cell_type:
+				_grid.set_hex_color(index, HexColor.Selected)
