@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=13 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
 [ext_resource type="Script" uid="uid://mpl54ukoekto" path="res://model/world.gd" id="1_rmejh"]
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
 [ext_resource type="Script" uid="uid://bqmrltjv5ji5c" path="res://theme/scale_container.gd" id="4_mhk4r"]
 [ext_resource type="Texture2D" uid="uid://bshq4y2gn32w2" path="res://icon/logo.png" id="4_ncflg"]
+[ext_resource type="Script" uid="uid://rhjftguq82ya" path="res://main/grid_viewport_container.gd" id="4_sfolt"]
 [ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="5_m3hh0"]
 [ext_resource type="PackedScene" uid="uid://dod8px5mjxrtn" path="res://main/level_panel/level_panel.tscn" id="5_vtfip"]
 [ext_resource type="PackedScene" uid="uid://60tr0jrk0ckj" path="res://main/genomes_panel/genomes_panel.tscn" id="9_mhk4r"]
@@ -34,6 +35,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_mhk4r")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainer"]
@@ -44,23 +46,27 @@ theme_override_constants/separation = 0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ncflg")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer"]
+[node name="GridViewportContainer" type="SubViewportContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 stretch = true
+script = ExtResource("4_sfolt")
 
-[node name="SubViewport" type="SubViewport" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/GridViewportContainer"]
 own_world_3d = true
 handle_input_locally = false
 msaa_3d = 3
 screen_space_aa = 1
 scaling_3d_scale = 2.0
 anisotropic_filtering_level = 4
+gui_disable_input = true
 size = Vector2i(1679, 1024)
 render_target_update_mode = 4
 
-[node name="HexGrid" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
+[node name="HexGrid" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/GridViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
 unique_name_in_owner = true
 default_line_color = Color(0.230028, 0.00698035, 0.248247, 1)
 default_background_color = Color(0.0722556, 0.000914003, 0.0790231, 1)
@@ -68,10 +74,10 @@ outside_color = Color(0, 0, 0, 1)
 hex_line_colors = Array[Color]([Color(0.437044, 0.00028479, 0.485718, 1), Color(0.840683, 0.00120019, 0.929285, 1), Color(1, 0, 0, 1), Color(0.94, 0.94, 0.1504, 1), Color(0, 0.827936, 0, 1)])
 hex_background_colors = Array[Color]([Color(0.230028, 0.00698035, 0.248247, 1), Color(0.311767, 0.0128437, 0.335206, 1), Color(0.3, 0, 0, 1), Color(0.227295, 0.227013, 0.00258881, 1), Color(0.105882, 0.207843, 0, 1)])
 
-[node name="CameraControl" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
+[node name="CameraControl" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/GridViewportContainer/SubViewport/HexGrid/GridPlane" index="1"]
 CfgRotateSpeed = 0.8
 
-[node name="Camera" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl" index="0"]
+[node name="Camera" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/GridViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl" index="0"]
 current = true
 
 [node name="GridOverlayPanel" type="Panel" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer"]
@@ -167,5 +173,5 @@ layout_mode = 2
 mouse_force_pass_scroll_events = false
 theme_type_variation = &"OverlayPanelOuter"
 
-[editable path="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid"]
-[editable path="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/SubViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl"]
+[editable path="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/GridViewportContainer/SubViewport/HexGrid"]
+[editable path="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/GridViewportContainer/SubViewport/HexGrid/GridPlane/CameraControl"]

@@ -2,8 +2,9 @@ class_name CellTypePanel extends PanelContainer
 
 @onready var _cell_type_name: LineEdit = %CellTypeName
 @onready var _delete_cell_type_button: Button = %DeleteCellTypeButton
-@onready var _cell_appearance_holder: Node3D = %CellAppearanceHolder
+@onready var _cell_appearance_container: CellAppearanceContainer = %CellAppearanceContainer
 @onready var _energy_cost_label: Label = %EnergyCostLabel
+@onready var _appearance_drag_source: AppearanceDragSource = %AppearanceDragSource
 
 var cell_type:CellType
 
@@ -23,11 +24,8 @@ func show_cell_type(cell_type_:CellType) -> void:
 	cell_type = cell_type_
 	_cell_type_name.text = cell_type.name
 	_energy_cost_label.text = str(cell_type.energy_cost)
-	var cell_appearance:CellAppearance = cell_type.instantiate_cell_appearance()
-	for child in _cell_appearance_holder.get_children():
-		_cell_appearance_holder.remove_child(child)
-		child.queue_free()
-	_cell_appearance_holder.add_child(cell_appearance)
+	_cell_appearance_container.cell_type = cell_type
+	_appearance_drag_source.cell_type = cell_type
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

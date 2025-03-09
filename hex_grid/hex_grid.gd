@@ -87,27 +87,43 @@ func clear_all_hex_content() -> void:
 
 #region: Mouse Position
 	
-var _mouse_hex_index:HexIndex = HexIndex.INVALID
+var mouse_hex_index:HexIndex = HexIndex.INVALID
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		
-		if _camera_control.ActualMouseState != CameraControl.E_MOUSE_ACTION_STATES.IDLE:
-			return
-			
-		var hex_index = _get_mouse_hex_index()
-		if hex_index != _mouse_hex_index:			
-			if _mouse_hex_index != HexIndex.INVALID:
-				mouse_exited_hex.emit(_mouse_hex_index)
-			_mouse_hex_index = hex_index
-			if _mouse_hex_index != HexIndex.INVALID:
-				mouse_entered_hex.emit(_mouse_hex_index)
-
-	elif Input.is_action_just_pressed("GridSelect"):
-		var hex_index = _get_mouse_hex_index()
+func _process(delta: float) -> void:
+	
+	if _camera_control.ActualMouseState == CameraControl.E_MOUSE_ACTION_STATES.IDLE:
+		var hex_index = _getmouse_hex_index()
+		if hex_index != mouse_hex_index:			
+			if mouse_hex_index != HexIndex.INVALID:
+				mouse_exited_hex.emit(mouse_hex_index)
+			mouse_hex_index = hex_index
+			if mouse_hex_index != HexIndex.INVALID:
+				mouse_entered_hex.emit(mouse_hex_index)
+	
+	if Input.is_action_just_pressed("GridSelect"):
+		prints('GridSelect')
+		var hex_index = _getmouse_hex_index()
 		hex_selected.emit(hex_index)
+
+#func _input(event: InputEvent) -> void:
+	#if event is InputEventMouseMotion:
+		#
+		#if _camera_control.ActualMouseState != CameraControl.E_MOUSE_ACTION_STATES.IDLE:
+			#return
+			#
+		#var hex_index = _getmouse_hex_index()
+		#if hex_index != mouse_hex_index:			
+			#if mouse_hex_index != HexIndex.INVALID:
+				#mouse_exited_hex.emit(mouse_hex_index)
+			#mouse_hex_index = hex_index
+			#if mouse_hex_index != HexIndex.INVALID:
+				#mouse_entered_hex.emit(mouse_hex_index)
+#
+	#elif Input.is_action_just_pressed("GridSelect"):
+		#var hex_index = _getmouse_hex_index()
+		#hex_selected.emit(hex_index)
 		
-func _get_mouse_hex_index() -> HexIndex:
+func _getmouse_hex_index() -> HexIndex:
 	var grid_position:Vector2 = _mouse_position_to_grid_plane_position()
 	if grid_position == Vector2.INF: return HexIndex.INVALID
 	var hex_index:HexIndex = HexIndex.from_point(grid_position, hex_outer_radius)

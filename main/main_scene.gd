@@ -6,6 +6,7 @@ class_name MainScene extends Node3D
 @onready var _cell_config_panel: PanelContainer = %CellConfigPanel
 @onready var _level_panel: LevelPanel = %LevelPanel
 @onready var _genomes_panel: GenomesPanel = %GenomesPanel
+@onready var _grid_viewport_container: GridViewportContainer = %GridViewportContainer
 
 @onready var _grid_overlay_panel: Panel = %GridOverlayPanel
 @onready var _window_overlay_panel: Panel = %WindowOverlayPanel
@@ -50,6 +51,8 @@ func _ready() -> void:
 	_level_panel.dialog_opened.connect(_show_window_overlay)
 	_level_panel.dialog_closed.connect(_hide_window_overlay)
 	_level_panel.level_changed.connect(_level_changed)
+	
+	_grid_viewport_container.cell_type_dropped.connect(_on_grid_viewport_container_cell_type_dropped)
 	
 	GeneStatePanel.gene_signals.set_target_highlight.connect(_set_target_highlight)
 	GeneStatePanel.gene_signals.clear_target_highlight.connect(_clear_target_highlight)
@@ -243,3 +246,7 @@ func _level_changed() -> void:
 	
 func _on_level_modified() -> void:
 	_update_grid()
+
+func _on_grid_viewport_container_cell_type_dropped(index:HexIndex, cell_type:CellType) -> void:
+	Level.current.content.set_content(index, cell_type)
+	Level.current.modified()
