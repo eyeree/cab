@@ -48,6 +48,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
 mouse_filter = 1
+mouse_force_pass_scroll_events = false
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ncflg")
 
 [node name="GridViewportContainer" type="SubViewportContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer"]

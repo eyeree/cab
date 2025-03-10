@@ -6,7 +6,6 @@ class_name MainScene extends Node3D
 @onready var _genes_panel: GenesPanel = %GenesPanel
 @onready var _level_panel: LevelPanel = %LevelPanel
 @onready var _genomes_panel: GenomesPanel = %GenomesPanel
-@onready var _grid_viewport_container: GridViewportContainer = %GridViewportContainer
 
 @onready var _grid_overlay_panel: Panel = %GridOverlayPanel
 @onready var _window_overlay_panel: Panel = %WindowOverlayPanel
@@ -16,11 +15,15 @@ class_name MainScene extends Node3D
 
 @onready var _world: World = %World
 
+const CURSOR_GRAB = preload("res://icon/cursor_grab.svg")
+const CURSOR_POINT = preload("res://icon/cursor_point.svg")
+
 var _load_needed:bool = true
 
 var _selected_index := HexIndex.INVALID
 var _hover_index := HexIndex.INVALID
 var _shown_index := HexIndex.INVALID
+var _selected_cell_type:CellType = null
 
 var _is_build_mode:bool 
 
@@ -55,8 +58,6 @@ func _ready() -> void:
 	_level_panel.dialog_closed.connect(_hide_window_overlay)
 	_level_panel.level_changed.connect(_level_changed)
 	
-	_grid_viewport_container.cell_type_dropped.connect(_on_grid_viewport_container_cell_type_dropped)
-	
 	GeneStatePanel.gene_signals.set_target_highlight.connect(_set_target_highlight)
 	GeneStatePanel.gene_signals.clear_target_highlight.connect(_clear_target_highlight)
 	
@@ -79,7 +80,6 @@ func _build_mode() -> void:
 		if _hover_index != HexIndex.INVALID:
 			_grid.set_hex_color(_hover_index, HexColor.Hover)
 			
-	_update_cell_type_selection()			
 	_update_grid_from_level()
 	
 func _view_mode() -> void:
@@ -100,7 +100,6 @@ func _view_mode() -> void:
 
 	if _load_needed:
 		_start_load()
-		
 
 func _run_speed_changed(value:float) -> void:
 	_level_panel.state.run_speed = value
@@ -137,6 +136,10 @@ func _on_mouse_entered_hex_build(index:HexIndex):
 	var cell_type = Level.current.content.get_content(index)
 	if cell_type == null or cell_type != _selected_cell_type:
 		_grid.set_hex_color(index, HexColor.Hover)
+	if cell_type != null:
+		#Input.set_custom_mouse_cursor(CURSOR_GRAB, Input.CursorShape.CURSOR_ARROW)
+		#Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
+		pass
 
 func _on_mouse_entered_hex_view(index:HexIndex):
 	if _selected_index == HexIndex.INVALID:
@@ -156,6 +159,8 @@ func _on_mouse_exited_hex_build(index:HexIndex):
 		_grid.set_hex_color(index, HexColor.Selected)
 	else:
 		_grid.clear_hex_color(index)
+	#Input.set_custom_mouse_cursor(CURSOR_POINT, Input.CursorShape.CURSOR_ARROW)	
+	#Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 func _on_mouse_exited_hex_view(index:HexIndex):
 	if _selected_index == HexIndex.INVALID:
@@ -248,10 +253,13 @@ func _update_grid_from_world():
 		_set_cell_state(index, cell_state)
 	
 func _update_grid_from_level():
+	_grid.clear_all_hex_colors()
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
 		var cell_type:CellType = Level.current.content.get_content(index)
 		_set_cell_appearance(index, cell_type)
-
+		if _selected_cell_type and cell_type == _selected_cell_type:
+			_grid.set_hex_color(index, HexColor.Selected)
+				
 func _set_cell_appearance(index:HexIndex, cell_type:CellType):
 	
 	var current_cell_appearance:CellAppearance = _grid.get_hex_content(index)
@@ -313,20 +321,7 @@ func _level_changed() -> void:
 func _on_level_modified() -> void:
 	_update_grid_from_level()
 
-func _on_grid_viewport_container_cell_type_dropped(index:HexIndex, cell_type:CellType) -> void:
-	Level.current.content.set_content(index, cell_type)
-	Level.current.modified()
-
-var _selected_cell_type:CellType = null
 func _on_cell_type_selected(cell_type:CellType) -> void:
 	_genes_panel.show_cell_type(cell_type)
 	_selected_cell_type = cell_type
-	_update_cell_type_selection()
-	
-func _update_cell_type_selection() -> void:
-	_grid.clear_all_hex_colors()
-	if _selected_cell_type != null:
-		for index in HexIndex.CENTER.spiral(Level.current.rings):
-			var hex_cell_type = Level.current.content.get_content(index)
-			if hex_cell_type == _selected_cell_type:
-				_grid.set_hex_color(index, HexColor.Selected)
+	_update_grid_from_level()

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg6317"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="cursor_point.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs6311" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#585858"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="15.839192"
+     inkscape:cx="-1.3889598"
+     inkscape:cy="7.0395006"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="3440"
+     inkscape:window-height="1369"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050" />
+  <metadata
+     id="metadata6314">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="opacity:1;fill:#e47cfa;fill-opacity:1;stroke:none;stroke-width:0.17828;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       d="M 8.6550829,25.354803 C 5.5978638,20.535875 5.4134384,20.049304 6.1419365,18.723978 6.5907198,17.907571 7.1569852,17.456259 8.267494,17.029962 L 9.0672191,16.722987 9.187649,13.12831 c 0.066206,-1.977085 0.1207292,-5.3647247 0.1207292,-7.5281158 0,-4.3286694 0.091371,-4.77201255 1.0939038,-5.32176525 0.658678,-0.36113936 1.165202,-0.3699469 1.868397,-0.032354 0.917064,0.4401376 1.040579,0.90618865 1.362743,5.14160025 0.451642,5.9373948 0.477945,6.1272358 0.828689,5.9856558 0.163268,-0.06591 0.816555,-0.15608 1.451807,-0.200416 1.145311,-0.07999 1.161158,-0.07489 1.894252,0.605564 0.735521,0.682645 0.745196,0.685701 1.899434,0.599722 1.063676,-0.07939 1.210199,-0.04733 1.761479,0.383158 0.330734,0.258235 0.715179,0.673957 0.854334,0.923714 0.17824,0.319918 0.500891,0.515661 1.091566,0.662274 0.936745,0.232471 2.010457,1.021496 2.485435,1.826308 0.263328,0.446279 0.313897,1.042314 0.313897,3.704291 0,3.588688 -0.277108,5.34789 -1.269396,8.059714 l -0.596126,1.629097 c -1.848956,3.403219 -11.463293,3.052714 -12.96453,0.09017 z"
+       id="path12487"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="scccssccccsccccscscccs"
+       inkscape:export-filename="E:\Game Dev\1. Projects\UltimateButtonPack\Assets\Icons\PNG\Finger_Pointing(Icon).png"
+       inkscape:export-xdpi="793.59766"
+       inkscape:export-ydpi="793.59766"
+       inkscape:label="path12487" />
+  </g>
+</svg>

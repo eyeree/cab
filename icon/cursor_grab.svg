@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg6317"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="cursor_grab.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs6311" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#565656"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="22.4"
+     inkscape:cx="26.830357"
+     inkscape:cy="12.299107"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="3440"
+     inkscape:window-height="1369"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050" />
+  <metadata
+     id="metadata6314">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="opacity:1;fill:#e47cfa;fill-opacity:1;stroke:none;stroke-width:0.458711;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       d="M 11.462812,30.840759 C 11.715048,29.034025 10.19524,27.486325 9.2091949,26.469383 5.9232895,23.088873 3.0025115,19.559209 1.6779643,17.368242 0.76184813,15.852741 0.72356843,14.500679 1.5494539,12.820711 2.3781074,11.134797 3.5059926,10.089965 4.4971986,10.089965 5.9791371,10.482913 5.6329787,11.459832 5.8417741,9.93753 5.8520322,9.607026 5.8622905,9.215512 5.8759446,8.7549933 5.9654998,5.3868208 6.117935,4.3211403 6.6729572,3.1786953 7.074245,2.3527417 7.8022777,1.6155487 8.5914555,1.2359645 9.3691492,0.86181412 11.223871,0.50222372 12.249597,1.0175647 c 0.721881,0.3627004 0.760058,0.3965029 1.213673,-0.11107948 1.055427,-1.18099826 2.935474,-1.03560374 3.972855,-0.5334215 0.618868,0.2994032 1.511469,1.22255928 1.828576,1.89084818 0.113805,0.2399335 0.271376,0.7690467 0.349851,0.7357571 0.07826,-0.034871 0.516672,-0.5398124 0.973842,-0.6857541 1.020121,-0.3257209 2.182834,-0.2836798 2.946752,0.1062926 0.660564,0.337341 1.418402,1.2137072 1.758032,2.0331669 0.04272,0.440661 0.102194,0.6670587 0.186263,0.755512 1.996491,-0.8046263 4.317202,1.2723911 5.145309,3.2839911 0.304876,0.8144015 0.421383,2.6916125 0.416119,6.6941005 -0.0071,4.84683 -0.643408,8.337225 -2.181874,11.954592 -0.430715,1.01267 -0.73405,1.904314 -1.228441,3.610668 -4.497388,1.881758 -11.724226,1.404491 -16.166793,0.08818 z"
+       id="path4610"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccssccssssssccsscccssccc"
+       inkscape:export-filename="E:\Game Dev\1. Projects\UltimateButtonPack\Assets\Icons\PNG\Fist_Attack_Aggresion(Icon).png"
+       inkscape:export-xdpi="694.50262"
+       inkscape:export-ydpi="694.50262" />
+  </g>
+</svg>

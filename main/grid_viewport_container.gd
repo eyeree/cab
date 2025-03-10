@@ -2,12 +2,63 @@ class_name GridViewportContainer extends SubViewportContainer
 
 @onready var _hex_grid: HexGrid = %HexGrid
 
-signal cell_type_dropped(index:HexIndex, cell_type:CellType)
+const CELL_APPEARANCE_CONTAINER = preload("res://main/genomes_panel/cell_appearance_container.tscn")
+
+var _current_drag_data:CellTypeDragData = null
+
+func _ready() -> void:
+	Input.set_custom_mouse_cursor(preload("res://icon/EnergyIcon.png"), Input.CURSOR_DRAG)
+	Input.set_custom_mouse_cursor(preload("res://icon/cursor_grab.svg"), Input.CURSOR_CAN_DROP)
+	Input.set_custom_mouse_cursor(preload("res://icon/LifeIcon.png"), Input.CURSOR_FORBIDDEN)
+	
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	return data is CellType and _hex_grid.mouse_hex_index != HexIndex.INVALID
+	
+	if data is not CellTypeDragData:
+		return false
+		
+	if data.source_index != null:
+		return true
+	else:
+		return _hex_grid.mouse_hex_index != HexIndex.INVALID
 	
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
-	if data is CellType and _hex_grid.mouse_hex_index != HexIndex.INVALID:
-		cell_type_dropped.emit(_hex_grid.mouse_hex_index, data)
 	
+	if _hex_grid.mouse_hex_index != HexIndex.INVALID:
+		Level.current.content.set_content(_hex_grid.mouse_hex_index, data.cell_type)
+		
+	Level.current.modified()
+	
+func _get_drag_data(_at_position: Vector2) -> Variant:
+	var cell_type = Level.current.content.get_content(_hex_grid.mouse_hex_index)
+	var cell_appearance_container:CellAppearanceContainer = CELL_APPEARANCE_CONTAINER.instantiate()
+	cell_appearance_container.cell_type = cell_type
+	set_drag_preview(cell_appearance_container)
+	var data := CellTypeDragData.new()
+	data.cell_type = cell_type
+	if not Input.is_key_pressed(KEY_CTRL):
+		data.source_index = _hex_grid.mouse_hex_index
+		Level.current.content.clear_content(_hex_grid.mouse_hex_index)
+		Level.current.modified()
+	_current_drag_data = data
+	#Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
+	return data
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_DRAG_BEGIN:
+			#Input.set_custom_mouse_cursor(preload("res://icon/cursor_grab.svg"), Input.CURSOR_ARROW)
+			#prints("NOTIFICATION_DRAG_BEGIN get_current_cursor_shape", Input.get_current_cursor_shape())
+			pass
+		NOTIFICATION_DRAG_END:
+			if not is_drag_successful() and _current_drag_data and _current_drag_data.source_index != null:
+				Level.current.content.set_content(_current_drag_data.source_index, _current_drag_data.cell_type)
+				Level.current.modified()
+			_current_drag_data = null
+			#prints("NOTIFICATION_DRAG_END before get_current_cursor_shape", Input.get_current_cursor_shape())
+			#Input.set_default_cursor_shape.call_deferred(Input.CURSOR_BUSY)
+			#Input.set_custom_mouse_cursor(null, Input.CURSOR_ARROW)
+			#prints("NOTIFICATION_DRAG_END after get_current_cursor_shape", Input.get_current_cursor_shape())
+			#Input.set_custom_mouse_cursor(preload("res://icon/cursor_point.svg"), Input.CURSOR_ARROW, Vector2(10, 0))
+
+				
