@@ -37,7 +37,10 @@ enum HexColor {
 
 func _ready() -> void:
 	
-	prints("User directory:", OS.get_user_data_dir())
+	Input.set_custom_mouse_cursor(preload("res://icon/mouse_drag_enabled.svg"), Input.CURSOR_DRAG, Vector2(16, 16))
+	Input.set_custom_mouse_cursor(preload("res://icon/mouse_drag_good.svg"), Input.CURSOR_CAN_DROP, Vector2(16, 16))
+	Input.set_custom_mouse_cursor(preload("res://icon/mouse_drag_bad.svg"), Input.CURSOR_FORBIDDEN, Vector2(16, 16))
+	Input.set_custom_mouse_cursor(preload("res://icon/mouse_text.svg"), Input.CURSOR_IBEAM, Vector2(16, 16))
 	
 	ScaleContainer.set_font_oversampling(3)
 	
@@ -137,9 +140,7 @@ func _on_mouse_entered_hex_build(index:HexIndex):
 	if cell_type == null or cell_type != _selected_cell_type:
 		_grid.set_hex_color(index, HexColor.Hover)
 	if cell_type != null:
-		#Input.set_custom_mouse_cursor(CURSOR_GRAB, Input.CursorShape.CURSOR_ARROW)
-		#Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
-		pass
+		Input.set_default_cursor_shape(Input.CURSOR_DRAG)
 
 func _on_mouse_entered_hex_view(index:HexIndex):
 	if _selected_index == HexIndex.INVALID:
@@ -159,14 +160,21 @@ func _on_mouse_exited_hex_build(index:HexIndex):
 		_grid.set_hex_color(index, HexColor.Selected)
 	else:
 		_grid.clear_hex_color(index)
-	#Input.set_custom_mouse_cursor(CURSOR_POINT, Input.CursorShape.CURSOR_ARROW)	
-	#Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 func _on_mouse_exited_hex_view(index:HexIndex):
 	if _selected_index == HexIndex.INVALID:
 		_grid.clear_hex_color(index)
 		_hide_cell_state()
 
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_DRAG_END:
+			if _hover_index != HexIndex.INVALID:
+				var cell_type = Level.current.content.get_content(_hover_index)
+				if cell_type != null:
+					Input.set_default_cursor_shape(Input.CURSOR_DRAG)
+			
 func _on_hex_selected(index:HexIndex):
 	if _is_build_mode:
 		_on_hex_selected_build(index)

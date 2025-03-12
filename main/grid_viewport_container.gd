@@ -6,12 +6,6 @@ const CELL_APPEARANCE_CONTAINER = preload("res://main/genomes_panel/cell_appeara
 
 var _current_drag_data:CellTypeDragData = null
 
-func _ready() -> void:
-	Input.set_custom_mouse_cursor(preload("res://icon/EnergyIcon.png"), Input.CURSOR_DRAG)
-	Input.set_custom_mouse_cursor(preload("res://icon/cursor_grab.svg"), Input.CURSOR_CAN_DROP)
-	Input.set_custom_mouse_cursor(preload("res://icon/LifeIcon.png"), Input.CURSOR_FORBIDDEN)
-	
-
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	
 	if data is not CellTypeDragData:
@@ -46,19 +40,8 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 
 func _notification(what: int) -> void:
 	match what:
-		NOTIFICATION_DRAG_BEGIN:
-			#Input.set_custom_mouse_cursor(preload("res://icon/cursor_grab.svg"), Input.CURSOR_ARROW)
-			#prints("NOTIFICATION_DRAG_BEGIN get_current_cursor_shape", Input.get_current_cursor_shape())
-			pass
 		NOTIFICATION_DRAG_END:
 			if not is_drag_successful() and _current_drag_data and _current_drag_data.source_index != null:
 				Level.current.content.set_content(_current_drag_data.source_index, _current_drag_data.cell_type)
 				Level.current.modified()
 			_current_drag_data = null
-			#prints("NOTIFICATION_DRAG_END before get_current_cursor_shape", Input.get_current_cursor_shape())
-			#Input.set_default_cursor_shape.call_deferred(Input.CURSOR_BUSY)
-			#Input.set_custom_mouse_cursor(null, Input.CURSOR_ARROW)
-			#prints("NOTIFICATION_DRAG_END after get_current_cursor_shape", Input.get_current_cursor_shape())
-			#Input.set_custom_mouse_cursor(preload("res://icon/cursor_point.svg"), Input.CURSOR_ARROW, Vector2(10, 0))
-
-				
