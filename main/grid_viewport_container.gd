@@ -24,9 +24,9 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	Level.current.modified()
 	
 func _get_drag_data(_at_position: Vector2) -> Variant:
-	var cell_type = Level.current.content.get_content(_hex_grid.mouse_hex_index)
+	var cell_type:CellType = Level.current.content.get_content(_hex_grid.mouse_hex_index)
 	var cell_appearance_container:CellAppearanceContainer = CELL_APPEARANCE_CONTAINER.instantiate()
-	cell_appearance_container.cell_type = cell_type
+	cell_appearance_container.cell_appearance = cell_type.instantiate_cell_appearance()
 	set_drag_preview(cell_appearance_container)
 	var data := CellTypeDragData.new()
 	data.cell_type = cell_type

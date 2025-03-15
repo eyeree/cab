@@ -116,54 +116,55 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "(hex index)"
 
-[node name="ScaleContainer" type="Container" parent="CanvasLayer/PanelContainer/HBoxContainer"]
-layout_mode = 2
-script = ExtResource("4_mhk4r")
-metadata/_custom_type_script = "uid://bqmrltjv5ji5c"
-
-[node name="SidePanelContainer" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer"]
+[node name="SidePanelContainer" type="PanelContainer" parent="CanvasLayer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"NomarginPanelContainer"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = -1
 theme_override_constants/margin_top = -1
 theme_override_constants/margin_right = -1
 theme_override_constants/margin_bottom = -1
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 texture = ExtResource("4_ncflg")
 expand_mode = 5
 stretch_mode = 4
 
-[node name="LevelPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_vtfip")]
+[node name="LevelPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_vtfip")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ControlPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_m3hh0")]
+[node name="ControlPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("5_m3hh0")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CellStatePanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("10_ys2ax")]
+[node name="CellStatePanel" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("10_ys2ax")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GenomesPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("9_mhk4r")]
+[node name="GenomesPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("9_mhk4r")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GenesPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/ScaleContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("11_sfolt")]
+[node name="GenesPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("11_sfolt")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="ScaleContainer" type="Container" parent="CanvasLayer/PanelContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("4_mhk4r")
+metadata/_custom_type_script = "uid://bqmrltjv5ji5c"
 
 [node name="WindowOverlayPanel" type="Panel" parent="CanvasLayer/PanelContainer"]
 unique_name_in_owner = true

@@ -1,9 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://ddw2i3utc1jti"]
+[gd_scene load_steps=14 format=3 uid="uid://ddw2i3utc1jti"]
 
 [ext_resource type="Texture2D" uid="uid://cvjpeir0ejt2v" path="res://icon/delete.svg" id="1_cicca"]
 [ext_resource type="Script" uid="uid://cb5t4vrxrj43j" path="res://main/genomes_panel/cell_type_panel.gd" id="1_fk5vb"]
 [ext_resource type="PackedScene" uid="uid://cblmla1tsx671" path="res://main/genomes_panel/cell_appearance_container.tscn" id="2_5cjkp"]
+[ext_resource type="Script" uid="uid://dxjb1rtucf84v" path="res://main/genomes_panel/cell_appearances_poup_panel.gd" id="2_f5xh0"]
 [ext_resource type="Script" uid="uid://bvmc0mpc4fpit" path="res://main/genomes_panel/appearance_drag_source.gd" id="3_5cjkp"]
+[ext_resource type="StyleBox" uid="uid://c7jejo42fctd0" path="res://main/genomes_panel/popup_style_box.tres" id="3_51qn2"]
+[ext_resource type="Texture2D" uid="uid://cukjbr1i65ply" path="res://icon/arrow_down.svg" id="4_kgxcm"]
+[ext_resource type="Texture2D" uid="uid://brxl0dlggo6j7" path="res://icon/arrow_down_highlight.svg" id="5_f5xh0"]
+[ext_resource type="Texture2D" uid="uid://ck3aqgmx6g7mu" path="res://icon/arrow_down_disabled.svg" id="6_51qn2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ogvsj"]
 content_margin_left = 2.0
@@ -16,6 +21,20 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.437044, 0.00028479, 0.485718, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51qn2"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.0722556, 0.000914003, 0.0790231, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2fjro"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.311767, 0.0128437, 0.335206, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ck4nf"]
 
@@ -35,6 +54,32 @@ mouse_filter = 1
 mouse_default_cursor_shape = 6
 theme_override_styles/panel = SubResource("StyleBoxFlat_ogvsj")
 
+[node name="CellAppearancesPopupPanel" type="PopupPanel" parent="HBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+size = Vector2i(62, 140)
+visible = true
+transient_to_focused = true
+theme_override_styles/panel = ExtResource("3_51qn2")
+script = ExtResource("2_f5xh0")
+normal = SubResource("StyleBoxFlat_51qn2")
+hover = SubResource("StyleBoxFlat_2fjro")
+selected = SubResource("StyleBoxFlat_51qn2")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/PanelContainer/CellAppearancesPopupPanel"]
+custom_minimum_size = Vector2(0, 120)
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 61.0
+offset_bottom = 139.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="AppearancesContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/CellAppearancesPopupPanel/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
 [node name="CellAppearanceContainer" parent="HBoxContainer/PanelContainer" instance=ExtResource("2_5cjkp")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -46,6 +91,28 @@ mouse_filter = 1
 mouse_default_cursor_shape = 6
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ck4nf")
 script = ExtResource("3_5cjkp")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_right = -4
+theme_override_constants/margin_bottom = -4
+
+[node name="PickCellAppearanceButton" type="TextureButton" parent="HBoxContainer/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+focus_mode = 0
+action_mode = 0
+texture_normal = ExtResource("4_kgxcm")
+texture_pressed = ExtResource("5_f5xh0")
+texture_hover = ExtResource("5_f5xh0")
+texture_disabled = ExtResource("6_51qn2")
+texture_focused = ExtResource("4_kgxcm")
+ignore_texture_size = true
+stretch_mode = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
