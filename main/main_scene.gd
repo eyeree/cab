@@ -327,6 +327,7 @@ func _level_changed() -> void:
 	_build_mode()
 	
 func _on_level_modified() -> void:
+	_reset_load()
 	_update_grid_from_level()
 
 func _on_cell_type_selected(cell_type:CellType) -> void:

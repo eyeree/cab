@@ -35,7 +35,6 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 		Level.current.content.clear_content(_hex_grid.mouse_hex_index)
 		Level.current.modified()
 	_current_drag_data = data
-	#Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
 	return data
 
 func _notification(what: int) -> void:
