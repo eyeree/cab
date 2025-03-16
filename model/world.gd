@@ -47,8 +47,6 @@ class WorldOptions:
 	var steps:int
 	var initial_content:HexStore
 
-#var _dispatch_qeueue:DispatchQueue
-
 func load(options:WorldOptions):	
 	
 	_rings = options.rings
@@ -56,10 +54,6 @@ func load(options:WorldOptions):
 	_initial_content = options.initial_content
 	
 	current_step = 0
-	
-	#_dispatch_qeueue = DispatchQueue.new()
-	#_dispatch_qeueue.create_concurrent(max(1, OS.get_processor_count() - 2))
-	#prints('_dispatch_queue - threaded:', _dispatch_qeueue.is_threaded(), 'treads:', _dispatch_qeueue.get_thread_count())
 	
 	if OS.has_feature('nothreads'):		
 		_is_process_loading = true
@@ -141,37 +135,6 @@ func _step() -> bool:
 	else:
 		current_step += 1
 		var cells := _cells.get_all_content()
-		
-		#var cells_per_thread:int = cells.size() / _dispatch_qeueue.get_thread_count()
-		#for thread_number in _dispatch_qeueue.get_thread_count():
-			#var start_index := thread_number * cells_per_thread
-			#var end_index := start_index + cells_per_thread
-			#if thread_number == _dispatch_qeueue.get_thread_count() - 1:
-				#end_index = cells.size() -1
-			#_dispatch_qeueue.dispatch(func ():
-				##prints('actions', thread_number, start_index, end_index)
-				#for index in range(start_index, end_index):
-					#_cell_perform_actions(cells[index]))
-		#await _dispatch_qeueue.all_tasks_finished
-##
-		#for thread_number in _dispatch_qeueue.get_thread_count():
-			#var start_index := thread_number * cells_per_thread
-			#var end_index := start_index + cells_per_thread
-			#if thread_number == _dispatch_qeueue.get_thread_count() - 1:
-				#end_index = cells.size() -1
-			#_dispatch_qeueue.dispatch(func ():
-				##prints('updates', thread_number, start_index, end_index)
-				#for index in range(start_index, end_index):
-					#_cell_update_state(cells[index]))
-		#await _dispatch_qeueue.all_tasks_finished
-		
-		#for cell in cells:
-			#_dispatch_qeueue.dispatch(_cell_perform_actions.bind(cell))	
-		#await _dispatch_qeueue.all_tasks_finished
-		#
-		#for cell in cells:
-			#_dispatch_qeueue.dispatch(_cell_update_state.bind(cell))	
-		#await _dispatch_qeueue.all_tasks_finished
 		
 		for cell in cells:
 			var cell_state:CellState = state.get_history_entry(cell.index, current_step)
