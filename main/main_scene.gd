@@ -200,19 +200,25 @@ func _on_hex_selected_view(index:HexIndex) -> void:
 		_show_cell_state(index)
 
 func _show_cell_state(index:HexIndex):
-	_shown_index = index
-	_cell_state_panel.visible = true
-	var cell_state := _world.state.get_history_entry(index, _control_panel.current_step)
-	_cell_state_panel.show_cell_state(cell_state)
+	if _world.state:
+		_shown_index = index
+		_cell_state_panel.visible = true
+		var cell_state := _world.state.get_history_entry(index, _control_panel.current_step)
+		_cell_state_panel.show_cell_state(cell_state)
 		
 func _hide_cell_state() -> void:
 	_shown_index = HexIndex.INVALID
 	_cell_state_panel.visible = false
 		
+var load_start_time:int
+
 func _start_load() -> void:
 	
 	_control_panel.loaded_steps = 0
 	_load_needed = false
+	
+	load_start_time = Time.get_ticks_msec()
+	prints('load_start_time', load_start_time)
 	
 	var world_options = World.WorldOptions.new()
 	world_options.rings = Level.current.rings
@@ -227,9 +233,12 @@ func _load_progress(loaded_steps:int) -> void:
 	_control_panel.loaded_steps = loaded_steps
 	if _control_panel.current_step <= loaded_steps:
 		_grid_overlay_panel.visible = false
-		_update_grid_from_world()
+		#_update_grid_from_world()
 	
 func _load_finished() -> void:
+	var load_end_time := Time.get_ticks_msec()
+	prints('load_end_time', load_start_time)
+	prints('Load time ms:', load_end_time - load_start_time)
 	if _load_needed:
 		_control_panel.loaded_steps = 0
 		
