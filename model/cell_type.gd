@@ -3,7 +3,7 @@ class_name CellType extends Resource
 var _genome_ref:WeakRef = null
 var genome:Genome:
 	get: 
-		if _genome_ref == null:
+		if _genome_ref == null || _genome_ref.get_ref() == null:
 			_genome_ref = weakref(Genome.get_cell_type_genome(self))
 			if _genome_ref == null:
 				prints('could not find genome')

@@ -6,6 +6,7 @@ class_name MainScene extends Node3D
 @onready var _genes_panel: GenesPanel = %GenesPanel
 @onready var _level_panel: LevelPanel = %LevelPanel
 @onready var _genomes_panel: GenomesPanel = %GenomesPanel
+@onready var _grid_viewport_container: GridViewportContainer = %GridViewportContainer
 
 @onready var _grid_overlay_panel: Panel = %GridOverlayPanel
 @onready var _window_overlay_panel: Panel = %WindowOverlayPanel
@@ -19,6 +20,7 @@ const CURSOR_GRAB = preload("res://icon/cursor_grab.svg")
 const CURSOR_POINT = preload("res://icon/cursor_point.svg")
 
 var _load_needed:bool = true
+var _load_start_time:int
 
 var _selected_index := HexIndex.INVALID
 var _hover_index := HexIndex.INVALID
@@ -37,6 +39,9 @@ enum HexColor {
 
 func _ready() -> void:
 	
+	var ts := TextServerManager.get_primary_interface()
+	ts.font_set_global_oversampling(10)
+		
 	Input.set_custom_mouse_cursor(preload("res://icon/mouse_drag_enabled.svg"), Input.CURSOR_DRAG, Vector2(16, 16))
 	Input.set_custom_mouse_cursor(preload("res://icon/mouse_drag_good.svg"), Input.CURSOR_CAN_DROP, Vector2(16, 16))
 	Input.set_custom_mouse_cursor(preload("res://icon/mouse_drag_bad.svg"), Input.CURSOR_FORBIDDEN, Vector2(16, 16))
@@ -73,6 +78,7 @@ func _ready() -> void:
 func _build_mode() -> void:
 	
 	_is_build_mode = true
+	_grid_viewport_container.drag_enabled = true
 	
 	_cell_state_panel.visible = false
 	_genomes_panel.visible = true
@@ -88,6 +94,7 @@ func _build_mode() -> void:
 func _view_mode() -> void:
 	
 	_is_build_mode = false
+	_grid_viewport_container.drag_enabled = false
 	
 	_genomes_panel.visible = false
 	_genes_panel.visible = false
@@ -136,11 +143,16 @@ func _on_mouse_entered_hex(index:HexIndex):
 		_on_mouse_entered_hex_view(index)
 
 func _on_mouse_entered_hex_build(index:HexIndex):
-	var cell_type = Level.current.content.get_content(index)
-	if cell_type == null or cell_type != _selected_cell_type:
+	var initial_hex_content := Level.current.get_hex_content(index)
+	if initial_hex_content == null or initial_hex_content.cell_type != _selected_cell_type:
 		_grid.set_hex_color(index, HexColor.Hover)
-	if cell_type != null:
+	if initial_hex_content != null:
 		Input.set_default_cursor_shape(Input.CURSOR_DRAG)
+		var cell_appearance:CellAppearance = _grid.get_hex_content(index)
+		if not cell_appearance:
+			prints("cell_appearance is null when initial_hex_content is not")
+		else:
+			cell_appearance.show_orientation(initial_hex_content.orientation)
 
 func _on_mouse_entered_hex_view(index:HexIndex):
 	if _selected_index == HexIndex.INVALID:
@@ -155,12 +167,15 @@ func _on_mouse_exited_hex(index:HexIndex):
 		_on_mouse_exited_hex_view(index)
 		
 func _on_mouse_exited_hex_build(index:HexIndex):
-	var cell_type = Level.current.content.get_content(index)
-	if cell_type != null and cell_type == _selected_cell_type:
+	var initial_hex_content := Level.current.get_hex_content(index)
+	if initial_hex_content != null and initial_hex_content.cell_type == _selected_cell_type:
 		_grid.set_hex_color(index, HexColor.Selected)
 	else:
 		_grid.clear_hex_color(index)
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+	if initial_hex_content:
+		var cell_appearance:CellAppearance = _grid.get_hex_content(index)
+		cell_appearance.hide_orientation()
 
 func _on_mouse_exited_hex_view(index:HexIndex):
 	if _selected_index == HexIndex.INVALID:
@@ -171,8 +186,8 @@ func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_DRAG_END:
 			if _hover_index != HexIndex.INVALID:
-				var cell_type = Level.current.content.get_content(_hover_index)
-				if cell_type != null:
+				var initial_hex_content := Level.current.get_hex_content(_hover_index)
+				if initial_hex_content != null:
 					Input.set_default_cursor_shape(Input.CURSOR_DRAG)
 			
 func _on_hex_selected(index:HexIndex):
@@ -182,7 +197,8 @@ func _on_hex_selected(index:HexIndex):
 		_on_hex_selected_view(index)
 		
 func _on_hex_selected_build(index:HexIndex) -> void:
-	var cell_type:CellType = Level.current.content.get_content(index)
+	var initial_hex_content := Level.current.get_hex_content(index)
+	var cell_type:CellType = initial_hex_content.cell_type if initial_hex_content else null
 	CellTypePanel.signals.cell_type_selected.emit(cell_type)
 	
 func _on_hex_selected_view(index:HexIndex) -> void:
@@ -210,20 +226,15 @@ func _hide_cell_state() -> void:
 	_shown_index = HexIndex.INVALID
 	_cell_state_panel.visible = false
 		
-var load_start_time:int
-
 func _start_load() -> void:
 	
 	_control_panel.loaded_steps = 0
 	_load_needed = false
 	
-	load_start_time = Time.get_ticks_msec()
-	prints('load_start_time', load_start_time)
+	_load_start_time = Time.get_ticks_msec()
 	
 	var world_options = World.WorldOptions.new()
-	world_options.rings = Level.current.rings
-	world_options.steps = Level.current.steps
-	world_options.initial_content = Level.current.content
+	world_options.level = Level.current
 	_world.load(world_options)
 		
 func _load_started() -> void:
@@ -237,8 +248,7 @@ func _load_progress(loaded_steps:int) -> void:
 	
 func _load_finished() -> void:
 	var load_end_time := Time.get_ticks_msec()
-	prints('load_end_time', load_start_time)
-	prints('Load time ms:', load_end_time - load_start_time)
+	prints('Load time ms:', load_end_time - _load_start_time)
 	if _load_needed:
 		_control_panel.loaded_steps = 0
 		
@@ -272,12 +282,15 @@ func _update_grid_from_world():
 func _update_grid_from_level():
 	_grid.clear_all_hex_colors()
 	for index:HexIndex in HexIndex.CENTER.spiral(_grid.rings):
-		var cell_type:CellType = Level.current.content.get_content(index)
-		_set_cell_appearance(index, cell_type)
+		var initial_hex_content := Level.current.get_hex_content(index)
+		var cell_type:CellType = initial_hex_content.cell_type if initial_hex_content else null
+		var cell_appearance := _set_cell_appearance(index, cell_type)
+		if cell_appearance and index == _hover_index:
+			cell_appearance.show_orientation(initial_hex_content.orientation)
 		if _selected_cell_type and cell_type == _selected_cell_type:
 			_grid.set_hex_color(index, HexColor.Selected)
 				
-func _set_cell_appearance(index:HexIndex, cell_type:CellType):
+func _set_cell_appearance(index:HexIndex, cell_type:CellType) -> CellAppearance:
 	
 	var current_cell_appearance:CellAppearance = _grid.get_hex_content(index)
 	
@@ -291,6 +304,8 @@ func _set_cell_appearance(index:HexIndex, cell_type:CellType):
 	
 	if current_cell_appearance: 
 		current_cell_appearance.queue_free()
+		
+	return new_cell_appearance
 	
 func _set_cell_state(index:HexIndex, cell_state:CellState):
 	var cell_appearance:CellAppearance = _grid.get_hex_content(index)
@@ -299,9 +314,22 @@ func _set_cell_state(index:HexIndex, cell_state:CellState):
 	if index == _shown_index:
 		_show_cell_state(index)
 
-func _input(_event: InputEvent) -> void:
+func _process(_delta:float) -> void:
 	if Input.is_action_just_pressed("ToggleDebugPanel"):
 		_debug_panel.visible = not _debug_panel.visible
+	if Input.is_action_just_pressed("RotateOrientationClockwise") or Input.is_action_just_pressed("RotateOrientationCounterClockwise"):
+		prints(Input.is_action_just_pressed("GridCameraZoomIn"), Input.is_action_just_pressed("GridCameraZoomOut"))
+		if not Input.is_action_just_pressed("GridCameraZoomIn") and not Input.is_action_just_pressed("GridCameraZoomOut"):
+			if _hover_index != HexIndex.INVALID:
+				var initial_hex_content := Level.current.get_hex_content(_hover_index)
+				if initial_hex_content:
+					initial_hex_content.orientation = \
+						HexIndex.rotate_direction_clockwise(initial_hex_content.orientation) \
+							if Input.is_action_just_pressed("RotateOrientationClockwise") \
+							else HexIndex.rotate_direction_counter_clockwise(initial_hex_content.orientation)
+					Level.current.modified()
+					var cell_appearance:CellAppearance = _grid.get_hex_content(_hover_index)
+					cell_appearance.show_orientation(initial_hex_content.orientation)
 
 func _on_step_count_changed(step_count:int) -> void:
 	Level.current.steps = step_count

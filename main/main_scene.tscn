@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://dmaqlc81kw7f8"]
+[gd_scene load_steps=13 format=3 uid="uid://dmaqlc81kw7f8"]
 
 [ext_resource type="Script" uid="uid://jtib34n3mmky" path="res://main/main_scene.gd" id="1_im0q4"]
 [ext_resource type="Script" uid="uid://mpl54ukoekto" path="res://model/world.gd" id="1_rmejh"]
 [ext_resource type="PackedScene" uid="uid://b1umt3mgf2ylg" path="res://hex_grid/hex_grid.tscn" id="2_vgh67"]
-[ext_resource type="Script" uid="uid://bqmrltjv5ji5c" path="res://theme/scale_container.gd" id="4_mhk4r"]
 [ext_resource type="Texture2D" uid="uid://bshq4y2gn32w2" path="res://icon/logo.png" id="4_ncflg"]
 [ext_resource type="Script" uid="uid://rhjftguq82ya" path="res://main/grid_viewport_container.gd" id="4_sfolt"]
 [ext_resource type="PackedScene" uid="uid://dh7tea1abmm2v" path="res://main/control_panel/control_panel.tscn" id="5_m3hh0"]
@@ -36,6 +35,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_mhk4r")
 
@@ -66,7 +67,7 @@ msaa_3d = 3
 screen_space_aa = 1
 scaling_3d_scale = 2.0
 anisotropic_filtering_level = 4
-size = Vector2i(2, 2)
+size = Vector2i(1679, 1024)
 render_target_update_mode = 4
 
 [node name="HexGrid" parent="CanvasLayer/PanelContainer/HBoxContainer/GridPanelContainer/GridViewportContainer/SubViewport" instance=ExtResource("2_vgh67")]
@@ -159,12 +160,6 @@ size_flags_vertical = 3
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="ScaleContainer" type="Container" parent="CanvasLayer/PanelContainer/HBoxContainer"]
-visible = false
-layout_mode = 2
-script = ExtResource("4_mhk4r")
-metadata/_custom_type_script = "uid://bqmrltjv5ji5c"
 
 [node name="WindowOverlayPanel" type="Panel" parent="CanvasLayer/PanelContainer"]
 unique_name_in_owner = true

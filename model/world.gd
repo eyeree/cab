@@ -43,15 +43,13 @@ var _stop_loading := false
 #signal cell_changed(index:HexIndex, new_cell:Cell)
 
 class WorldOptions:
-	var rings:int
-	var steps:int
-	var initial_content:HexStore
+	var level:Level
 
 func load(options:WorldOptions):	
 	
-	_rings = options.rings
-	_steps = options.steps
-	_initial_content = options.initial_content
+	_rings = options.level.rings
+	_steps = options.level.steps
+	_initial_content = options.level.content
 	
 	current_step = 0
 	
@@ -67,12 +65,14 @@ func _init_cells():
 	_cells = HexStore.new()
 	
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
-		var cell_type:CellType = _initial_content.get_content(index)
-		if cell_type == null:
-			cell_type = environment_genome.empty_cell_type
-		if not _genomes.has(cell_type.genome):
-			_genomes.append(cell_type.genome)
-		set_cell(index, cell_type)
+		var initial_hex_content:LevelHexContent = _initial_content.get_content(index)
+		if initial_hex_content:
+			if not _genomes.has(initial_hex_content.cell_type.genome):
+				_genomes.append(initial_hex_content.cell_type.genome)
+			var cell := set_cell(index, initial_hex_content.cell_type)
+			cell.orientation = initial_hex_content.orientation
+		else:
+			set_cell(index, environment_genome.empty_cell_type)
 		
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var cell:Cell = get_cell(index)
@@ -148,16 +148,6 @@ func _step() -> bool:
 		_genome_rank_index = min(_genome_rank_index + 1, _genomes.size())
 		load_progress.emit.call_deferred(current_step)
 		return true
-
-func _cell_perform_actions(cell:Cell):
-	var cell_state:CellState = state.get_history_entry(cell.index, current_step)
-	cell.perform_actions(cell_state)
-	
-func _cell_update_state(cell:Cell):
-	var cell_state:CellState = state.get_history_entry(cell.index, current_step)
-	cell.update_state(cell_state)
-	if cell.is_dead:
-		set_cell(cell.index, environment_genome.empty_cell_type)
 	
 func visit_ring(center:HexIndex, radius:int, callable:Callable) -> void:
 	for index in center.ring(radius):

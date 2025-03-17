@@ -47,12 +47,12 @@ func _ready() -> void:
 
 func _load_default_level() -> void:
 	if not FileAccess.file_exists(Level.INITIAL_LEVEL_PATH):
-		ResourceSaver.save(ResourceLoader.load(Level.DEFAULT_LEVEL_PATH), Level.INITIAL_LEVEL_PATH)
+		ResourceSaver.save(Level.get_default_level(), Level.INITIAL_LEVEL_PATH)
 	_load_level_resource(Level.INITIAL_LEVEL_PATH)
 		
 func _new_level():
 	var path = _get_next_level_path()
-	ResourceSaver.save(ResourceLoader.load(Level.DEFAULT_LEVEL_PATH), path)
+	ResourceSaver.save(Level.get_default_level(), path)
 	_load_level_resource(path)
 	
 func _get_next_level_path() -> String:
@@ -84,6 +84,8 @@ func _on_file_dialog_canceled():
 	dialog_closed.emit()
 	
 func _load_level_resource(path:String) -> void:
+	if Level.current:
+		Level.current.level_modified.disconnect(_on_level_modified)
 	Level.current = ResourceLoader.load(path)
 	if Level.current == null:
 		if path == Level.INITIAL_LEVEL_PATH:
@@ -104,43 +106,3 @@ func _on_level_modified() -> void:
 	await get_tree().create_timer(0.5).timeout
 	if _change_number == my_change_number:
 		Level.current.save()
-	
-func _get_initial_level() -> Level:
-	
-	var initial_level := Level.new()
-	
-	var genome1 = Genome.new()
-	genome1.name = "Genome1"
-	genome1.appearance_set = preload("res://appearance/simple_a/simple_a_appearance_set.tres")
-	genome1.add_gene(GenerateEnergyGene)
-	genome1.add_gene(RepairDamageGene)
-	genome1.add_gene(ProduceCellGene)
-	initial_level.genomes.append(genome1)
-	
-	var cell_type_1a = genome1.add_cell_type()
-	cell_type_1a.name = '1A'
-	cell_type_1a.add_gene(GenerateEnergyGene)
-	cell_type_1a.add_gene(RepairDamageGene)
-	cell_type_1a.add_gene(ProduceCellGene)
-
-	var genome2 = Genome.new()
-	genome2.name = "Genome2"
-	genome2.appearance_set = preload("res://appearance/simple_b/simple_b_appearance_set.tres")
-	genome2.add_gene(GenerateEnergyGene)
-	genome2.add_gene(RepairDamageGene)
-	genome2.add_gene(ProduceCellGene)
-	initial_level.genomes.append(genome2)
-
-	var cell_type_2a = genome2.add_cell_type()
-	cell_type_2a.name = '2A'
-	cell_type_2a.cell_appearance_index = 1
-	cell_type_2a.add_gene(GenerateEnergyGene)
-	cell_type_2a.add_gene(RepairDamageGene)
-	cell_type_2a.add_gene(ProduceCellGene)
-
-	#level.content.set_content(HexIndex.CENTER, cell_type_1a)
-	initial_level.content.set_content(HexIndex.from(-3, 0, 3), cell_type_1a)
-	initial_level.content.set_content(HexIndex.from(2, 2, -4), cell_type_2a)
-	initial_level.content.set_content(HexIndex.from(4, -2, -2), cell_type_2a)
-
-	return initial_level

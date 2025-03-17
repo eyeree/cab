@@ -93,8 +93,8 @@ func _on_cancel_remove_genome_button_pressed() -> void:
 func _on_confirm_remove_genome_button_pressed() -> void:
 	_confirm_remove_genome_popup.hide()
 	for index in Level.current.content.get_all_indexes():
-		var content = Level.current.content.get_content(index)
-		if content is CellType and content.genome == genome:
+		var initial_hex_content := Level.current.get_hex_content(index)
+		if initial_hex_content.cell_type.genome == genome:
 			Level.current.content.clear_content(index)
 	Level.current.genomes.erase(genome)
 	Level.current.modified()

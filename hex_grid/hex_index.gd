@@ -11,22 +11,22 @@ static var ALL_DIRECTIONS:Array[HexDirection] = [
 	HexDirection.W, HexDirection.NW, HexDirection.NE
 ]
 	
-static func rotate_direction_right(direction:HexDirection, steps:int = 1) -> HexDirection:
+static func rotate_direction_clockwise(direction:HexDirection, steps:int = 1) -> HexDirection:
 	return ((direction + steps) % 6) as HexDirection
 
-static func rotate_direction_left(direction:HexDirection, steps:int = 1) -> HexDirection:
-	return ((direction - steps) % 6) as HexDirection
+static func rotate_direction_counter_clockwise(direction:HexDirection, steps:int = 1) -> HexDirection:
+	return ((direction + 6 - (steps %6)) % 6) as HexDirection
 	
-static func rotate_directions_right(directions:Array[HexDirection], steps:int = 1) -> Array[HexDirection]:
+static func rotate_directions_clockwise(directions:Array[HexDirection], steps:int = 1) -> Array[HexDirection]:
 	var result:Array[HexDirection] = directions.duplicate()
 	for i in range(result.size()):
-		result[i] = rotate_direction_right(result[i], steps)
+		result[i] = rotate_direction_clockwise(result[i], steps)
 	return result
 
-static func rotate_directions_left(directions:Array[HexDirection], steps:int = 1) -> Array[HexDirection]:
+static func rotate_directions_counter_clockwise(directions:Array[HexDirection], steps:int = 1) -> Array[HexDirection]:
 	var result:Array[HexDirection] = directions.duplicate()
 	for i in range(result.size()):
-		result[i] = rotate_direction_left(result[i], steps)
+		result[i] = rotate_direction_counter_clockwise(result[i], steps)
 	return result
 		
 static func orient_direction(orientation:HexDirection, direction:HexDirection) -> HexDirection:
@@ -52,22 +52,22 @@ static var ALL_DIAGONALS:Array[HexDiagonal] = [
 	HexDiagonal.S, HexDiagonal.SW, HexDiagonal.NW
 ]
 
-static func rotate_diagnonal_right(diagnonal:HexDiagonal, steps:int = 1) -> HexDiagonal:
+static func rotate_diagnonal_clockwise(diagnonal:HexDiagonal, steps:int = 1) -> HexDiagonal:
 	return ((diagnonal + steps) % 6) as HexDiagonal
 
-static func rotate_diagnonal_left(diagnonal:HexDiagonal, steps:int = 1) -> HexDiagonal:
+static func rotate_diagnonal_counter_clockwise(diagnonal:HexDiagonal, steps:int = 1) -> HexDiagonal:
 	return ((diagnonal - steps) % 6) as HexDiagonal
 	
-static func rotate_diagnonals_right(diagnonals:Array[HexDiagonal], steps:int = 1) -> Array[HexDiagonal]:
+static func rotate_diagnonals_clockwise(diagnonals:Array[HexDiagonal], steps:int = 1) -> Array[HexDiagonal]:
 	var result:Array[HexDiagonal] = diagnonals.duplicate()
 	for i in range(result.size()):
-		result[i] = rotate_diagnonal_right(result[i], steps)
+		result[i] = rotate_diagnonal_clockwise(result[i], steps)
 	return result
 
 static func rotate_diagnonals_left(diagnonals:Array[HexDiagonal], steps:int = 1) -> Array[HexDiagonal]:
 	var result:Array[HexDiagonal] = diagnonals.duplicate()
 	for i in range(result.size()):
-		result[i] = rotate_diagnonal_left(result[i], steps)
+		result[i] = rotate_diagnonal_counter_clockwise(result[i], steps)
 	return result
 
 static func orient_diagonal(orientation:HexDirection, diagonal:HexDiagonal) -> HexDiagonal:

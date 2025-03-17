@@ -10,6 +10,6 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	set_drag_preview(cell_appearance_container)
 	var data := CellTypeDragData.new()
 	data.cell_type = cell_type
+	data.orientation = HexIndex.HexDirection.E
 	data.source_index = null
-	prints('_get_drag_data', data, cell_appearance_container)
 	return data

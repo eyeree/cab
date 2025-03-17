@@ -8,9 +8,9 @@ const LEVEL_EXTENSION := ".cab_level.tres"
 const LEVEL_FILTERS := ['*' + LEVEL_EXTENSION + ';Cellular AutoBata Level;text/plain']
 const INITIAL_LEVEL_PATH := LEVEL_PATH_PREFIX + 'level_1' + Level.LEVEL_EXTENSION
 const LEVEL_PATH_TEMPALTE := LEVEL_PATH_PREFIX + 'level_%d' + Level.LEVEL_EXTENSION
-const DEFAULT_LEVEL_PATH := 'res://level/default.cab_level.tres'
 
 static func _static_init() -> void:
+	prints("User directory:", OS.get_user_data_dir())
 	DirAccess.make_dir_recursive_absolute(LEVEL_PATH)
 
 static var current:Level = null
@@ -61,3 +61,53 @@ func save() -> void:
 
 func modified():
 	Level.current.level_modified.emit()
+	
+func get_hex_content(index:HexIndex) -> LevelHexContent:
+	return content.get_content(index)
+
+func set_hex_content(index:HexIndex, cell_type:CellType, orientation:HexIndex.HexDirection = HexIndex.HexDirection.E) -> LevelHexContent:
+	var inital_hex_content := LevelHexContent.new()
+	inital_hex_content.cell_type = cell_type
+	inital_hex_content.orientation = orientation
+	content.set_content(index, inital_hex_content)
+	return inital_hex_content
+
+static func get_default_level() -> Level:
+	
+	var level := Level.new()
+	
+	var genome1 = Genome.new()
+	genome1.name = "Genome1"
+	genome1.appearance_set = preload("res://appearance/simple_a/simple_a_appearance_set.tres")
+	genome1.add_gene(GenerateEnergyGene)
+	genome1.add_gene(RepairDamageGene)
+	genome1.add_gene(ProduceCellGene)
+	level.genomes.append(genome1)
+	
+	var cell_type_1a = genome1.add_cell_type()
+	cell_type_1a.name = '1A'
+	cell_type_1a.add_gene(GenerateEnergyGene)
+	cell_type_1a.add_gene(RepairDamageGene)
+	cell_type_1a.add_gene(ProduceCellGene)
+
+	var genome2 = Genome.new()
+	genome2.name = "Genome2"
+	genome2.appearance_set = preload("res://appearance/simple_b/simple_b_appearance_set.tres")
+	genome2.add_gene(GenerateEnergyGene)
+	genome2.add_gene(RepairDamageGene)
+	genome2.add_gene(ProduceCellGene)
+	level.genomes.append(genome2)
+
+	var cell_type_2a = genome2.add_cell_type()
+	cell_type_2a.name = '2A'
+	cell_type_2a.cell_appearance_index = 1
+	cell_type_2a.add_gene(GenerateEnergyGene)
+	cell_type_2a.add_gene(RepairDamageGene)
+	cell_type_2a.add_gene(ProduceCellGene)
+
+	#level.content.set_content(HexIndex.CENTER, cell_type_1a)
+	level.set_hex_content(HexIndex.from(-3, 0, 3), cell_type_1a)
+	level.set_hex_content(HexIndex.from(2, 2, -4), cell_type_2a)
+	level.set_hex_content(HexIndex.from(4, -2, -2), cell_type_2a)
+
+	return level
