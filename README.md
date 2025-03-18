@@ -2,6 +2,8 @@
 
 Cellular AutoBata is an auto-battler style game loosely based on the idea of cellular automata.
 
+Try it here: https://eyeree.art/cab
+
 The core idea is that you define a genome that consists of multiple cell types. Each cell type has
 a set of genes.  These genes determine the cell's capabilities and behavers. The more powerful the gene, the more the
 gene costs.  The total cost of all the genes in a cell type determines the cost of creating a cell of that type. The
