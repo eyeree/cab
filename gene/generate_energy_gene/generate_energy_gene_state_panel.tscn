@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dp3m3nit7ktb8" path="res://gene/generate_energy_gene/generate_energy_gene_state_panel.gd" id="1_wlaqm"]
 [ext_resource type="Texture2D" uid="uid://drrup7wbb1mue" path="res://icon/EnergyIcon.png" id="3_ut5hn"]
 
-[node name="GenerateEnergyGeneViewPanel" type="PanelContainer"]
+[node name="GenerateEnergyGeneStatePanel" type="PanelContainer"]
 theme_type_variation = &"SubDetailPanel"
 script = ExtResource("1_wlaqm")
 metadata/_custom_type_script = "uid://daf07buglduh1"
@@ -35,7 +35,8 @@ columns = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
-theme_type_variation = &"GridHeaderLabel"
+size_flags_horizontal = 0
+theme_type_variation = &"DimLabel"
 text = "Energy Gained:"
 
 [node name="EnergyGained" type="Label" parent="VBoxContainer/GridContainer"]

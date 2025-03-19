@@ -30,7 +30,6 @@ func get_grid() -> HexGrid:
 var _orientation_indicator:Node3D = null
 
 func show_orientation(orientation:HexIndex.HexDirection) -> void:
-	prints('show_orientation', orientation)
 	if _orientation_indicator == null:
 		_orientation_indicator = preload("res://appearance/orientation_indicator.tscn").instantiate()
 		add_child.call_deferred(_orientation_indicator)
@@ -38,6 +37,5 @@ func show_orientation(orientation:HexIndex.HexDirection) -> void:
 	_orientation_indicator.visible = true
 	
 func hide_orientation():
-	prints('hide_orientation')
 	if _orientation_indicator:
 		_orientation_indicator.visible = false

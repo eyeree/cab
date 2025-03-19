@@ -1,14 +1,95 @@
-[gd_scene load_steps=2 format=3 uid="uid://bed4qwum2vs03"]
+[gd_scene load_steps=3 format=3 uid="uid://bed4qwum2vs03"]
 
 [ext_resource type="Script" uid="uid://djqolgwwbf6bx" path="res://main/genes_panel/genes_panel.gd" id="1_w5nct"]
+[ext_resource type="Texture2D" uid="uid://dbsq7g2fpejwq" path="res://icon/add.svg" id="2_f2tcx"]
 
 [node name="GenesPanel" type="PanelContainer"]
+offset_right = 267.0
+offset_bottom = 273.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_type_variation = &"DetailPanel"
 script = ExtResource("1_w5nct")
 
-[node name="Label" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="CellTypeNameTitleLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"DimLabelLarge"
+text = "Cell Type:"
+
+[node name="CellTypeNameValueLabel" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DetailTitleLabel"
+text = "(cell type name)"
+
+[node name="GenomeNameTitleLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"DimLabel"
+text = "Genome:"
+
+[node name="GenomeNameValueLabel" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(genome name)"
+
+[node name="EnergyCostTitleLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"DimLabel"
+text = "Energy Cost:"
+
+[node name="EnergyCostValueLabel" type="Label" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(energy cost)"
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"DetailTitleLabel"
+text = "Genes"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OneGeneMinimumContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="OneGeneMinimumLabel" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/OneGeneMinimumContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_type_variation = &"DimLabel"
+text = "A cell type must have
+at least one gene."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="GeneContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddGeneButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "(cell type panel)"
+text = " Gene"
+icon = ExtResource("2_f2tcx")

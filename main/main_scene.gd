@@ -72,7 +72,9 @@ func _ready() -> void:
 	CellTypePanel.signals.cell_type_selected.connect(_on_cell_type_selected)
 	
 	_control_panel.run_speed = _level_panel.state.run_speed
+	_on_cell_type_selected(null)
 	
+	Level.signals.current_level_modified.connect(_on_current_level_modified)
 	_level_changed()
 	
 func _build_mode() -> void:
@@ -82,7 +84,7 @@ func _build_mode() -> void:
 	
 	_cell_state_panel.visible = false
 	_genomes_panel.visible = true
-	_genes_panel.visible = true
+	_genes_panel.visible = false
 	
 	if _selected_index != HexIndex.INVALID:
 		_grid.clear_hex_color(_selected_index)
@@ -318,7 +320,6 @@ func _process(_delta:float) -> void:
 	if Input.is_action_just_pressed("ToggleDebugPanel"):
 		_debug_panel.visible = not _debug_panel.visible
 	if Input.is_action_just_pressed("RotateOrientationClockwise") or Input.is_action_just_pressed("RotateOrientationCounterClockwise"):
-		prints(Input.is_action_just_pressed("GridCameraZoomIn"), Input.is_action_just_pressed("GridCameraZoomOut"))
 		if not Input.is_action_just_pressed("GridCameraZoomIn") and not Input.is_action_just_pressed("GridCameraZoomOut"):
 			if _hover_index != HexIndex.INVALID:
 				var initial_hex_content := Level.current.get_hex_content(_hover_index)
@@ -355,7 +356,6 @@ func _hide_window_overlay():
 	_window_overlay_panel.visible = false
 
 func _level_changed() -> void:
-	Level.current.level_modified.connect(_on_level_modified)
 	_control_panel.reset(Level.current.rings, Level.current.steps)
 	_grid.rings = Level.current.rings
 	_selected_index = HexIndex.INVALID
@@ -363,11 +363,16 @@ func _level_changed() -> void:
 	_genomes_panel.show_genomes()
 	_build_mode()
 	
-func _on_level_modified() -> void:
+func _on_current_level_modified() -> void:
 	_reset_load()
 	_update_grid_from_level()
 
 func _on_cell_type_selected(cell_type:CellType) -> void:
-	_genes_panel.show_cell_type(cell_type)
 	_selected_cell_type = cell_type
 	_update_grid_from_level()
+	if cell_type:
+		_genes_panel.show_cell_type(cell_type)
+		_genes_panel.visible = true
+	else:
+		_genes_panel.visible = false
+		

@@ -159,7 +159,6 @@ size_flags_vertical = 3
 [node name="GenesPanel" parent="CanvasLayer/PanelContainer/HBoxContainer/SidePanelContainer/VBoxContainer" instance=ExtResource("11_sfolt")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
 
 [node name="WindowOverlayPanel" type="Panel" parent="CanvasLayer/PanelContainer"]
 unique_name_in_owner = true

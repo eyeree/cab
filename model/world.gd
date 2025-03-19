@@ -67,6 +67,7 @@ func _init_cells():
 	for index:HexIndex in HexIndex.CENTER.spiral(_rings, true):
 		var initial_hex_content:LevelHexContent = _initial_content.get_content(index)
 		if initial_hex_content:
+			initial_hex_content.cell_type.cached_energy_cost = initial_hex_content.cell_type.get_energy_cost()
 			if not _genomes.has(initial_hex_content.cell_type.genome):
 				_genomes.append(initial_hex_content.cell_type.genome)
 			var cell := set_cell(index, initial_hex_content.cell_type)

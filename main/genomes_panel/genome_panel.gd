@@ -11,6 +11,7 @@ class_name GenomePanel extends PanelContainer
 @onready var _confirm_remove_genome_name: Label = %ConfirmRemoveGenomeName
 @onready var _appearance_set_option_button: OptionButton = %AppearanceSetOptionButton
 @onready var _toggled_container: MarginContainer = %ToggledContainer
+@onready var _energy_cost_value_label: Label = %EnergyCostValueLabel
 
 const ARROW_DOWN := preload("res://icon/arrow_down.svg")
 const ARROW_RIGHT := preload("res://icon/arrow_right.svg")
@@ -33,6 +34,7 @@ func _ready() -> void:
 	_confirm_remove_genome_button.pressed.connect(_on_confirm_remove_genome_button_pressed)
 	_cancel_remove_genome_button.pressed.connect(_on_cancel_remove_genome_button_pressed)
 	_appearance_set_option_button.item_selected.connect(_on_appearance_set_option_button_item_selected)
+	Level.signals.current_level_modified.connect(_on_current_level_modified)
 	
 	for appearance_set in AppearanceSet.get_all_appearance_sets():
 		if not appearance_set.hidden:
@@ -49,15 +51,15 @@ func _on_toggle_button_pressed() -> void:
 func show_genome(genome_:Genome) -> void:
 	genome = genome_
 	_genome_name.text = genome.name
+	_energy_cost_value_label.text = str(genome.get_energy_cost())
 	
-	for cell_type_panel:CellTypePanel in _cell_type_container.get_children().slice(0, -1):
+	for cell_type_panel:CellTypePanel in _cell_type_container.get_children():
 		_cell_type_container.remove_child(cell_type_panel)
 		cell_type_panel.queue_free()
 		
 	for cell_type in genome.cell_types:
 		var cell_type_panel:CellTypePanel = CELL_TYPE_PANEL.instantiate()
 		_cell_type_container.add_child(cell_type_panel)
-		_cell_type_container.move_child(cell_type_panel, -2)
 		cell_type_panel.show_cell_type(cell_type)
 		
 	var selected_index := -1
@@ -67,13 +69,14 @@ func show_genome(genome_:Genome) -> void:
 			selected_index = index
 			break
 	_appearance_set_option_button.select(selected_index)
-
-		
+	
+func _on_current_level_modified() -> void:
+	_energy_cost_value_label.text = str(genome.get_energy_cost())
+	
 func _on_add_cell_type_button_pressed() -> void:
 	var cell_type := genome.add_cell_type()
 	var cell_type_panel:CellTypePanel = CELL_TYPE_PANEL.instantiate()
 	_cell_type_container.add_child(cell_type_panel)
-	_cell_type_container.move_child(cell_type_panel, -2)
 	cell_type_panel.show_cell_type(cell_type)
 	CellTypePanel.signals.cell_type_selected.emit(cell_type)
 	Level.current.modified()

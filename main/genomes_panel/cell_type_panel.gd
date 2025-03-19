@@ -24,11 +24,18 @@ func _ready() -> void:
 	signals.cell_type_selected.connect(_on_cell_type_selected)
 	_cell_appearances_popup_panel.visible = false
 	_cell_appearances_popup_panel.appearance_index_selected.connect(_on_cell_appearances_popup_panel_appearance_index_selected)
+	Level.signals.current_level_modified.connect(_on_current_level_modified)
 
 func show_cell_type(cell_type_:CellType) -> void:
 	cell_type = cell_type_
+	_update_controls()
+	
+func _on_current_level_modified() -> void:
+	_update_controls()
+	
+func _update_controls() -> void:
 	_cell_type_name.text = cell_type.name
-	_energy_cost_label.text = str(cell_type.energy_cost)
+	_energy_cost_label.text = str(cell_type.get_energy_cost())
 	_cell_appearance_container.cell_appearance = cell_type.instantiate_cell_appearance()
 	_appearance_drag_source.cell_type = cell_type
 

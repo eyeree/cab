@@ -65,11 +65,11 @@ func _init(world_:World, index_:HexIndex, cell_type_:CellType, progenitor_:Cell 
 	
 	title = "%s:%s:%d" % [genome.name, cell_type.name, cell_number]
 
-	max_energy = cell_type.energy_cost * 2
+	max_energy = cell_type.cached_energy_cost * 2
 	new_energy = 0
 	energy = 0
 	
-	max_life = cell_type.energy_cost
+	max_life = cell_type.cached_energy_cost
 	new_life = max_life
 	life = 0
 	

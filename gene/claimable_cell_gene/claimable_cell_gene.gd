@@ -87,7 +87,7 @@ class ClaimState:
 	var ranking_data:Dictionary[String, Variant] = {}
 	
 	var is_complete:bool:
-		get: return energy_provided >= cell_type.energy_cost and not cancelled
+		get: return energy_provided >= cell_type.cached_energy_cost and not cancelled
 
 class Claim extends ClaimState:
 	

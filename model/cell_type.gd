@@ -18,12 +18,13 @@ var genome:Genome:
 @export var gene_configs:Array[GeneConfig] = []
 @export var cell_appearance_index:int = 0
 
-var energy_cost:int:
-	get:
-		var total = 0
-		for gene_config in gene_configs:
-			total += gene_config.get_energy_cost()
-		return total
+var cached_energy_cost := -1;
+
+func get_energy_cost() -> int:
+	var total = 0
+	for gene_config in gene_configs:
+		total += gene_config.get_energy_cost()
+	return total
 
 func add_gene_config(gene_config:GeneConfig) -> void:
 	gene_configs.append(gene_config)

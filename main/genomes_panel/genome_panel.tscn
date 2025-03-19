@@ -106,15 +106,27 @@ theme_override_constants/margin_left = 16
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ToggledContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ToggledContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/ToggledContainer/VBoxContainer"]
 layout_mode = 2
+columns = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/ToggledContainer/VBoxContainer/HBoxContainer"]
+[node name="EnergyCostTitleLabel" type="Label" parent="VBoxContainer/ToggledContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-theme_type_variation = &"GridHeaderLabel"
+theme_type_variation = &"DimLabel"
+text = "Energy Cost:"
+
+[node name="EnergyCostValueLabel" type="Label" parent="VBoxContainer/ToggledContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "99"
+
+[node name="AppearanceSetOptionTitleLabel" type="Label" parent="VBoxContainer/ToggledContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"DimLabel"
 text = "Appearance Set:"
 
-[node name="AppearanceSetOptionButton" type="OptionButton" parent="VBoxContainer/ToggledContainer/VBoxContainer/HBoxContainer"]
+[node name="AppearanceSetOptionButton" type="OptionButton" parent="VBoxContainer/ToggledContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -125,7 +137,7 @@ fit_to_longest_item = false
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="AddCellTypeButton" type="Button" parent="VBoxContainer/ToggledContainer/VBoxContainer/CellTypeContainer"]
+[node name="AddCellTypeButton" type="Button" parent="VBoxContainer/ToggledContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0

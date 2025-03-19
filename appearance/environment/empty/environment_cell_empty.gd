@@ -39,7 +39,7 @@ var _claim_states:Array[ClaimableCellGene.ClaimState] = []
 	#end_mesh.position = to_local(end)
 	#end_mesh.visible = true
 	#
-	#var percent_complete:float = min(1.0, float(claim.energy_provided) / float(claim.cell_type.energy_cost))
+	#var percent_complete:float = min(1.0, float(claim.energy_provided) / float(claim.cell_type.get_energy_cost())
 	##percent_complete = max(0.0, percent_complete - (0.1 * i))
 			#
 	#var appearance_position:Vector3 = start + ((end - start) * percent_complete)
@@ -84,7 +84,7 @@ func set_state(cell_state:CellState) -> void:
 		var cell_appearance:CellAppearance = _claim_cell_appearances[i]
 		var claim_state:ClaimableCellGene.ClaimState = _claim_states[i]
 
-		var percent_complete:float = min(1.0, float(claim_state.energy_provided) / float(claim_state.cell_type.energy_cost))
+		var percent_complete:float = min(1.0, float(claim_state.energy_provided) / float(claim_state.cell_type.get_energy_cost()))
 		percent_complete = max(0.0, percent_complete - (0.1 * i))
 		
 		var start:Vector3 = grid.get_center_point(claim_state.progenitor.index)

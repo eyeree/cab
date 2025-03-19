@@ -66,3 +66,9 @@ func get_cell_type(cell_type_name:String) -> CellType:
 		if cell_type.name == cell_type_name:
 			return cell_type
 	return null
+
+func get_energy_cost() -> int:
+	var energy_cost := 0
+	for cell_type in cell_types:
+		energy_cost += cell_type.get_energy_cost()
+	return energy_cost

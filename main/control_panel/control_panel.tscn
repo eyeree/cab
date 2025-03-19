@@ -124,7 +124,7 @@ theme_override_constants/separation = -6
 [node name="CurrentStepLabel" type="Label" parent="PanelContainer/HBoxContainer/StepInfoPanel"]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_type_variation = &"GridHeaderLabel"
+theme_type_variation = &"DimLabelSmall"
 text = "Step"
 
 [node name="CurrentStepValue" type="Label" parent="PanelContainer/HBoxContainer/StepInfoPanel"]
@@ -144,14 +144,14 @@ size_flags_horizontal = 4
 [node name="NumStepsLabel" type="Label" parent="PanelContainer/HBoxContainer/StepInfoPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
-theme_type_variation = &"GridHeaderLabel"
+theme_type_variation = &"DimLabelSmall"
 text = "of"
 
 [node name="NumStepsValue" type="Label" parent="PanelContainer/HBoxContainer/StepInfoPanel/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
-theme_type_variation = &"GridHeaderLabel"
+theme_type_variation = &"DimLabelSmall"
 text = "9999"
 
 [node name="ViewSettingsPanel" type="PanelContainer" parent="."]
@@ -164,7 +164,7 @@ columns = 2
 
 [node name="NumStepsLabel" type="Label" parent="ViewSettingsPanel/GridContainer"]
 layout_mode = 2
-theme_type_variation = &"GridHeaderLabel"
+theme_type_variation = &"DimLabel"
 text = "Steps:"
 
 [node name="NumStepsSlider" type="HSlider" parent="ViewSettingsPanel/GridContainer"]
@@ -184,7 +184,7 @@ ticks_on_borders = true
 
 [node name="GridSizeLabel" type="Label" parent="ViewSettingsPanel/GridContainer"]
 layout_mode = 2
-theme_type_variation = &"GridHeaderLabel"
+theme_type_variation = &"DimLabel"
 text = "Size:"
 
 [node name="GridSizeSlider" type="HSlider" parent="ViewSettingsPanel/GridContainer"]
@@ -203,7 +203,7 @@ ticks_on_borders = true
 
 [node name="RunSpeedLabel" type="Label" parent="ViewSettingsPanel/GridContainer"]
 layout_mode = 2
-theme_type_variation = &"GridHeaderLabel"
+theme_type_variation = &"DimLabel"
 text = "Speed:"
 
 [node name="RunSpeedSlider" type="HSlider" parent="ViewSettingsPanel/GridContainer"]

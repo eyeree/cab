@@ -61,6 +61,8 @@ func save() -> void:
 
 func modified():
 	Level.current.level_modified.emit()
+	if Level.current == self:
+		Level.signals.current_level_modified.emit()
 	
 func get_hex_content(index:HexIndex) -> LevelHexContent:
 	return content.get_content(index)
@@ -111,3 +113,9 @@ static func get_default_level() -> Level:
 	level.set_hex_content(HexIndex.from(4, -2, -2), cell_type_2a)
 
 	return level
+
+class Signals:
+	@warning_ignore("unused_signal")
+	signal current_level_modified()
+	
+static var signals := Signals.new()

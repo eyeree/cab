@@ -41,7 +41,7 @@ func show_gene_state(cell_state:CellState) -> void:
 			
 			cell_type.text = claim_state.cell_type.name
 			
-			energy_cost.text = "-%d" % [claim_state.cell_type.energy_cost]
+			energy_cost.text = "-%d" % [claim_state.cell_type.cached_energy_cost]
 			energy_provided.text = "%d" % [claim_state.energy_provided]
 			
 			if gene_state.winning_claim_state == claim_state:

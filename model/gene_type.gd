@@ -45,6 +45,20 @@ func get_gene_state_panel() -> GeneStatePanel:
 	else:
 		return null
 
+var _config_panel_loaded:bool = false
+var _config_panel_scene:PackedScene = null
+
+func get_gene_config_panel() -> GeneConfigPanel:
+	if not _config_panel_loaded:
+		var config_panel_resource_path := base_resource_path + '_config_panel.tscn'
+		if ResourceLoader.exists(config_panel_resource_path):
+			_config_panel_scene = load(config_panel_resource_path)
+		_config_panel_loaded = true
+	if _config_panel_scene != null:
+		return _config_panel_scene.instantiate()
+	else:
+		return null
+		
 func get_edge_attribute_list() -> Array[CellType.EdgeAttributeInfo]:
 	return []
 

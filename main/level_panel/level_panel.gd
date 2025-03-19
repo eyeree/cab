@@ -39,6 +39,8 @@ func _ready() -> void:
 	_save_level_file_dialog.get_cancel_button().pressed.connect(_on_file_dialog_canceled)
 	_load_level_file_dialog.get_cancel_button().pressed.connect(_on_file_dialog_canceled)
 	
+	Level.signals.current_level_modified.connect(_on_current_level_modified)
+
 	state = LevelEditorState.load()
 	if state.current_level_path == '' or not FileAccess.file_exists(state.current_level_path):
 		_load_default_level()
@@ -84,15 +86,12 @@ func _on_file_dialog_canceled():
 	dialog_closed.emit()
 	
 func _load_level_resource(path:String) -> void:
-	if Level.current:
-		Level.current.level_modified.disconnect(_on_level_modified)
 	Level.current = ResourceLoader.load(path)
 	if Level.current == null:
 		if path == Level.INITIAL_LEVEL_PATH:
 			DirAccess.remove_absolute(Level.INITIAL_LEVEL_PATH)
 		_load_default_level()
 	else:
-		Level.current.level_modified.connect(_on_level_modified)
 		state.current_level_path = path
 		state.save()
 		_level_file_name.text = path.replace(Level.LEVEL_PATH_PREFIX, '').replace(Level.LEVEL_EXTENSION, '')
@@ -100,7 +99,7 @@ func _load_level_resource(path:String) -> void:
 		level_changed.emit()
 	
 var _change_number := 0
-func _on_level_modified() -> void:
+func _on_current_level_modified() -> void:
 	_change_number += 1
 	var my_change_number = _change_number
 	await get_tree().create_timer(0.5).timeout
