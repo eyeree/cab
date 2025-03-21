@@ -35,6 +35,7 @@ func _ready() -> void:
 	_cancel_remove_genome_button.pressed.connect(_on_cancel_remove_genome_button_pressed)
 	_appearance_set_option_button.item_selected.connect(_on_appearance_set_option_button_item_selected)
 	Level.signals.current_level_modified.connect(_on_current_level_modified)
+	_confirm_remove_genome_popup.popup_hide.connect(_on_confirm_remove_genome_popup_popup_hide)
 	
 	for appearance_set in AppearanceSet.get_all_appearance_sets():
 		if not appearance_set.hidden:
@@ -81,17 +82,33 @@ func _on_add_cell_type_button_pressed() -> void:
 	CellTypePanel.signals.cell_type_selected.emit(cell_type)
 	Level.current.modified()
 
-func _on_remove_genome_button_pressed() -> void:
-	_confirm_remove_genome_name.text = '"%s"' % [genome.name]
-	_confirm_remove_genome_popup.reset_size()
-	_confirm_remove_genome_popup.show()
-	
 func _on_genome_name_text_changed(new_text:String) -> void:
 	genome.name = new_text
 	Level.current.modified()
 
+func _on_remove_genome_button_pressed() -> void:
+	for index in Level.current.content.get_all_indexes():
+		var initial_hex_content := Level.current.get_hex_content(index)
+		if initial_hex_content.cell_type.genome == genome:
+			MainScene.signals.set_target_highlight.emit(index, MainScene.HexColor.BadTarget)
+	_confirm_remove_genome_name.text = '"%s"' % [genome.name]
+	_confirm_remove_genome_popup.reset_size()
+	_confirm_remove_genome_popup.popup(
+		Rect2(
+			_confirm_remove_genome_popup.get_parent().global_position - 
+				Vector2(_confirm_remove_genome_popup.size.x + 12, 0), 
+			_confirm_remove_genome_popup.size
+		)
+	)
+	
 func _on_cancel_remove_genome_button_pressed() -> void:
 	_confirm_remove_genome_popup.hide()
+	
+func _on_confirm_remove_genome_popup_popup_hide() -> void:
+	for index in Level.current.content.get_all_indexes():
+		var initial_hex_content := Level.current.get_hex_content(index)
+		if initial_hex_content.cell_type.genome == genome:
+			MainScene.signals.clear_target_highlight.emit(index)
 	
 func _on_confirm_remove_genome_button_pressed() -> void:
 	_confirm_remove_genome_popup.hide()

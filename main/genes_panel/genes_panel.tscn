@@ -11,58 +11,60 @@ size_flags_vertical = 3
 theme_type_variation = &"DetailPanel"
 script = ExtResource("1_w5nct")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="SelectionContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="SelectionContainer"]
 layout_mode = 2
 columns = 2
 
-[node name="CellTypeNameTitleLabel" type="Label" parent="VBoxContainer/GridContainer"]
+[node name="CellTypeNameTitleLabel" type="Label" parent="SelectionContainer/GridContainer"]
 layout_mode = 2
 theme_type_variation = &"DimLabelLarge"
 text = "Cell Type:"
 
-[node name="CellTypeNameValueLabel" type="Label" parent="VBoxContainer/GridContainer"]
+[node name="CellTypeNameValueLabel" type="Label" parent="SelectionContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"DetailTitleLabel"
 text = "(cell type name)"
 
-[node name="GenomeNameTitleLabel" type="Label" parent="VBoxContainer/GridContainer"]
+[node name="GenomeNameTitleLabel" type="Label" parent="SelectionContainer/GridContainer"]
 layout_mode = 2
 theme_type_variation = &"DimLabel"
 text = "Genome:"
 
-[node name="GenomeNameValueLabel" type="Label" parent="VBoxContainer/GridContainer"]
+[node name="GenomeNameValueLabel" type="Label" parent="SelectionContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "(genome name)"
 
-[node name="EnergyCostTitleLabel" type="Label" parent="VBoxContainer/GridContainer"]
+[node name="EnergyCostTitleLabel" type="Label" parent="SelectionContainer/GridContainer"]
 layout_mode = 2
 theme_type_variation = &"DimLabel"
 text = "Energy Cost:"
 
-[node name="EnergyCostValueLabel" type="Label" parent="VBoxContainer/GridContainer"]
+[node name="EnergyCostValueLabel" type="Label" parent="SelectionContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "(energy cost)"
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="SelectionContainer"]
 layout_mode = 2
 theme_type_variation = &"DetailTitleLabel"
 text = "Genes"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="SelectionContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SelectionContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="OneGeneMinimumContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="OneGeneMinimumContainer" type="MarginContainer" parent="SelectionContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 8
@@ -70,7 +72,7 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="OneGeneMinimumLabel" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/OneGeneMinimumContainer"]
+[node name="OneGeneMinimumLabel" type="Label" parent="SelectionContainer/ScrollContainer/VBoxContainer/OneGeneMinimumContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -82,14 +84,28 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="GeneContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="GeneContainer" type="VBoxContainer" parent="SelectionContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AddGeneButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="AddGeneButton" type="MenuButton" parent="SelectionContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
-text = " Gene"
+text = "Gene"
 icon = ExtResource("2_f2tcx")
+flat = false
+item_count = 2
+popup/item_0/text = "Repair Damage"
+popup/item_0/id = 0
+popup/item_1/text = "Generate Energy"
+popup/item_1/id = 1
+
+[node name="NoSelectionContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NoSelectionContainer"]
+layout_mode = 2
+text = "(no cell type selected)"

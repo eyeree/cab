@@ -55,7 +55,7 @@ func show_gene_state(cell_state:CellState) -> void:
 
 func _on_mouse_entered_row(row_index:int) -> void:
 	var claim_state := current_claim_states[row_index]
-	gene_signals.set_target_highlight.emit(claim_state.progenitor.index, TargetType.Netural)
+	MainScene.signals.set_target_highlight.emit(claim_state.progenitor.index, TargetType.Netural)
 	claimable_cell_gene_signals.highlight_claim.emit(claim_state)
 	if claim_state.ranking_data.size() > 0:
 		ranking_data_grid.clear()
@@ -70,6 +70,6 @@ func _on_mouse_entered_row(row_index:int) -> void:
 
 func _on_mouse_exited_row(row_index:int) -> void:
 	var claim_state := current_claim_states[row_index]
-	gene_signals.clear_target_highlight.emit(claim_state.progenitor.index)
+	MainScene.signals.clear_target_highlight.emit(claim_state.progenitor.index)
 	claimable_cell_gene_signals.highlight_claim.emit(null)
 	ranking_data_panel.visible = false

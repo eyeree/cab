@@ -38,7 +38,6 @@ icon = ExtResource("2_smwaa")
 
 [node name="ConfirmRemoveGenomePopup" type="PopupPanel" parent="VBoxContainer/HBoxContainer/RemoveGenomeButton"]
 unique_name_in_owner = true
-initial_position = 2
 size = Vector2i(367, 157)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/RemoveGenomeButton/ConfirmRemoveGenomePopup"]

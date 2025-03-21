@@ -37,6 +37,15 @@ enum HexColor {
 	GoodTarget = 4
 }
 
+class Signals:
+	@warning_ignore("unused_signal")
+	signal set_target_highlight(index:HexIndex, hex_color:HexColor)
+	
+	@warning_ignore("unused_signal")
+	signal clear_target_highlight(index:HexIndex)
+
+static var signals := Signals.new()
+
 func _ready() -> void:
 	
 	var ts := TextServerManager.get_primary_interface()
@@ -66,8 +75,8 @@ func _ready() -> void:
 	_level_panel.dialog_closed.connect(_hide_window_overlay)
 	_level_panel.level_changed.connect(_level_changed)
 	
-	GeneStatePanel.gene_signals.set_target_highlight.connect(_set_target_highlight)
-	GeneStatePanel.gene_signals.clear_target_highlight.connect(_clear_target_highlight)
+	signals.set_target_highlight.connect(_set_target_highlight)
+	signals.clear_target_highlight.connect(_clear_target_highlight)
 	
 	CellTypePanel.signals.cell_type_selected.connect(_on_cell_type_selected)
 	
@@ -84,7 +93,7 @@ func _build_mode() -> void:
 	
 	_cell_state_panel.visible = false
 	_genomes_panel.visible = true
-	_genes_panel.visible = false
+	_genes_panel.visible = true
 	
 	if _selected_index != HexIndex.INVALID:
 		_grid.clear_hex_color(_selected_index)
@@ -370,9 +379,5 @@ func _on_current_level_modified() -> void:
 func _on_cell_type_selected(cell_type:CellType) -> void:
 	_selected_cell_type = cell_type
 	_update_grid_from_level()
-	if cell_type:
-		_genes_panel.show_cell_type(cell_type)
-		_genes_panel.visible = true
-	else:
-		_genes_panel.visible = false
+	_genes_panel.show_cell_type(cell_type)
 		

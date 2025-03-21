@@ -5,18 +5,30 @@ class_name GenesPanel extends PanelContainer
 @onready var _energy_cost_value_label: Label = %EnergyCostValueLabel
 @onready var _one_gene_minimum_container: MarginContainer = %OneGeneMinimumContainer
 @onready var _gene_container: VBoxContainer = %GeneContainer
+@onready var _add_gene_button: MenuButton = %AddGeneButton
+@onready var _no_selection_container: VBoxContainer = %NoSelectionContainer
+@onready var _selection_container: VBoxContainer = %SelectionContainer
 
 var _cell_type:CellType
 
 func _ready() -> void:
 	Level.signals.current_level_modified.connect(_on_current_level_modified)
+	_add_gene_button.get_popup().index_pressed.connect(_on_add_gene_button_index_pressed)
 
 func show_cell_type(cell_type_:CellType) -> void:
 	_cell_type = cell_type_
-	_update_controls()
+	if _cell_type:
+		_selection_container.visible = true
+		_no_selection_container.visible = false
+		_update_controls()
+	else:
+		_selection_container.visible = false
+		_no_selection_container.visible = true
+
 	
 func _on_current_level_modified() -> void:
-	_update_controls()
+	if _cell_type:
+		_update_controls()
 	
 func _update_controls() -> void:
 	_cell_type_name_value_label.text = _cell_type.name
@@ -42,3 +54,6 @@ func _show_genes(gene_configs:Array[GeneConfig]) -> void:
 		if gene_config_panel:
 			_gene_container.add_child(gene_config_panel)
 			gene_config_panel.show_gene_config(gene_config)
+
+func _on_add_gene_button_index_pressed(index:int) -> void:
+	prints('index', index)

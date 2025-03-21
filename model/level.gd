@@ -67,6 +67,9 @@ func modified():
 func get_hex_content(index:HexIndex) -> LevelHexContent:
 	return content.get_content(index)
 
+func clear_hex_content(index:HexIndex) -> void:
+	content.clear_content(index)
+
 func set_hex_content(index:HexIndex, cell_type:CellType, orientation:HexIndex.HexDirection = HexIndex.HexDirection.E) -> LevelHexContent:
 	var inital_hex_content := LevelHexContent.new()
 	inital_hex_content.cell_type = cell_type

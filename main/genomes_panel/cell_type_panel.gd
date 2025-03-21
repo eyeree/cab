@@ -7,6 +7,10 @@ class_name CellTypePanel extends PanelContainer
 @onready var _appearance_drag_source: AppearanceDragSource = %AppearanceDragSource
 @onready var _pick_cell_appearance_button: TextureButton = %PickCellAppearanceButton
 @onready var _cell_appearances_popup_panel: CellAppearancesPopupPanel = %CellAppearancesPopupPanel
+@onready var _confirm_remove_cell_type_name: Label = %ConfirmRemoveCellTypeName
+@onready var _confirm_remove_cell_type_button: Button = %ConfirmRemoveCellTypeButton
+@onready var _cancel_remove_cell_type_button: Button = %CancelRemoveCellTypeButton
+@onready var _confirm_remove_cell_type_popup: PopupPanel = %ConfirmRemoveCellTypePopup
 
 var cell_type:CellType
 
@@ -25,6 +29,9 @@ func _ready() -> void:
 	_cell_appearances_popup_panel.visible = false
 	_cell_appearances_popup_panel.appearance_index_selected.connect(_on_cell_appearances_popup_panel_appearance_index_selected)
 	Level.signals.current_level_modified.connect(_on_current_level_modified)
+	_cancel_remove_cell_type_button.pressed.connect(_on_cancel_remove_cell_type_button_pressed)
+	_confirm_remove_cell_type_button.pressed.connect(_on_confirm_remove_cell_type_button_pressed)
+	_confirm_remove_cell_type_popup.popup_hide.connect(_on_confirm_remove_cell_type_popup_popup_hide)
 
 func show_cell_type(cell_type_:CellType) -> void:
 	cell_type = cell_type_
@@ -65,11 +72,39 @@ var _is_selected:bool:
 		return theme_type_variation == "CellTypePanelSelected"
 		
 func _on_delete_cell_type_button_pressed() -> void:
+	for index in Level.current.content.get_all_indexes():
+		var content := Level.current.get_hex_content(index)
+		if content.cell_type == cell_type:
+			MainScene.signals.set_target_highlight.emit(index, MainScene.HexColor.BadTarget)
+	_confirm_remove_cell_type_name.text = '"%s"' % [cell_type.name]
+	_confirm_remove_cell_type_popup.reset_size()
+	_confirm_remove_cell_type_popup.popup(
+		Rect2(
+			_confirm_remove_cell_type_popup.get_parent().global_position - 
+				Vector2(_confirm_remove_cell_type_popup.size.x + 12, 0), 
+			_confirm_remove_cell_type_popup.size
+		)
+	)
+		
+func _on_confirm_remove_cell_type_button_pressed():
 	cell_type.genome.remove_cell_type(cell_type)
+	for index in Level.current.content.get_all_indexes():
+		var content := Level.current.get_hex_content(index)
+		if content.cell_type == cell_type:
+			Level.current.clear_hex_content(index)
 	Level.current.modified()
 	get_parent().remove_child(self)	
 	queue_free()
 	
+func _on_cancel_remove_cell_type_button_pressed():
+	_confirm_remove_cell_type_popup.hide()
+	
+func _on_confirm_remove_cell_type_popup_popup_hide():	
+	for index in Level.current.content.get_all_indexes():
+		var content := Level.current.get_hex_content(index)
+		if content.cell_type == cell_type:
+			MainScene.signals.clear_target_highlight.emit(index)
+		
 func _exit_tree() -> void:
 	if _is_selected:
 		signals.cell_type_selected.emit(null)
